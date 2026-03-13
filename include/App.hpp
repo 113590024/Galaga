@@ -13,11 +13,11 @@ public:
         END,
     };
 
-    enum class GameState{
-        START,
-        UPDATE,
+    enum class GameState {
+        START_SCREEN,
+        PLAYING,
         PAUSED,
-        END,
+        GAME_OVER,
     };
 
     State GetCurrentState() const { return m_CurrentState; }

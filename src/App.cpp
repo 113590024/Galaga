@@ -2,11 +2,14 @@
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
+#include "SDL.h"
 
 void App::Start() {
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
     LOG_TRACE("Start");
 
     m_Player = std::make_shared<PLAYER>(RESOURCE_DIR"/Image/Character/player_1.png");
+
     m_Root.AddChild(m_Player);
 
     m_CurrentState = State::UPDATE;
