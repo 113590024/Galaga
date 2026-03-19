@@ -31,12 +31,13 @@ list(TRANSFORM INCLUDE_FILES PREPEND ${INCLUDE_DIR}/)
 # file(GLOB_RECURSE SRC_FILES src/*)
 # file(GLOB_RECURSE HEADER_FILES include/*)
 
-add_executable(${PROJECT_NAME}
-    ${SRC_DIR}/main.cpp
-    ${SRC_FILES}
-    ${HEADER_FILES}
-        include/PLAYER.hpp
-        src/PLAYER.cpp
+file(GLOB_RECURSE SRC_FILES src/*.cpp)
+file(GLOB_RECURSE HEADER_FILES include/*.hpp)
+
+add_executable(Galaga ${SRC_FILES} ${HEADER_FILES}
+        include/Sprite.hpp
+        include/Label.hpp
+        include/Cursor.hpp
 )
 
 if(MSVC)
