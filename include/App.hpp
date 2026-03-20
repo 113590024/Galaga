@@ -8,6 +8,7 @@
 #include "Sprite.hpp"
 #include "Label.hpp"
 #include "Cursor.hpp"
+#include "Player_bullet.hpp"
 
 class App {
 public:
@@ -57,6 +58,10 @@ private:
 
     // 暫停文字
     std::shared_ptr<Label> m_PauseText;
+
+    //玩家子彈
+    std::vector<std::shared_ptr<Player_bullet>> m_Bullets;
+    float m_ShootCooldown = 0.0f; // 射擊冷卻
 };
 
 #endif

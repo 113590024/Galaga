@@ -3,6 +3,7 @@
 #include "Util/Color.hpp"
 #include "Sprite.hpp"
 #include "Label.hpp"
+#include "Player_bullet.hpp"
 
 void App::Start() {
     LOG_TRACE("Start");

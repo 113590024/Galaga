@@ -51,6 +51,24 @@ void App::Update() {
         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);
 
         // 之後加：敵人移動、子彈、碰撞偵測
+        //按Z或X發射子彈
+        m_ShootCooldown -= Util::Time::GetDeltaTimeMs();
+        if ((Util::Input::IsKeyDown(Util::Keycode::Z) && m_ShootCooldown <= 0.0f)
+            || (Util::Input::IsKeyDown(Util::Keycode::X) && m_ShootCooldown <= 0.0f)){
+            auto bullet = std::make_shared<Player_bullet>(m_Player->GetPosition());
+            m_Bullets.push_back(bullet);
+            m_Root.AddChild(bullet);
+            m_ShootCooldown = 100.0f; // 0.1秒冷卻
+        }
+        // 更新子彈位置，移除出畫面的子彈
+        for (auto& bullet : m_Bullets) {
+            bullet->flyUp();
+        }
+        m_Bullets.erase(
+            std::remove_if(m_Bullets.begin(), m_Bullets.end(),
+                [](const auto& b) { return b->IsOutOfScreen(); }),
+            m_Bullets.end()
+        );
 
         if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE)) {
             m_GameState = GameState::PAUSED;
