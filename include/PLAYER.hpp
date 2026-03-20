@@ -15,10 +15,12 @@ public:
     void Move(float dx, float dy);
 
     [[nodiscard]] glm::vec2 GetPosition() const { return m_Transform.translation; }
-    void SetPosition(const glm::vec2& pos) { m_Transform.translation = pos; }
+    void SetPosition(const glm::vec2& pos) {
+		m_Transform.translation = pos;
+	}
 
 private:
-    float m_Speed = 5.0f;
+    float m_Speed = 10.0f;
     // 之後加：float m_HP = 3;
 };
 

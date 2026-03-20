@@ -38,6 +38,7 @@ add_executable(Galaga ${SRC_FILES} ${HEADER_FILES}
         include/Sprite.hpp
         include/Label.hpp
         include/Cursor.hpp
+        include/Player_bullet.hpp
 )
 
 if(MSVC)
