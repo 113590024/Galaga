@@ -14,6 +14,7 @@ public:
         m_Drawable = std::make_unique<Util::Image>(
             RESOURCE_DIR"/Image/Character/bullet_player.png");
         m_Transform.translation = startPos;
+        m_Transform.translation.y+=m_speed; //子彈出現位置
         m_Transform.scale = {1.0f, 1.0f};
         m_ZIndex = 20;
         m_Visible = true;
@@ -27,7 +28,17 @@ public:
     [[nodiscard]] bool IsOutOfScreen() const {
         return m_Transform.translation.y>400.0f;
     }
+
+    void setBulletcount(int n) {
+        bullet_count+=n;
+        if (bullet_count<0){bullet_count=0;}
+    }
+    int getBulletcount() {
+        return bullet_count;
+    }
+
 private:
     float m_speed=20.0f;
+    int bullet_count=0;
 };
 #endif //GALAGA_PLAYER_BULLET_HPP

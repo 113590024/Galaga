@@ -55,10 +55,13 @@ void App::Update() {
         m_ShootCooldown -= Util::Time::GetDeltaTimeMs();
         if ((Util::Input::IsKeyDown(Util::Keycode::Z) && m_ShootCooldown <= 0.0f)
             || (Util::Input::IsKeyDown(Util::Keycode::X) && m_ShootCooldown <= 0.0f)){
+            if (Player_bullet::getBulletcount()>=2) {
+
+            }
             auto bullet = std::make_shared<Player_bullet>(m_Player->GetPosition());
             m_Bullets.push_back(bullet);
             m_Root.AddChild(bullet);
-            m_ShootCooldown = 100.0f; // 0.1秒冷卻
+            m_ShootCooldown = 1.0f; // 0.001秒冷卻
         }
         // 更新子彈位置，移除出畫面的子彈
         for (auto& bullet : m_Bullets) {
