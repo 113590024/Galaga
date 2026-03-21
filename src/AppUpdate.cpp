@@ -55,13 +55,14 @@ void App::Update() {
         m_ShootCooldown -= Util::Time::GetDeltaTimeMs();
         if ((Util::Input::IsKeyDown(Util::Keycode::Z) && m_ShootCooldown <= 0.0f)
             || (Util::Input::IsKeyDown(Util::Keycode::X) && m_ShootCooldown <= 0.0f)){
-            if (Player_bullet::getBulletcount()>=2) {
-
+            //最多兩顆子彈
+            if (Player_bullet::getBulletcount()<2){
+                Player_bullet::setBulletcount(1);
+                auto bullet = std::make_shared<Player_bullet>(m_Player->GetPosition());
+                m_Bullets.push_back(bullet);
+                m_Root.AddChild(bullet);
+                m_ShootCooldown = 0.5f; // 0.0005秒冷卻
             }
-            auto bullet = std::make_shared<Player_bullet>(m_Player->GetPosition());
-            m_Bullets.push_back(bullet);
-            m_Root.AddChild(bullet);
-            m_ShootCooldown = 1.0f; // 0.001秒冷卻
         }
         // 更新子彈位置，移除出畫面的子彈
         for (auto& bullet : m_Bullets) {
@@ -69,7 +70,13 @@ void App::Update() {
         }
         m_Bullets.erase(
             std::remove_if(m_Bullets.begin(), m_Bullets.end(),
-                [](const auto& b) { return b->IsOutOfScreen(); }),
+                [](const auto& b) {
+                        if (b->IsOutOfScreen()) {
+                            Player_bullet::setBulletcount(-1);
+                            return true;
+                        }
+                        return false;
+                     }),
             m_Bullets.end()
         );
 

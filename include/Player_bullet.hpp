@@ -29,16 +29,16 @@ public:
         return m_Transform.translation.y>400.0f;
     }
 
-    void setBulletcount(int n) {
+    static void setBulletcount(int n) {
         bullet_count+=n;
         if (bullet_count<0){bullet_count=0;}
     }
-    int getBulletcount() {
+    static int getBulletcount() {
         return bullet_count;
     }
 
 private:
     float m_speed=20.0f;
-    int bullet_count=0;
+    static int bullet_count;
 };
 #endif //GALAGA_PLAYER_BULLET_HPP
