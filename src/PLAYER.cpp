@@ -6,7 +6,7 @@
 
 PLAYER::PLAYER(const std::string& imagePath) {
     m_Drawable = std::make_shared<Util::Image>(imagePath);
-    m_Transform.translation = {0.0f, -250.0f};
+    m_Transform.translation = {0.0f, -275.0f};
     m_Visible = true;
 }
 
