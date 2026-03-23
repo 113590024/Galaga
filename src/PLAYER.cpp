@@ -12,8 +12,6 @@ PLAYER::PLAYER(const std::string& imagePath) {
 
 void PLAYER::Move(float dx, float dy) {
     m_Transform.translation.x += dx * m_Speed;
-    m_Transform.translation.y += dy * m_Speed;
-
-    // 限制不能移出畫面（根據你的視窗大小調整）
-    m_Transform.translation.x = glm::clamp(m_Transform.translation.x, -310.0f, 310.0f);
+    // 右邊界改成 +160，不讓玩家跑進 UI 區
+    m_Transform.translation.x = glm::clamp(m_Transform.translation.x, -600.0f, 160.0f);
 }

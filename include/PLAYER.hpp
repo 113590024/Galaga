@@ -19,6 +19,7 @@ public:
 		m_Transform.translation = pos;
 	}
 
+
 private:
     float m_Speed = 10.0f;
     // 之後加：float m_HP = 3;

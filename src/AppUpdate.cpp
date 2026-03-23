@@ -10,14 +10,14 @@ void App::Update() {
 
     // 背景捲動只在非暫停時執行
     if (m_GameState != GameState::PAUSED) {
-        m_BgScrollY -= 3.0f;
+        m_BgScrollY -= 1.0f;
         m_Bg1->SetPosition({0.0f, m_BgScrollY});
         m_Bg2->SetPosition({0.0f, m_BgScrollY + 720.0f});
         if (m_BgScrollY < -720.0f) {
             m_BgScrollY = 0.0f;
         }
         m_BgSwitchTimer += Util::Time::GetDeltaTimeMs();
-        if (m_BgSwitchTimer >= 300.0f) {
+        if (m_BgSwitchTimer >= 600.0f) {
             m_BgSwitchTimer = 0.0f;
             m_BgIndex = (m_BgIndex + 1) % 3;
             m_Bg1->SetImage(m_BgPaths[m_BgIndex]);

@@ -62,6 +62,13 @@ private:
     //玩家子彈
     std::vector<std::shared_ptr<Player_bullet>> m_Bullets;
     float m_ShootCooldown = 0.0f; // 射擊冷卻
+
+    //分數、生命值
+    std::shared_ptr<Sprite> m_Panel;
+    std::shared_ptr<Label> m_ScoreLabel;
+    std::shared_ptr<Label> m_LivesLabel;
+    int m_Score = 0;
+    int m_Lives = 3;
 };
 
 #endif

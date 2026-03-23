@@ -15,13 +15,13 @@ void App::Start() {
         RESOURCE_DIR"/Image/Background/wall_3.png",
     };
     m_Bg1 = std::make_shared<Sprite>(m_BgPaths[0], -10);
-    m_Bg1->SetScale({1.5f, 1.5f});
-    m_Bg1->SetPosition({0.0f, 0.0f});
+    m_Bg1->SetScale({1.5f, 1.5f}); // 調整成只蓋左邊
+    m_Bg1->SetPosition({-160.0f, 0.0f}); // 往左偏移
     m_Root.AddChild(m_Bg1);
 
     m_Bg2 = std::make_shared<Sprite>(m_BgPaths[0], -10);
     m_Bg2->SetScale({1.5f, 1.5f});
-    m_Bg2->SetPosition({0.0f, 720.0f});
+    m_Bg2->SetPosition({-160.0f, 720.0f});
     m_Root.AddChild(m_Bg2);
 
     // Galaga圖片
@@ -64,6 +64,21 @@ void App::Start() {
     m_PauseText->SetPosition({0.0f, 0.0f});
     m_PauseText->SetVisible(false);
     m_Root.AddChild(m_PauseText);
+
+    //分數、生命值
+    m_ScoreLabel = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 16, "SCORE",
+    Util::Color::FromRGB(255, 255, 0), 20
+);
+    m_ScoreLabel->SetPosition({480.0f, 200.0f});
+    m_Root.AddChild(m_ScoreLabel);
+
+    m_LivesLabel = std::make_shared<Label>(
+        RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 16, "LIVES: 3",
+        Util::Color::FromRGB(255, 255, 255), 20
+    );
+    m_LivesLabel->SetPosition({480.0f, 100.0f});
+    m_Root.AddChild(m_LivesLabel);
 
     m_CurrentState = State::UPDATE;
 }
