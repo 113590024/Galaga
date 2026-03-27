@@ -42,6 +42,11 @@ void App::Update() {
             m_Text2P->SetVisible(false);
             m_Cursor->SetVisible(false);
             m_Player->SetVisible(true);
+
+            // 顯示所有敵人
+            for (auto& enemy : m_Enemies) {
+                enemy->SetVisible(true); // ← 加這行
+            }
         }
     }
 
@@ -50,7 +55,6 @@ void App::Update() {
         if (Util::Input::IsKeyPressed(Util::Keycode::LEFT))  m_Player->Move(-1, 0);
         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);
 
-        // 之後加：敵人移動、子彈、碰撞偵測
         //按Z或X發射子彈
         m_ShootCooldown -= Util::Time::GetDeltaTimeMs();
         if ((Util::Input::IsKeyDown(Util::Keycode::Z) && m_ShootCooldown <= 0.0f)
@@ -84,6 +88,40 @@ void App::Update() {
                      }),
             m_Bullets.end()
         );*/
+
+        // 碰撞偵測
+        for (auto& bullet : m_Bullets) {
+            for (auto& enemy : m_Enemies) {
+                if (!enemy->IsAlive()) continue;
+                if (enemy->IfCollides(bullet->GetPosition(), 25.0f)) {
+                    enemy->Kill();              // 敵人消失
+                    bullet->SetVisible(false);  // 子彈消失
+                    Player_bullet::setBulletcount(-1); // 子彈數量-1
+                    m_Score += enemy->GetScore(); // 加分
+
+                    // 更新分數顯示
+                    m_ScoreLabel->SetText("SCORE\n" + std::to_string(m_Score));
+                }
+            }
+        }
+
+        // 移除被嘎嘎敵人和嘎嘎子彈
+        m_Enemies.erase(
+            std::remove_if(m_Enemies.begin(), m_Enemies.end(),
+                [](const auto& e) { return !e->IsAlive(); }),
+            m_Enemies.end()
+        );
+        m_Bullets.erase(
+            std::remove_if(m_Bullets.begin(), m_Bullets.end(),
+                [](const auto& b) {
+                    if (!b->GetVisibility() || b->IsOutOfScreen()) {
+                        Player_bullet::setBulletcount(-1);
+                        return true;
+                    }
+                    return false;
+                }),
+            m_Bullets.end()
+        );
 
         if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE)) {
             m_GameState = GameState::PAUSED;

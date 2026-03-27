@@ -80,5 +80,15 @@ void App::Start() {
     m_LivesLabel->SetPosition({480.0f, 100.0f});
     m_Root.AddChild(m_LivesLabel);
 
+    // 測試用 生成敵人 剛開始時消失
+    for (int i = 0; i < 5; i++) {
+        auto zako = std::make_shared<Zako>(
+            glm::vec2(-400.0f + i * 80.0f, 200.0f)
+        );
+        zako->SetVisible(false);
+        m_Enemies.push_back(zako);
+        m_Root.AddChild(zako);
+    }
+
     m_CurrentState = State::UPDATE;
 }

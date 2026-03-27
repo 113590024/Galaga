@@ -28,6 +28,11 @@ public:
         return m_IsAlive;
     }
 
+    // 拿分數
+    [[nodiscard]] int GetScore() const {
+        return m_Score;
+    }
+
     // 嘎嘎
     void Kill() {
         m_IsAlive = false;

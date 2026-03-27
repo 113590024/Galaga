@@ -41,6 +41,7 @@ add_executable(Galaga ${SRC_FILES} ${HEADER_FILES}
         include/Player_bullet.hpp
         src/Player_bullet.cpp
         include/Enemy.hpp
+        include/Zako.hpp
 )
 
 if(MSVC)

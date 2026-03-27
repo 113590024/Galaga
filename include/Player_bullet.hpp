@@ -52,6 +52,8 @@ public:
         );
     }
 
+    [[nodiscard]] bool GetVisibility() const { return m_Visible; }
+
 private:
     float m_speed=20.0f;
     static int bullet_count;

@@ -9,6 +9,7 @@
 #include "Label.hpp"
 #include "Cursor.hpp"
 #include "Player_bullet.hpp"
+#include "Zako.hpp"
 
 class App {
 public:
@@ -68,6 +69,9 @@ private:
     std::shared_ptr<Label> m_LivesLabel;
     int m_Score = 0;
     int m_Lives = 3;
+
+    // 敵人
+    std::vector<std::shared_ptr<Enemy>> m_Enemies;
 };
 
 #endif
