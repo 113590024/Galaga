@@ -69,9 +69,14 @@ void App::Update() {
             bullet->flyUp();
         }
 
+        //子彈超出螢幕
         Player_bullet::Remove(m_Bullets, [](const auto& b) {
             return b->IsOutOfScreen();
         });
+        //子彈打到敵人
+        /*Player_bullet::Remove(m_Bullets, [](const auto& b) {
+            return b->;
+        });*/
 
         /*m_Bullets.erase(
             std::remove_if(m_Bullets.begin(), m_Bullets.end(),
