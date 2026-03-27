@@ -45,6 +45,9 @@ private:
     std::shared_ptr<Sprite> m_Logo;
     std::shared_ptr<Label> m_Text1P;
     std::shared_ptr<Label> m_Text2P;
+    bool m_IntroPlaying = true;   // 開場動畫進行中
+    float m_IntroY = -500.0f;     // 從畫面底部開始
+    float m_IntroTargetY = 0.0f;  // 最終停止的 Y 位置
 
     // 背景
     std::shared_ptr<Sprite> m_Bg1;

@@ -79,6 +79,8 @@ void App::Start() {
     );
     m_LivesLabel->SetPosition({480.0f, 100.0f});
     m_Root.AddChild(m_LivesLabel);
+    m_ScoreLabel->SetVisible(false);
+    m_LivesLabel->SetVisible(false);
 
     // 測試用 生成敵人 剛開始時消失
     for (int i = 0; i < 5; i++) {

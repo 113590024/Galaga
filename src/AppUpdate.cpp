@@ -27,27 +27,47 @@ void App::Update() {
 
     // 開始畫面
     if (m_GameState == GameState::START_SCREEN) {
-        if (Util::Input::IsKeyUp(Util::Keycode::UP)) {
-            m_MenuIndex = 0;
-            m_Cursor->SetPosition({-130.0f, -50.0f});
-        }
-        if (Util::Input::IsKeyUp(Util::Keycode::DOWN)) {
-            m_MenuIndex = 1;
-            m_Cursor->SetPosition({-130.0f, -90.0f});
-        }
-        if (Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
-            m_GameState = GameState::PLAYING;
-            m_Logo->SetVisible(false);
-            m_Text1P->SetVisible(false);
-            m_Text2P->SetVisible(false);
+        // 開場動畫
+        if (m_IntroPlaying) {
+            m_IntroY += 5.0f; // 動畫速度
+            if (m_IntroY >= m_IntroTargetY) {
+                m_IntroY = m_IntroTargetY;
+                m_IntroPlaying = false;
+            }
+            m_Logo->SetPosition({0.0f, m_IntroY + 80.0f});
+            m_Text1P->SetPosition({0.0f, m_IntroY - 50.0f});
+            m_Text2P->SetPosition({0.0f, m_IntroY - 90.0f});
             m_Cursor->SetVisible(false);
-            m_Player->SetVisible(true);
+        }
 
-            // 顯示所有敵人
-            for (auto& enemy : m_Enemies) {
-                enemy->SetVisible(true); // ← 加這行
+        // 動畫結束
+        if (!m_IntroPlaying) {
+            m_Cursor->SetVisible(true); // 顯示箭頭
+            if (Util::Input::IsKeyUp(Util::Keycode::UP)) {
+                m_MenuIndex = 0;
+                m_Cursor->SetPosition({-130.0f, -50.0f});
+            }
+            if (Util::Input::IsKeyUp(Util::Keycode::DOWN)) {
+                m_MenuIndex = 1;
+                m_Cursor->SetPosition({-130.0f, -90.0f});
+            }
+            if (Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
+                m_GameState = GameState::PLAYING;
+                m_Logo->SetVisible(false);
+                m_Text1P->SetVisible(false);
+                m_Text2P->SetVisible(false);
+                m_Cursor->SetVisible(false);
+                m_Player->SetVisible(true);
+                m_ScoreLabel->SetVisible(true);
+                m_LivesLabel->SetVisible(true);
+
+                // 顯示敵人
+                for (auto& enemy : m_Enemies) {
+                    enemy->SetVisible(true);
+                }
             }
         }
+
     }
 
     // 遊戲進行中
