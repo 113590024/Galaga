@@ -34,7 +34,9 @@ public:
         m_Visible = false;
     }
 
-    
+    /*void takeDamage() {
+
+    }*/
 
     // 碰撞偵測
     [[nodiscard]] bool IfCollides(const glm::vec2& pos, float radius = 20.0f) const {
