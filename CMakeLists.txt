@@ -40,6 +40,7 @@ add_executable(Galaga ${SRC_FILES} ${HEADER_FILES}
         include/Cursor.hpp
         include/Player_bullet.hpp
         src/Player_bullet.cpp
+        include/Enemy.hpp
 )
 
 if(MSVC)

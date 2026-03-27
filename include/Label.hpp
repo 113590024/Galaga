@@ -14,6 +14,10 @@ public:
         m_Visible = true;
     }
     void SetPosition(const glm::vec2& pos) { m_Transform.translation = pos; }
+
+    void SetText(const std::string& text) {
+        std::dynamic_pointer_cast<Util::Text>(m_Drawable)->SetText(text);
+    }
 };
 
 #endif

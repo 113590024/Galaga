@@ -11,8 +11,8 @@ void App::Update() {
     // 背景捲動只在非暫停時執行
     if (m_GameState != GameState::PAUSED) {
         m_BgScrollY -= 1.0f;
-        m_Bg1->SetPosition({0.0f, m_BgScrollY});
-        m_Bg2->SetPosition({0.0f, m_BgScrollY + 720.0f});
+        m_Bg1->SetPosition({-160.0f, m_BgScrollY});
+        m_Bg2->SetPosition({-160.0f, m_BgScrollY + 720.0f});
         if (m_BgScrollY < -720.0f) {
             m_BgScrollY = 0.0f;
         }
