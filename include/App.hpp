@@ -10,6 +10,7 @@
 #include "Cursor.hpp"
 #include "Player_bullet.hpp"
 #include "Zako.hpp"
+#include "Explosion.hpp"
 
 class App {
 public:
@@ -75,6 +76,9 @@ private:
 
     // 敵人
     std::vector<std::shared_ptr<Enemy>> m_Enemies;
+
+    // Explosion!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    std::vector<std::shared_ptr<Explosion>> m_Explosions;
 };
 
 #endif

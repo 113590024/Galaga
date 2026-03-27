@@ -93,6 +93,16 @@ void App::Update() {
             bullet->flyUp();
         }
 
+        // 更新爆炸動畫
+        for (auto& exp : m_Explosions) {
+            exp->Update();
+        }
+        m_Explosions.erase(
+            std::remove_if(m_Explosions.begin(), m_Explosions.end(),
+                [](const auto& e) { return e->IsFinished(); }),
+            m_Explosions.end()
+        );
+
         //子彈超出螢幕
         Player_bullet::Remove(m_Bullets, [&](const auto& b) {
             if (b->IsOutOfScreen()) {
@@ -107,6 +117,13 @@ void App::Update() {
                 if (!enemy->IsAlive()) continue;
                 if (enemy->IfCollides(b->GetPosition(), 25.0f)) {
                     enemy->TakeDamage(1);       //敵人扣血
+
+                    if (!enemy->IsAlive()) {
+                    auto explosion = std::make_shared<Explosion>(enemy->GetPosition());
+                    m_Explosions.push_back(explosion);
+                    m_Root.AddChild(explosion);
+    }
+
                     m_Root.RemoveChild(b);      //移除子彈
                     m_Score += enemy->GetScore(); // 加分
 
