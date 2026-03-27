@@ -39,9 +39,12 @@ public:
         m_Visible = false;
     }
 
-    /*void takeDamage() {
-
-    }*/
+    void TakeDamage(int damage) {
+        m_health -= damage;
+        if (m_health <= 0) {
+            Kill();
+        }
+    }
 
     // 碰撞偵測
     [[nodiscard]] bool IfCollides(const glm::vec2& pos, float radius = 20.0f) const {
@@ -53,7 +56,7 @@ public:
 
 protected:
     bool m_IsAlive = true;
-    int health=1;
+    int m_health=1;
     // 擊殺得分
     int m_Score = 0;
 };

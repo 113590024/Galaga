@@ -68,47 +68,52 @@ void App::Update() {
                 m_ShootCooldown = 0.5f; // 0.0005秒冷卻
             }
         }
-        // 更新子彈位置，移除出畫面的子彈
+        // 更新子彈位置
         for (auto& bullet : m_Bullets) {
             bullet->flyUp();
         }
 
         //子彈超出螢幕
-        Player_bullet::Remove(m_Bullets, [](const auto& b) {
-            return b->IsOutOfScreen();
+        Player_bullet::Remove(m_Bullets, [&](const auto& b) {
+            if (b->IsOutOfScreen()) {
+                m_Root.RemoveChild(b);
+                return true;
+            }
+            return false;
         });
         //子彈打到敵人
-        /*Player_bullet::Remove(m_Bullets, [](const auto& b) {
-            return b->;
-        });*/
+        Player_bullet::Remove(m_Bullets, [&](const std::shared_ptr<Player_bullet>& b) {
+            for (auto& enemy : m_Enemies) {
+                if (!enemy->IsAlive()) continue;
+                if (enemy->IfCollides(b->GetPosition(), 25.0f)) {
+                    enemy->TakeDamage(1);       //敵人扣血
+                    m_Root.RemoveChild(b);      //移除子彈
+                    m_Score += enemy->GetScore(); // 加分
 
-        /*m_Bullets.erase(
-            std::remove_if(m_Bullets.begin(), m_Bullets.end(),
-                [](const auto& b) {
-                        if (b->IsOutOfScreen()) {
-                            Player_bullet::setBulletcount(-1);
-                            return true;
-                        }
-                        return false;
-                     }),
-            m_Bullets.end()
-        );*/
+                    // 更新分數顯示
+                    m_ScoreLabel->SetText("SCORE\n" + std::to_string(m_Score));
+                    return true;
+                }
+            }
+            return false;
+        }
+        );
 
         // 碰撞偵測
-        for (auto& bullet : m_Bullets) {
+        /*for (auto& bullet : m_Bullets) {
             for (auto& enemy : m_Enemies) {
                 if (!enemy->IsAlive()) continue;
                 if (enemy->IfCollides(bullet->GetPosition(), 25.0f)) {
-                    enemy->Kill();              // 敵人消失
+                    //enemy->Kill();              // 敵人消失
                     bullet->SetVisible(false);  // 子彈消失
-                    Player_bullet::setBulletcount(-1); // 子彈數量-1
+                    //Player_bullet::setBulletcount(-1); // 子彈數量-1
                     m_Score += enemy->GetScore(); // 加分
 
                     // 更新分數顯示
                     m_ScoreLabel->SetText("SCORE\n" + std::to_string(m_Score));
                 }
             }
-        }
+        }*/
 
         // 移除被嘎嘎敵人和嘎嘎子彈
         m_Enemies.erase(
