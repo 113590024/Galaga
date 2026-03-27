@@ -68,7 +68,12 @@ void App::Update() {
         for (auto& bullet : m_Bullets) {
             bullet->flyUp();
         }
-        m_Bullets.erase(
+
+        Player_bullet::Remove(m_Bullets, [](const auto& b) {
+            return b->IsOutOfScreen();
+        });
+
+        /*m_Bullets.erase(
             std::remove_if(m_Bullets.begin(), m_Bullets.end(),
                 [](const auto& b) {
                         if (b->IsOutOfScreen()) {
@@ -78,7 +83,7 @@ void App::Update() {
                         return false;
                      }),
             m_Bullets.end()
-        );
+        );*/
 
         if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE)) {
             m_GameState = GameState::PAUSED;

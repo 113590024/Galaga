@@ -37,6 +37,21 @@ public:
         return bullet_count;
     }
 
+    static void Remove(std::vector<std::shared_ptr<Player_bullet>>& bullets,
+                   std::function<bool(const std::shared_ptr<Player_bullet>&)> condition) {
+        bullets.erase(
+            std::remove_if(bullets.begin(), bullets.end(),
+                [&condition](const auto& b) {
+                    if (condition(b)) {
+                        Player_bullet::setBulletcount(-1);
+                        return true;
+                    }
+                    return false;
+                }),
+            bullets.end()
+        );
+    }
+
 private:
     float m_speed=20.0f;
     static int bullet_count;
