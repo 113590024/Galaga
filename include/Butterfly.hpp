@@ -18,10 +18,30 @@ public:
     }
 
     void Update() override {
-        // 移動...之後再做
+        switch (m_State) {
+            case State::ENTERING:
+                UpdatePath();
+                break;
+            case State::FORMATION:
+                // 之後做編隊移動
+                break;
+            case State::DIVING:
+                UpdatePath();
+                break;
+            case State::RETURNING:
+                // 之後做
+                break;
+        }
     }
 
-    [[nodiscard]] int GetScore() const { return m_Score; }
+    void StartDive(const glm::vec2& playerPos) override {
+        m_FormationPos = m_Transform.translation;
+        m_State = State::DIVING;
+        // 之後設定俯衝路徑
+    }
+
+private:
+    //
 };
 
 #endif //GALAGA_BUTTERFLY_HPP
