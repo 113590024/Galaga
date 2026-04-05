@@ -10,7 +10,7 @@ public:
         m_Transform.translation = startPos;
         m_Transform.scale = {1.0f, 1.0f};
         m_health=1;
-        m_Score = 100;
+        m_Score = 50;
     }
 
     void Update() override {
