@@ -6,6 +6,13 @@
 
 class Enemy : public Util::GameObject {
 public:
+    enum class State {
+        ENTERING,   // 入場中
+        FORMATION,  // 編隊待機
+        DIVING,     // 俯衝中
+        RETURNING,  // 返回編隊
+    };
+
     explicit Enemy(const std::string& imagePath, float zIndex = 10) {
         m_Drawable = std::make_shared<Util::Image>(imagePath);
         m_ZIndex = zIndex;
@@ -21,6 +28,24 @@ public:
 
     void SetPosition(const glm::vec2& pos) {
         m_Transform.translation = pos;
+    }
+
+    // 俯衝
+    virtual void StartDive(const glm::vec2& playerPos) {
+        m_State = State::DIVING;
+    }
+
+    [[nodiscard]] bool IsEntering() const {
+        return m_State == State::ENTERING;
+    }
+    [[nodiscard]] bool IsInFormsation() const {
+        return m_State == State::FORMATION;
+    }
+    [[nodiscard]] bool IsDiving() const {
+        return m_State == State::DIVING;
+    }
+    [[nodiscard]] bool IsReturning() const {
+        return m_State == State::RETURNING;
     }
 
     // 還活著
@@ -57,8 +82,9 @@ public:
 protected:
     bool m_IsAlive = true;
     int m_health=1;
-    // 擊殺得分
     int m_Score = 0;
+    State m_State = State::ENTERING;
+    glm::vec2 m_FormationPos;
 };
 
 #endif
