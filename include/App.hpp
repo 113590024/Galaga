@@ -12,8 +12,6 @@
 #include "Zako.hpp"
 #include "Explosion.hpp"
 #include "Stage0.hpp"
-#include "StageTwo.hpp"
-#include "StageThree.hpp"
 
 class App {
 public:
