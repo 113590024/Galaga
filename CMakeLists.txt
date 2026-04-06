@@ -47,6 +47,7 @@ add_executable(Galaga ${SRC_FILES} ${HEADER_FILES}
         include/Boss_Galaga.hpp
         include/StageManager.hpp
         include/Stage0.hpp
+        include/Stage0_0.hpp
 )
 
 if(MSVC)
