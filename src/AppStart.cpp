@@ -82,15 +82,9 @@ void App::Start() {
     m_ScoreLabel->SetVisible(false);
     m_LivesLabel->SetVisible(false);
 
-    // 測試用 生成敵人 剛開始時消失
-    for (int i = 0; i < 5; i++) {
-        auto zako = std::make_shared<Zako>(
-            glm::vec2(-400.0f + i * 80.0f, 200.0f)
-        );
-        zako->SetVisible(false);
-        m_Enemies.push_back(zako);
-        m_Root.AddChild(zako);
-    }
+    // 生人敵人 (第一關)
+    m_StageManager = std::make_unique<StageOne>(m_Root, m_Enemies);
+    m_StageManager->StartStage();
 
     m_CurrentState = State::UPDATE;
 }

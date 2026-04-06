@@ -72,6 +72,10 @@ void App::Update() {
 
     // 遊戲進行中
     if (m_GameState == GameState::PLAYING) {
+
+        m_StageManager->Update();
+
+
         if (Util::Input::IsKeyPressed(Util::Keycode::LEFT))  m_Player->Move(-1, 0);
         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);
 

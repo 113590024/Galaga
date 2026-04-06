@@ -2,15 +2,30 @@
 #define ZAKO_HPP
 
 #include "Enemy.hpp"
+#include "Util/Animation.hpp"
 
 class Zako : public Enemy {
 public:
-    explicit Zako(const glm::vec2& startPos)
-        : Enemy(RESOURCE_DIR"/Image/Character/enemy_zako1.png", 10) {
+    Zako(const glm::vec2& startPos,
+         const glm::vec2& formationPos,
+         const std::vector<BezierPath>& entryPath)
+        : Enemy("", 10) {
+
+        std::vector<std::string> frames = {
+            RESOURCE_DIR"/Image/Character/enemy_zako1.png",
+            RESOURCE_DIR"/Image/Character/enemy_zako2.png",
+        };
+        m_Drawable = std::make_shared<Util::Animation>(
+            frames, true, 200, true, 0
+        );
+        std::dynamic_pointer_cast<Util::Animation>(m_Drawable)->Play();
+
         m_Transform.translation = startPos;
         m_Transform.scale = {1.0f, 1.0f};
-        m_health=1;
-        m_Score = 50;
+        m_health = 1;
+        m_Score = 100;
+        m_FormationPos = formationPos;
+        SetPath(entryPath);
     }
 
     void Update() override {
@@ -19,25 +34,34 @@ public:
                 UpdatePath();
                 break;
             case State::FORMATION:
-                // 之後做編隊移動
+                updateFormation();
                 break;
             case State::DIVING:
                 UpdatePath();
                 break;
             case State::RETURNING:
-                // 之後做
                 break;
         }
     }
 
+    void SetFormationOffset(float offsetX) {
+        m_FormationOffsetX = offsetX;
+    }
+
     void StartDive(const glm::vec2& playerPos) override {
-        m_FormationPos = m_Transform.translation;
+        (void)playerPos;
         m_State = State::DIVING;
-        // 之後設定俯衝路徑
     }
 
 private:
-    //
+    float m_FormationOffsetX = 0.0f;
+
+    void updateFormation() {
+        m_Transform.translation = {
+            m_FormationPos.x + m_FormationOffsetX,
+            m_FormationPos.y
+        };
+    }
 };
 
 #endif

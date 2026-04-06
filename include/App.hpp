@@ -11,6 +11,9 @@
 #include "Player_bullet.hpp"
 #include "Zako.hpp"
 #include "Explosion.hpp"
+#include "StageOne.hpp"
+#include "StageTwo.hpp"
+#include "StageThree.hpp"
 
 class App {
 public:
@@ -79,6 +82,10 @@ private:
 
     // Explosion!!!!!!!!!!!!!!!!!!!!!!!!!!!
     std::vector<std::shared_ptr<Explosion>> m_Explosions;
+
+    //關卡
+    std::unique_ptr<StageManager> m_StageManager;
+    int m_CurrentStage = 1;
 };
 
 #endif

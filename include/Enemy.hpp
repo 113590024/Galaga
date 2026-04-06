@@ -20,7 +20,9 @@ public:
     };
 
     explicit Enemy(const std::string& imagePath, float zIndex = 10) {
-        m_Drawable = std::make_shared<Util::Image>(imagePath);
+        if (!imagePath.empty()) {
+            m_Drawable = std::make_shared<Util::Image>(imagePath);
+        }
         m_ZIndex = zIndex;
         m_Visible = true;
     }
@@ -44,7 +46,7 @@ public:
     [[nodiscard]] bool IsEntering() const {
         return m_State == State::ENTERING;
     }
-    [[nodiscard]] bool IsInFormsation() const {
+    [[nodiscard]] bool IsInFormation() const {
         return m_State == State::FORMATION;
     }
     [[nodiscard]] bool IsDiving() const {
