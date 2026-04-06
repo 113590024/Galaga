@@ -83,7 +83,7 @@ void App::Start() {
     m_LivesLabel->SetVisible(false);
 
     // 生人敵人 (第一關)
-    m_StageManager = std::make_unique<StageOne>(m_Root, m_Enemies);
+    m_StageManager = std::make_unique<Stage0>(m_Root, m_Enemies);
     m_StageManager->StartStage();
 
     m_CurrentState = State::UPDATE;

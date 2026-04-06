@@ -1,11 +1,11 @@
-#ifndef STAGE_ONE_HPP
-#define STAGE_ONE_HPP
+#ifndef STAGE0_HPP
+#define STAGE0_HPP
 
 #include "StageManager.hpp"
 
-class StageOne : public StageManager {
+class Stage0 : public StageManager {
 public:
-    StageOne(Util::Renderer& root,
+    Stage0(Util::Renderer& root,
              std::vector<std::shared_ptr<Enemy>>& enemies)
         : StageManager(root, enemies) {}
 

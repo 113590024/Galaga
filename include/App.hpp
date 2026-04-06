@@ -11,7 +11,7 @@
 #include "Player_bullet.hpp"
 #include "Zako.hpp"
 #include "Explosion.hpp"
-#include "StageOne.hpp"
+#include "Stage0.hpp"
 #include "StageTwo.hpp"
 #include "StageThree.hpp"
 
