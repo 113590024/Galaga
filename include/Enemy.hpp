@@ -87,6 +87,14 @@ public:
         return (dx * dx + dy * dy) < (radius * radius);
     }
 
+    // 由 AppUpdate 或 Stage 給入場路徑
+    void SetPath(const std::vector<BezierPath>& path) {
+        m_Path = path;
+        m_PathIndex = 0;
+        m_T = 0.0f;
+        m_State = State::ENTERING;
+    }
+
 protected:
     bool m_IsAlive = true;
     int m_health=1;
@@ -98,19 +106,12 @@ protected:
     int m_PathIndex = 0;//目前走到第幾段曲線
     float m_T = 0.0f;//目前這段曲線的進度
 
-    // 由 AppUpdate 或 Stage 給入場路徑
-    void SetPath(const std::vector<BezierPath>& path) {
-        m_Path = path;
-        m_PathIndex = 0;
-        m_T = 0.0f;
-        m_State = State::ENTERING;
-    }
-
     void UpdatePath() {
         if (m_PathIndex >= m_Path.size()) {
             // 路徑走完
             if (m_State == State::ENTERING) {
                 m_State = State::FORMATION;
+                m_Transform.translation = m_FormationPos;
             }
             return;
         }

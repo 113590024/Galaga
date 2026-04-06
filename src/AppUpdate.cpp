@@ -73,8 +73,12 @@ void App::Update() {
     // 遊戲進行中
     if (m_GameState == GameState::PLAYING) {
 
-        m_StageManager->Update();
-
+        //m_StageManager->Update();
+        m_Stage0_0->Update(m_Enemies, m_Root);
+        // 更新所有敵人
+        for (auto& enemy : m_Enemies) {
+            enemy->Update();
+        }
 
         if (Util::Input::IsKeyPressed(Util::Keycode::LEFT))  m_Player->Move(-1, 0);
         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);
@@ -127,7 +131,6 @@ void App::Update() {
                     m_Explosions.push_back(explosion);
                     m_Root.AddChild(explosion);
     }
-
                     m_Root.RemoveChild(b);      //移除子彈
                     m_Score += enemy->GetScore(); // 加分
 
@@ -139,22 +142,6 @@ void App::Update() {
             return false;
         }
         );
-
-        // 碰撞偵測
-        /*for (auto& bullet : m_Bullets) {
-            for (auto& enemy : m_Enemies) {
-                if (!enemy->IsAlive()) continue;
-                if (enemy->IfCollides(bullet->GetPosition(), 25.0f)) {
-                    //enemy->Kill();              // 敵人消失
-                    bullet->SetVisible(false);  // 子彈消失
-                    //Player_bullet::setBulletcount(-1); // 子彈數量-1
-                    m_Score += enemy->GetScore(); // 加分
-
-                    // 更新分數顯示
-                    m_ScoreLabel->SetText("SCORE\n" + std::to_string(m_Score));
-                }
-            }
-        }*/
 
         // 移除被嘎嘎敵人和嘎嘎子彈
         m_Enemies.erase(
