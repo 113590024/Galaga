@@ -60,7 +60,7 @@ void App::Start() {
     m_StartText = std::make_shared<Label>(
     RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "START",
     Util::Color::FromRGB(255, 120, 0), 20);
-    m_StartText->SetPosition({0.0f, 0.0f});
+    m_StartText->SetPosition({-150.0f, 0.0f});
     m_StartText->SetVisible(false);
     m_Root.AddChild(m_StartText);
 
@@ -69,7 +69,7 @@ void App::Start() {
     RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "PAUSED",
     Util::Color::FromRGB(255, 255, 0), 20 // 黃色，最上層
     );
-    m_PauseText->SetPosition({0.0f, 0.0f});
+    m_PauseText->SetPosition({-150.0f, 0.0f});
     m_PauseText->SetVisible(false);
     m_Root.AddChild(m_PauseText);
 
@@ -77,7 +77,7 @@ void App::Start() {
     m_ReadyText = std::make_shared<Label>(
     RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "READY",
     Util::Color::FromRGB(255, 120, 0), 20);
-    m_ReadyText->SetPosition({0.0f, 0.0f});
+    m_ReadyText->SetPosition({-150.0f, 0.0f});
     m_ReadyText->SetVisible(false);
     m_Root.AddChild(m_ReadyText);
 

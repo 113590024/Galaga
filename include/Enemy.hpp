@@ -92,6 +92,7 @@ public:
         m_Path = path;
         m_PathIndex = 0;
         m_T = 0.0f;
+        m_Transform.rotation = 0.0f;
         m_State = State::ENTERING;
     }
 
@@ -129,6 +130,7 @@ protected:
         //(u + t)^3 = u³ + 3u²t + 3ut² + t³，u=1-t
         float u = 1.0f - m_T;
         int n = seg.points.size();
+        glm::vec2 prevPos = m_Transform.translation;
 
         if (n == 2) {
             m_Transform.translation =
@@ -147,6 +149,14 @@ protected:
                 3*u*u*m_T     * seg.points[1] +
                 3*u*m_T*m_T   * seg.points[2] +
                 m_T*m_T*m_T   * seg.points[3];
+        }
+
+        // 計算移動方向並旋轉
+        glm::vec2 dir = m_Transform.translation - prevPos;
+        if (glm::length(dir) > 0.001f) {
+            // atan2 算出角度，+90度是因為圖片預設朝上
+            float angle = glm::degrees(std::atan2(dir.x, dir.y));
+            m_Transform.rotation = -angle;
         }
     }
 };
