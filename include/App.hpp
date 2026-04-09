@@ -11,7 +11,6 @@
 #include "Player_bullet.hpp"
 #include "Zako.hpp"
 #include "Explosion.hpp"
-#include "Stage0.hpp"
 #include "Stage0_0.hpp"
 
 class App {
@@ -63,8 +62,18 @@ private:
     // 箭頭
     std::shared_ptr<Cursor> m_Cursor;
 
+    // START
+    std::shared_ptr<Label> m_StartText;
+    bool m_ShowingStart = false;
+    float m_StartTimer = 0.0f;
+
     // 暫停文字
     std::shared_ptr<Label> m_PauseText;
+
+    // READY
+    std::shared_ptr<Label> m_ReadyText;
+    bool m_ShowingReady = false;
+    float m_ReadyTimer = 0.0f;
 
     //玩家子彈
     std::vector<std::shared_ptr<Player_bullet>> m_Bullets;

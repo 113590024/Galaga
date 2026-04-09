@@ -6,6 +6,7 @@
 #define GALAGA_STAGE0_0_HPP
 
 #include "Zako.hpp"
+#include "Util/Time.hpp"
 #include <vector>
 #include <memory>
 

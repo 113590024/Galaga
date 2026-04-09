@@ -41,7 +41,7 @@ void App::Update() {
         }
 
         // 動畫結束
-        if (!m_IntroPlaying) {
+        if (!m_IntroPlaying && !m_ShowingStart) {
             m_Cursor->SetVisible(true); // 顯示箭頭
             if (Util::Input::IsKeyUp(Util::Keycode::UP)) {
                 m_MenuIndex = 0;
@@ -51,23 +51,40 @@ void App::Update() {
                 m_MenuIndex = 1;
                 m_Cursor->SetPosition({-130.0f, -90.0f});
             }
-            if (Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
-                m_GameState = GameState::PLAYING;
+            if (Util::Input::IsKeyUp(Util::Keycode::RETURN)){
                 m_Logo->SetVisible(false);
                 m_Text1P->SetVisible(false);
                 m_Text2P->SetVisible(false);
                 m_Cursor->SetVisible(false);
-                m_Player->SetVisible(true);
                 m_ScoreLabel->SetVisible(true);
                 m_LivesLabel->SetVisible(true);
+                m_StartText->SetVisible(true);
+                m_ShowingStart = true;
+            }
+        }
+        // START 文字顯示計時（每幀都跑）
+        if (m_ShowingStart && !m_ShowingReady) {
+            m_StartTimer += Util::Time::GetDeltaTimeMs();
+            if (m_StartTimer >= 2000.0f) {
+                m_StartText->SetVisible(false);
+                m_ReadyText->SetVisible(true);
+                m_ShowingReady = true;
+            }
+        }
 
+        // READY 文字顯示計時（每幀都跑）
+        if (m_ShowingReady) {
+            m_ReadyTimer += Util::Time::GetDeltaTimeMs();
+            if (m_ReadyTimer >= 2000.0f) {
+                m_ReadyText->SetVisible(false);
+                m_Player->SetVisible(true);
+                m_GameState = GameState::PLAYING;
                 // 顯示敵人
                 for (auto& enemy : m_Enemies) {
                     enemy->SetVisible(true);
                 }
             }
         }
-
     }
 
     // 遊戲進行中

@@ -56,7 +56,15 @@ void App::Start() {
     m_Cursor->SetPosition({-130.0f, -50.0f}); // 對齊 1 PLAYER 左邊
     m_Root.AddChild(m_Cursor);
 
-    // 暫停文字(預設隱藏)
+    // START (剛開始)
+    m_StartText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "START",
+    Util::Color::FromRGB(255, 120, 0), 20);
+    m_StartText->SetPosition({0.0f, 0.0f});
+    m_StartText->SetVisible(false);
+    m_Root.AddChild(m_StartText);
+
+    // 暫停文字
     m_PauseText = std::make_shared<Label>(
     RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "PAUSED",
     Util::Color::FromRGB(255, 255, 0), 20 // 黃色，最上層
@@ -65,16 +73,24 @@ void App::Start() {
     m_PauseText->SetVisible(false);
     m_Root.AddChild(m_PauseText);
 
+    // READY
+    m_ReadyText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "READY",
+    Util::Color::FromRGB(255, 120, 0), 20);
+    m_ReadyText->SetPosition({0.0f, 0.0f});
+    m_ReadyText->SetVisible(false);
+    m_Root.AddChild(m_ReadyText);
+
     //分數、生命值
     m_ScoreLabel = std::make_shared<Label>(
-    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 16, "SCORE",
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 25, "SCORE",
     Util::Color::FromRGB(255, 255, 0), 20
 );
     m_ScoreLabel->SetPosition({480.0f, 200.0f});
     m_Root.AddChild(m_ScoreLabel);
 
     m_LivesLabel = std::make_shared<Label>(
-        RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 16, "LIVES: 3",
+        RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 25, "LIVES: 3",
         Util::Color::FromRGB(255, 255, 255), 20
     );
     m_LivesLabel->SetPosition({480.0f, 100.0f});
