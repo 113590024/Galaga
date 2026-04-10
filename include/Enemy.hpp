@@ -119,7 +119,7 @@ protected:
 
         // 取得目前這段曲線
         auto& seg = m_Path[m_PathIndex];
-        m_T += 0.02f;  // 移動速度
+        m_T += 0.01f;  // 移動速度
         if (m_T >= 1.0f) {
             m_T = 0.0f;
             m_PathIndex++;  // 走下一段
@@ -152,12 +152,12 @@ protected:
         }
 
         // 計算移動方向並旋轉
-        glm::vec2 dir = m_Transform.translation - prevPos;
+        /*glm::vec2 dir = m_Transform.translation - prevPos;
         if (glm::length(dir) > 0.001f) {
             // atan2 算出角度，+90度是因為圖片預設朝上
             float angle = glm::degrees(std::atan2(dir.x, dir.y));
             m_Transform.rotation = -angle;
-        }
+        }*/
     }
 };
 

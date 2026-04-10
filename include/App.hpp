@@ -92,8 +92,6 @@ private:
     std::vector<std::shared_ptr<Explosion>> m_Explosions;
 
     //關卡
-    /*std::unique_ptr<StageManager> m_StageManager;
-    int m_CurrentStage = 1;*/
     std::shared_ptr<Stage0_0> m_Stage0_0;
 };
 
