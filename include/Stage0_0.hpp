@@ -6,6 +6,7 @@
 #define GALAGA_STAGE0_0_HPP
 
 #include "Zako.hpp"
+#include "Butterfly.hpp"
 #include "Util/Time.hpp"
 #include <vector>
 #include <memory>
@@ -15,14 +16,29 @@ public:
     Stage0_0() {
         //編隊位置
         std::vector<glm::vec2> formationPositions = {
+            {-400.0f, 100.0f},
+            {-350.0f,  100.0f},
+            {-300.0f, 100.0f},
+            {-250.0f, 100.0f},
             {-200.0f, 100.0f},
             {-150.0f, 100.0f},
             {-100.0f,  100.0f},
             {-50.0f, 100.0f},
             {0.0f, 100.0f},
+            {50.0f, 100.0f},
+            {-400.0f, 150.0f},
+            {-350.0f,  150.0f},
+            {-300.0f, 150.0f},
+            {-250.0f, 150.0f},
+            {-200.0f, 150.0f},
+            {-150.0f, 150.0f},
+            {-100.0f,  150.0f},
+            {-50.0f, 150.0f},
+            {0.0f, 150.0f},
+            {50.0f, 150.0f},
         };
         // 5隻 Zako 排隊從同一個起點進來
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 20; i++) {
             glm::vec2 fPos = formationPositions[i];
             std::vector<Enemy::BezierPath> path = {
                 { { {-100.0f, 500.0f}, {-100.0f, 350.0f}, {-100.0f, 350.0f}, {-400.0f, 180.0f} } },
