@@ -3,6 +3,7 @@
 
 #include "Enemy.hpp"
 #include "Util/Animation.hpp"
+#include "Util/Time.hpp"
 
 class Zako : public Enemy {
 public:
@@ -50,6 +51,10 @@ public:
                 break;
             case State::FORMATION:
                 updateFormation();
+                m_DiveTimer -= Util::Time::GetDeltaTimeMs();
+                if (m_DiveTimer <= 0.0f) {
+                    StartDive({0.0f, 0.0f}); // 先用假的玩家位置測試
+                }
                 break;
             case State::DIVING:
                 UpdatePath();
@@ -71,8 +76,27 @@ public:
 
     void StartDive(const glm::vec2& playerPos) override {
         (void)playerPos;
+        m_FormationPos = m_Transform.translation;
         m_State = State::DIVING;
         setAnimation(m_DiveFrames);
+
+        glm::vec2 start = m_Transform.translation;
+
+        // 俯衝路徑：從編隊位置飛向玩家，再飛出畫面
+        std::vector<Enemy::BezierPath> divePath = {
+            { { start,
+                {start.x, start.y - 100.0f},   // 先往下
+                {start.x-50.0f,  + 100.0f},
+                {start.x-50.0f, -400.0f} } },            // 飛出畫面下方
+
+            // 回到編隊位置
+            { { {m_FormationPos.x, -400.0f},
+                {m_FormationPos.x, -300.0f},
+                {m_FormationPos.x, -300.0f},
+                m_FormationPos } }
+        };
+
+        SetPath(divePath);
     }
 
 private:
@@ -80,6 +104,7 @@ private:
     std::vector<std::string> m_IdleFrames;
     std::vector<std::string> m_DiveFrames;
     glm::vec2 m_PrevPosition = {0.0f, 0.0f};
+    float m_DiveTimer = 3000.0f;  // 3秒（毫秒單位）
 
     void updateFormation() {
         m_Transform.translation = {

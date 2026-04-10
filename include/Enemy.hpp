@@ -110,7 +110,7 @@ protected:
     void UpdatePath() {
         if (m_PathIndex >= m_Path.size()) {
             // 路徑走完
-            if (m_State == State::ENTERING) {
+            if (m_State == State::ENTERING || m_State == State::DIVING) {
                 m_State = State::FORMATION;
                 m_Transform.translation = m_FormationPos;
             }
