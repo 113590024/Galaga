@@ -29,7 +29,7 @@ public:
         setAnimation(m_IdleFrames);
 
         m_Transform.translation = startPos;
-        m_Transform.scale = {1.0f, 1.0f};
+        m_Transform.scale = {0.9f, 0.9f};
         m_health = 1;
         m_Score = 100;
         m_FormationPos = formationPos;
