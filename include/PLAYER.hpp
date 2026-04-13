@@ -7,6 +7,7 @@
 
 #include "Util/GameObject.hpp"
 #include "Util/Image.hpp"
+#include "Util/Time.hpp"
 
 class PLAYER : public Util::GameObject {
 public:
@@ -19,10 +20,34 @@ public:
 		m_Transform.translation = pos;
 	}
 
+    void TakeDamage() {
+        if (m_IsInvincible) return;  // 無敵時不扣血
+        m_HP--;
+        m_IsInvincible = true;
+        m_InvincibleTimer = 5000.0f;  // 死亡後5秒無敵
+    }
+    void Update() {
+        if (m_IsInvincible) {
+            m_InvincibleTimer -= Util::Time::GetDeltaTimeMs();
+            if (m_InvincibleTimer <= 0.0f) {
+                m_IsInvincible = false;
+            }
+        }
+    }
+
+    void ResetPosition() {
+        m_Transform.translation = {-150.0f, -300.0f};
+    }
+
+    [[nodiscard]] bool IsDead() const { return m_HP <= 0; }
+    [[nodiscard]] bool IsAlive() const { return m_HP > 0; }
+    [[nodiscard]] int GetHP() const { return m_HP; }
 
 private:
     float m_Speed = 10.0f;
-    // 之後加：float m_HP = 3;
+    int m_HP = 3;
+    bool m_IsInvincible = false;
+    float m_InvincibleTimer = 0.0f;
 };
 
 #endif

@@ -23,6 +23,7 @@ public:
     enum class GameState {
         START_SCREEN,
         PLAYING,
+        PLAYER_DEAD,
         PAUSED,
         GAME_OVER
     };
@@ -78,6 +79,8 @@ private:
     //玩家子彈
     std::vector<std::shared_ptr<Player_bullet>> m_Bullets;
     float m_ShootCooldown = 0.0f; // 射擊冷卻
+
+    float m_DeathTimer = 0.0f;
 
     //分數、生命值
     std::shared_ptr<Label> m_ScoreLabel;

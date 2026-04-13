@@ -46,6 +46,7 @@ add_executable(Galaga ${SRC_FILES} ${HEADER_FILES}
         include/Butterfly.hpp
         include/Boss_Galaga.hpp
         include/Stage0_0.hpp
+        include/Enemy_bullet.hpp
 )
 
 if(MSVC)

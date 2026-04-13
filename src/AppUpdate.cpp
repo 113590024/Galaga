@@ -89,6 +89,7 @@ void App::Update() {
 
     // 遊戲進行中
     if (m_GameState == GameState::PLAYING) {
+        m_Player->Update();
 
         //m_StageManager->Update();
         m_Stage0_0->Update(m_Enemies, m_Root);
@@ -178,6 +179,22 @@ void App::Update() {
             m_Bullets.end()
         );
 
+        //敵人碰到玩家
+        for (auto& enemy : m_Enemies) {
+            if (!enemy->IsAlive()) continue;
+            if (enemy->IfCollides(m_Player->GetPosition(), 20.0f)) {
+                m_Player->TakeDamage();
+                if (m_Player->IsDead()) {
+                    m_GameState = GameState::GAME_OVER;
+                } else {
+                    m_GameState = GameState::PLAYER_DEAD;
+                    m_Player->SetVisible(false);
+                    m_DeathTimer = 5000.0f;
+                }
+                break;
+            }
+        }
+
         if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE)) {
             m_GameState = GameState::PAUSED;
             m_PauseText->SetVisible(true);
@@ -191,6 +208,27 @@ void App::Update() {
             m_GameState = GameState::PLAYING;
             m_PauseText->SetVisible(false);
         }
+    }
+
+    //玩家受傷
+    if (m_GameState==GameState::PLAYER_DEAD) {
+        m_DeathTimer -= Util::Time::GetDeltaTimeMs();
+
+        // 敵人繼續移動
+        for (auto& enemy : m_Enemies) {
+            enemy->Update();
+        }
+
+        if (m_DeathTimer <= 0.0f) {
+            m_Player->SetVisible(true);
+            m_Player->ResetPosition();
+            m_GameState = GameState::PLAYING;
+        }
+    }
+
+    //結算
+    if (m_GameState == GameState::GAME_OVER) {
+
     }
 
     if (Util::Input::IfExit()) {
