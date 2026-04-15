@@ -22,7 +22,7 @@ public:
 
     void TakeDamage() {
         if (m_IsInvincible) return;  // 無敵時不扣血
-        m_HP--;
+        m_HP = m_HP - 1;
         m_IsInvincible = true;
         m_InvincibleTimer = 5000.0f;  // 死亡後5秒無敵
     }
@@ -42,6 +42,7 @@ public:
     [[nodiscard]] bool IsDead() const { return m_HP <= 0; }
     [[nodiscard]] bool IsAlive() const { return m_HP > 0; }
     [[nodiscard]] int GetHP() const { return m_HP; }
+    [[nodiscard]] int GetVisibility() const { return m_IsInvincible; }
 
 private:
     float m_Speed = 10.0f;

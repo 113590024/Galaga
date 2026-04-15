@@ -101,5 +101,13 @@ void App::Start() {
     //生人敵人
     m_Stage0_0 = std::make_shared<Stage0_0>();
 
+    // GAMEOVER文字
+    m_GameOverText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 40, "GAME OVER",
+    Util::Color::FromRGB(255, 0, 0), 50);
+    m_GameOverText->SetPosition({-150.0f, 0.0f});
+    m_GameOverText->SetVisible(false);
+    m_Root.AddChild(m_GameOverText);
+
     m_CurrentState = State::UPDATE;
 }

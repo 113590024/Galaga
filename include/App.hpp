@@ -25,7 +25,8 @@ public:
         PLAYING,
         PLAYER_DEAD,
         PAUSED,
-        GAME_OVER
+        GAME_OVER,
+        RESULT
     };
 
     State GetCurrentState() const { return m_CurrentState; }
@@ -76,13 +77,12 @@ private:
     bool m_ShowingReady = false;
     float m_ReadyTimer = 0.0f;
 
-    //玩家子彈
+    // 玩家子彈
     std::vector<std::shared_ptr<Player_bullet>> m_Bullets;
     float m_ShootCooldown = 0.0f; // 射擊冷卻
-
     float m_DeathTimer = 0.0f;
 
-    //分數、生命值
+    // 分數、生命值
     std::shared_ptr<Label> m_ScoreLabel;
     std::shared_ptr<Label> m_LivesLabel;
     int m_Score = 0;
@@ -94,8 +94,23 @@ private:
     // Explosion!!!!!!!!!!!!!!!!!!!!!!!!!!!
     std::vector<std::shared_ptr<Explosion>> m_Explosions;
 
-    //關卡
+    // 關卡 (第幾關)
     std::shared_ptr<Stage0_0> m_Stage0_0;
+
+    //GAMEOVER
+    std::shared_ptr<Label> m_GameOverText;
+    float m_PlayerDeathTimer = 0.0f;
+    float m_GameOverTimer = 0.0f;
+    float m_ResultTimer = 0.0f;
+
+    //Result計數
+    int m_ShotsFired = 0;   // 總射擊次數
+    int m_Hits = 0;         // 命中次數
+
+    // Result畫面的文字物件
+    std::shared_ptr<Label> m_ResultShotsText;
+    std::shared_ptr<Label> m_ResultHitsText;
+    std::shared_ptr<Label> m_ResultRatioText;
 };
 
 #endif
