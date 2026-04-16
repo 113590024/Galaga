@@ -43,6 +43,7 @@ public:
     [[nodiscard]] bool IsAlive() const { return m_HP > 0; }
     [[nodiscard]] int GetHP() const { return m_HP; }
     [[nodiscard]] int GetVisibility() const { return m_IsInvincible; }
+    void ResetHP() { m_HP = 3; }
 
 private:
     float m_Speed = 10.0f;

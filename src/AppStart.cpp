@@ -109,5 +109,31 @@ void App::Start() {
     m_GameOverText->SetVisible(false);
     m_Root.AddChild(m_GameOverText);
 
+    // Result文字
+    m_ResultText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 35, "- RESULT -",
+    Util::Color::FromRGB(255, 0, 0), 50);
+    m_ResultText->SetPosition({-150.0f, 80.0f});
+    m_ResultText->SetVisible(false);
+    m_Root.AddChild(m_ResultText);
+    m_ResultShotsText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 35, "SHOTS FIRED:        ",
+    Util::Color::FromRGB(0, 0, 255), 50);
+    m_ResultShotsText->SetPosition({-150.0f, 20.0f});
+    m_ResultShotsText->SetVisible(false);
+    m_Root.AddChild(m_ResultShotsText);
+    m_ResultHitsText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 35, "NUMBER OF HITS:     ",
+    Util::Color::FromRGB(255, 255, 255), 50);
+    m_ResultHitsText->SetPosition({-150.0, -40.0f});
+    m_ResultHitsText->SetVisible(false);
+    m_Root.AddChild(m_ResultHitsText);
+    m_ResultRatioText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 35, "HIT-MISS RATIO:     ",
+    Util::Color::FromRGB(255, 255, 0), 50);
+    m_ResultRatioText->SetPosition({-150.0f, -100.0f});
+    m_ResultRatioText->SetVisible(false);
+    m_Root.AddChild(m_ResultRatioText);
+
     m_CurrentState = State::UPDATE;
 }

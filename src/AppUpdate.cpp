@@ -7,7 +7,6 @@
 #include "Util/Logger.hpp"
 
 void App::Update() {
-
     // 背景捲動只在非暫停時執行
     if (m_GameState != GameState::PAUSED) {
         m_BgScrollY -= 1.0f;
@@ -184,7 +183,7 @@ void App::Update() {
         //敵人碰到玩家
         for (auto& enemy : m_Enemies) {
             if (!enemy->IsAlive()) continue;
-            if (enemy->IfCollides(m_Player->GetPosition(), 20.0f)) {
+            if (enemy->IfCollides(m_Player->GetPosition(), 30.0f)) {
 
                 // 玩家爆炸動畫
                 auto expPlayer = std::make_shared<Explosion>(m_Player->GetPosition(), Explosion::Type::PLAYER);
@@ -198,10 +197,10 @@ void App::Update() {
                 if (m_Player->IsDead()) {
                     m_GameState = GameState::GAME_OVER;
                     m_GameOverText->SetVisible(true);
-                    m_ResultTimer = 3000.0f;
+                    m_GameOverTimer = 3000.0f;
                 } else {
                     m_GameState = GameState::PLAYER_DEAD;
-                    m_PlayerDeathTimer = 3500.0f;
+                    m_PlayerDeathTimer = 5000.0f;
                 }
                 break;
             }
@@ -224,6 +223,7 @@ void App::Update() {
 
     //玩家受傷
     if (m_GameState == GameState::PLAYER_DEAD) {
+        m_ReadyText->SetVisible(true);
         m_PlayerDeathTimer -= Util::Time::GetDeltaTimeMs();
 
         // 爆炸動畫繼續更新
@@ -243,6 +243,7 @@ void App::Update() {
 
         if (m_PlayerDeathTimer <= 0.0f) {
             // 復活
+            m_ReadyText->SetVisible(false);
             m_Player->SetVisible(true);
             m_Player->ResetPosition();
             m_GameState = GameState::PLAYING;
@@ -251,8 +252,7 @@ void App::Update() {
 
     //結算
     if (m_GameState == GameState::GAME_OVER){
-        m_GameOverTimer = 10000.0f;
-        m_ResultTimer -= Util::Time::GetDeltaTimeMs();
+        m_GameOverTimer -= Util::Time::GetDeltaTimeMs();
 
         // 爆炸動畫繼續
         for (auto& exp : m_Explosions) {
@@ -270,10 +270,10 @@ void App::Update() {
             // 計算比例 (避免除以零)
             float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;
 
-            // 設定 Result 文字內容 (假設你已經在 Start() 初始化了這些 Text 物件)
-            m_ResultShotsText->SetText("SHOTS FIRED: " + std::to_string(m_ShotsFired));
-            m_ResultHitsText->SetText("NUMBER OF HITS: " + std::to_string(m_Hits));
-            m_ResultRatioText->SetText("HIT-MISS RATIO: " + std::to_string(static_cast<int>(ratio)) + "%");
+            // Result文字
+            m_ResultShotsText->SetText("SHOTS FIRED:        " + std::to_string(m_ShotsFired));
+            m_ResultHitsText->SetText("NUMBER OF HITS:      " + std::to_string(m_Hits));
+            m_ResultRatioText->SetText("HIT-MISS RATIO:     " + std::to_string(static_cast<int>(ratio)) + "%");
 
             // 顯示文字
             m_ResultShotsText->SetVisible(true);
@@ -283,53 +283,54 @@ void App::Update() {
             m_ResultTimer = 5000.0f; // 給玩家 5 秒看分數
             m_GameState = GameState::RESULT; // 跳轉狀態
         }
-        if (m_GameState == GameState::RESULT) {
-            m_ResultTimer -= Util::Time::GetDeltaTimeMs();
-            // 也可以讓玩家按 Enter 直接跳過等待時間
-            if (m_ResultTimer <= 0.0f || Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
-                // 隱藏 Result 文字
-                m_ResultShotsText->SetVisible(false);
-                m_ResultHitsText->SetVisible(false);
-                m_ResultRatioText->SetVisible(false);
+    }
+    if (m_GameState == GameState::RESULT) {
+        m_ResultTimer -= Util::Time::GetDeltaTimeMs();
+        // 也可以讓玩家按 Enter 直接跳過等待時間
+        if (m_ResultTimer <= 0.0f || Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
+            // 隱藏 Result 文字
+            m_ResultShotsText->SetVisible(false);
+            m_ResultHitsText->SetVisible(false);
+            m_ResultRatioText->SetVisible(false);
 
-                // --- 重置數據 (原本在 GameOver 做的重置動作搬到這裡) ---
-                m_ShotsFired = 0;
-                m_Hits = 0;
+            // --- 重置數據
+            m_ShotsFired = 0;
+            m_Hits = 0;
 
-                // 回到大廳：重置所有狀態
-                m_GameOverText->SetVisible(false);
-                m_Player->SetVisible(false);
+            // 回到大廳：重置所有狀態
+            m_Player->SetVisible(false);
 
-                // 清除所有敵人
-                for (auto& enemy : m_Enemies) {
-                    m_Root.RemoveChild(enemy);
-                }
-                m_Enemies.clear();
-
-                // 重置分數生命
-                m_Score = 0;
-                m_ScoreLabel->SetText("SCORE\n0");
-                m_ScoreLabel->SetVisible(false);
-                m_LivesLabel->SetVisible(false);
-
-                // 重置開場動畫狀態
-                m_ShowingStart = false;
-                m_ShowingReady = false;
-                m_StartTimer = 0.0f;
-                m_ReadyTimer = 0.0f;
-                m_IntroPlaying = true;
-                m_IntroY = -500.0f;
-
-                // 顯示選單
-                m_Logo->SetVisible(true);
-                m_Text1P->SetVisible(true);
-                m_Text2P->SetVisible(true);
-
-                // 重建關卡
-                m_Stage0_0 = std::make_unique<Stage0_0>();
-
-                m_GameState = GameState::START_SCREEN;
+            // 清除所有敵人
+            for (auto& enemy : m_Enemies) {
+                m_Root.RemoveChild(enemy);
             }
+            m_Enemies.clear();
+
+            // 重置分數、生命
+            m_Score = 0;
+            m_ScoreLabel->SetText("SCORE\n0");
+            m_ScoreLabel->SetVisible(false);
+            m_Player->ResetHP();
+            m_LivesLabel->SetText("LIVES: " + std::to_string(m_Player->GetHP()));
+            m_LivesLabel->SetVisible(false);
+
+            // 重置開場動畫狀態
+            m_ShowingStart = false;
+            m_ShowingReady = false;
+            m_StartTimer = 0.0f;
+            m_ReadyTimer = 0.0f;
+            m_IntroPlaying = true;
+            m_IntroY = -500.0f;
+
+            // 顯示選單
+            m_Logo->SetVisible(true);
+            m_Text1P->SetVisible(true);
+            m_Text2P->SetVisible(true);
+
+            // 重建關卡
+            m_Stage0_0 = std::make_unique<Stage0_0>();
+
+            m_GameState = GameState::START_SCREEN;
         }
     }
     if (Util::Input::IfExit()) {

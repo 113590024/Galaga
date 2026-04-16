@@ -108,6 +108,7 @@ private:
     int m_Hits = 0;         // 命中次數
 
     // Result畫面的文字物件
+    std::shared_ptr<Label> m_ResultText;
     std::shared_ptr<Label> m_ResultShotsText;
     std::shared_ptr<Label> m_ResultHitsText;
     std::shared_ptr<Label> m_ResultRatioText;
