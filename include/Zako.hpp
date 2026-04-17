@@ -78,6 +78,7 @@ public:
         (void)playerPos;
         m_FormationPos = m_Transform.translation;
         m_State = State::DIVING;
+        m_DiveTimer=3000.0f;
         setAnimation(m_DiveFrames);
 
         glm::vec2 start = m_Transform.translation;
@@ -104,7 +105,7 @@ private:
     std::vector<std::string> m_IdleFrames;
     std::vector<std::string> m_DiveFrames;
     glm::vec2 m_PrevPosition = {0.0f, 0.0f};
-    float m_DiveTimer = 3000.0f;  // 3秒（毫秒單位）
+    float m_DiveTimer = 5000.0f;  // 5秒
 
     void updateFormation() {
         m_Transform.translation = {

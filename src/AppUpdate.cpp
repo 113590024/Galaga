@@ -226,6 +226,10 @@ void App::Update() {
         m_ReadyText->SetVisible(true);
         m_PlayerDeathTimer -= Util::Time::GetDeltaTimeMs();
 
+        /*for (auto& enemy : m_Enemies) {
+            enemy->;
+        }*/
+
         // 爆炸動畫繼續更新
         for (auto& exp : m_Explosions) {
             exp->Update();
