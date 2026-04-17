@@ -15,14 +15,6 @@ public:
             RESOURCE_DIR"/Image/Character/enemy_Butterfly1.png",
             RESOURCE_DIR"/Image/Character/enemy_Butterfly2.png",
         };
-        m_DiveFrames = {
-            RESOURCE_DIR"/Image/Character/enemy_Butterfly3.png",
-            RESOURCE_DIR"/Image/Character/enemy_Butterfly4.png",
-            RESOURCE_DIR"/Image/Character/enemy_Butterfly5.png",
-            RESOURCE_DIR"/Image/Character/enemy_Butterfly6.png",
-            RESOURCE_DIR"/Image/Character/enemy_Butterfly7.png",
-            RESOURCE_DIR"/Image/Character/enemy_Butterfly8.png",
-        };
 
         setAnimation(m_IdleFrames);
 

@@ -12,7 +12,6 @@ PLAYER::PLAYER(const std::string& imagePath) {
 
 void PLAYER::Move(float dx, float dy) {
     m_Transform.translation.x += dx * m_Speed;
-    // 右邊界改成 +160，不讓玩家跑進 UI 區
     m_Transform.translation.x = glm::clamp(m_Transform.translation.x, -600.0f, 300.0f);
     //中心點 x:-150.0f y:0.0f
 }
