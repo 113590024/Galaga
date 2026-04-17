@@ -7,6 +7,7 @@
 
 #include "Zako.hpp"
 #include "Butterfly.hpp"
+#include "Boss_Galaga.hpp"
 #include "Util/Time.hpp"
 #include <vector>
 #include <memory>
@@ -17,21 +18,25 @@ public:
         //編隊位置
         std::vector<glm::vec2> formationPositions = {
             // ZAKO
-            {-400.0f, 100.0f},{-350.0f,  100.0f},{-300.0f, 100.0f},
-            {-250.0f, 100.0f},{-200.0f, 100.0f},{-150.0f, 100.0f},
-            {-100.0f,  100.0f},{-50.0f, 100.0f},{0.0f, 100.0f},
-            {50.0f, 100.0f},
-            {-400.0f, 150.0f},{-350.0f,  150.0f},{-300.0f, 150.0f},
-            {-250.0f, 150.0f},{-200.0f, 150.0f},{-150.0f, 150.0f},
-            {-100.0f,  150.0f},{-50.0f, 150.0f},{0.0f, 150.0f},
-            {50.0f, 150.0f},
+            {-350.0f, 100.0f},{-300.0f,  100.0f},{-250.0f, 100.0f},
+            {-200.0f, 100.0f},{-150.0f, 100.0f},{-100.0f, 100.0f},
+            {-50.0f,  100.0f},{0.0f, 100.0f},{50.0f, 100.0f},
+            {100.0f, 100.0f},
+            {-350.0f, 150.0f},{-300.0f,  150.0f},{-250.0f, 150.0f},
+            {-200.0f, 150.0f},{-150.0f, 150.0f},{-100.0f, 150.0f},
+            {-50.0f,  150.0f},{-0.0f, 150.0f},{50.0f, 150.0f},
+            {100.0f, 150.0f},
             //Butterfly
-            {0.0f,  200.0f},{-50.0f, 200.0f},{-100.0f, 200.0f},
-            {-150.0f, 200.0f},{-200.0f, 200.0f},{-250.0f,  200.0f},
-            {-300.0f, 200.0f},{-350.0f, 200.0f},
-            {0.0f,  250.0f},{-50.0f, 250.0f},{-100.0f, 250.0f},
-            {-150.0f, 250.0f},{-200.0f, 250.0f},{-250.0f,  250.0f},
-            {-300.0f, 250.0f},{-350.0f, 250.0f},
+            {50.0f,  200.0f},{0.0f, 200.0f},{-50.0f, 200.0f},
+            {-100.0f, 200.0f},{-150.0f, 200.0f},{-200.0f,  200.0f},
+            {-250.0f, 200.0f},{-300.0f, 200.0f},
+            {50.0f,  250.0f},{0.0f, 250.0f},{-50.0f, 250.0f},
+            {-100.0f, 250.0f},{-150.0f, 250.0f},{-200.0f,  250.0f},
+            {-250.0f, 250.0f},{-300.0f, 250.0f},
+            //Galaga右
+            {-100.0f, 250.0f},{-50.0f, 250.0f},{0.0f, 250.0f},
+            //Galaga左
+            {-150.0f, 250.0f},{-200.0f, 250.0f},{-250.0f, 250.0f},
         };
         // ZAKO
         for (int i = 0; i < 20; i++) {
@@ -56,8 +61,20 @@ public:
             };
             m_ButterflyList.push_back(
                 std::make_shared<Butterfly>(glm::vec2{100.0f, 500.0f}, fPos, path)
-         );
+            );
         }
+        //Galaga右
+        for (int i = 36; i < 39; i++) {
+            glm::vec2 fPos = formationPositions[i];
+            std::vector<Enemy::BezierPath> path = {
+                { { {400.0f, -150.0f}, {100.0f, -100.0f},
+                    {100.0f, -100.0f}, fPos } }
+            };
+            m_GalagaList.push_back(
+                std::make_shared<Boss_Galaga>(glm::vec2{400.0f, -150.0f}, fPos, path)
+            );
+        }
+        //
     }
 
     void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) {
@@ -74,20 +91,28 @@ public:
                 root.AddChild(m_ButterflyList[m_ButterflyIndex]);
                 m_ButterflyIndex++;
             }
+            if (m_GalagaIndex < (int)m_GalagaList.size()) {
+                enemies.push_back(m_GalagaList[m_GalagaIndex]);
+                root.AddChild(m_GalagaList[m_GalagaIndex]);
+                m_GalagaIndex++;
+            }
             m_Timer = 300.0f;
         }
     }
 
     [[nodiscard]] bool IsSpawnDone() const {
         return m_ZakoIndex >= (int)m_ZakoList.size() &&
-               m_ButterflyIndex >= (int)m_ButterflyList.size();
+               m_ButterflyIndex >= (int)m_ButterflyList.size() &&
+               m_GalagaIndex >= (int)m_GalagaList.size() ;
     }
 
 private:
     std::vector<std::shared_ptr<Enemy>> m_ZakoList;
     std::vector<std::shared_ptr<Enemy>> m_ButterflyList;
+    std::vector<std::shared_ptr<Enemy>> m_GalagaList;
     int m_ZakoIndex = 0;
     int m_ButterflyIndex = 0;
+    int m_GalagaIndex = 0;
     float m_Timer = 0.0f;
 };
 
