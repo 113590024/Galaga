@@ -40,6 +40,10 @@ public:
 
     // 俯衝
     virtual void StartDive(const glm::vec2& playerPos) {
+        if (stopdiving==true) {
+            m_State = State::FORMATION;
+            return;
+        }
         m_State = State::DIVING;
     }
 
@@ -64,6 +68,11 @@ public:
     // 拿分數
     [[nodiscard]] int GetScore() const {
         return m_Score;
+    }
+
+    //
+     void Playerdead() {
+        stopdiving=true;
     }
 
     // 嘎嘎
@@ -102,6 +111,7 @@ protected:
     int m_Score = 0;
     State m_State = State::ENTERING;
     glm::vec2 m_FormationPos;
+    bool stopdiving=false;
 
     std::vector<BezierPath> m_Path;//這隻敵人的所有路徑段
     int m_PathIndex = 0;//目前走到第幾段曲線
