@@ -73,6 +73,15 @@ void App::Start() {
     m_PauseText->SetVisible(false);
     m_Root.AddChild(m_PauseText);
 
+    // 關卡文字
+    m_Stage1Text = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "Stage    1",
+    Util::Color::FromRGB(0, 0, 255), 20 // 黃色，最上層
+    );
+    m_Stage1Text->SetPosition({-150.0f, 0.0f});
+    m_Stage1Text->SetVisible(false);
+    m_Root.AddChild(m_Stage1Text);
+
     // READY
     m_ReadyText = std::make_shared<Label>(
     RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "READY",
@@ -148,6 +157,18 @@ void App::Start() {
     m_ResultRatioText->SetPosition({-150.0f, -100.0f});
     m_ResultRatioText->SetVisible(false);
     m_Root.AddChild(m_ResultRatioText);
+
+    // 音效
+    m_StartMusic = std::make_shared<Util::SFX>(RESOURCE_DIR"/sound/GameStart.mp3");
+    m_StageSound = std::make_shared<Util::SFX>(RESOURCE_DIR"/sound/StageFlag.mp3");
+    m_ShootSound = std::make_shared<Util::SFX>(RESOURCE_DIR"/sound/Shooting.mp3");
+    m_EnemyExplodeSound = std::make_shared<Util::SFX>(RESOURCE_DIR"/sound/Enemy1Kill.mp3");
+    m_PlayerExplodeSound = std::make_shared<Util::SFX>(RESOURCE_DIR"/sound/Death.mp3");
+    m_StartMusic->SetVolume(32);
+    m_StageSound->SetVolume(32);
+    m_ShootSound->SetVolume(32);
+    m_EnemyExplodeSound->SetVolume(32);
+    m_PlayerExplodeSound->SetVolume(32);
 
     m_CurrentState = State::UPDATE;
 }

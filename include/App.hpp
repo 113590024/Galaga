@@ -4,6 +4,7 @@
 #include "pch.hpp"
 #include "Util/Renderer.hpp"
 #include "Util/GameObject.hpp"
+#include "Util/SFX.hpp"
 #include "PLAYER.hpp"
 #include "Sprite.hpp"
 #include "Label.hpp"
@@ -105,6 +106,9 @@ private:
 
     // 關卡 (第幾關)
     std::shared_ptr<Stage0_0> m_Stage0_0;
+    std::shared_ptr<Label> m_Stage1Text;
+    bool m_ShowingStage = false;
+    float m_StageTimer = 0.0f;
 
     //GAMEOVER
     std::shared_ptr<Label> m_GameOverText;
@@ -121,6 +125,14 @@ private:
     std::shared_ptr<Label> m_ResultShotsText;
     std::shared_ptr<Label> m_ResultHitsText;
     std::shared_ptr<Label> m_ResultRatioText;
+
+    // 音效
+    std::shared_ptr<Util::SFX> m_StartMusic;
+    std::shared_ptr<Util::SFX> m_StageSound;
+    std::shared_ptr<Util::SFX> m_ShootSound;
+    std::shared_ptr<Util::SFX> m_EnemyExplodeSound;
+    std::shared_ptr<Util::SFX> m_PlayerExplodeSound;
+
 };
 
 #endif

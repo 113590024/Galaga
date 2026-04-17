@@ -59,15 +59,27 @@ void App::Update() {
                 m_ScoreLabel->SetText("SCORE\n0");
                 m_Lives = m_Player->GetHP();
                 UpdateLifeIcons();
+                m_StartMusic->Play();
                 m_StartText->SetVisible(true);
                 m_ShowingStart = true;
             }
         }
         // START 文字顯示計時（每幀都跑）
-        if (m_ShowingStart && !m_ShowingReady) {
+        if (m_ShowingStart && !m_ShowingReady && !m_ShowingStage) {
             m_StartTimer += Util::Time::GetDeltaTimeMs();
-            if (m_StartTimer >= 2000.0f) {
+            if (m_StartTimer >= 8000.0f) {
+                m_StageSound->Play();
                 m_StartText->SetVisible(false);
+                m_Stage1Text->SetVisible(true);
+                m_ShowingStage = true;
+            }
+        }
+
+        // 關卡
+        if (m_ShowingStage && !m_ShowingReady){
+            m_StageTimer += Util::Time::GetDeltaTimeMs();
+            if (m_StageTimer >= 2000.0f) {
+                m_Stage1Text->SetVisible(false);
                 m_ReadyText->SetVisible(true);
                 m_ShowingReady = true;
             }
@@ -113,7 +125,7 @@ void App::Update() {
                 m_Bullets.push_back(bullet);
                 m_Root.AddChild(bullet);
                 m_ShootCooldown = 0.5f; // 0.0005秒冷卻
-
+                m_ShootSound->Play();   // 射擊音效
                 m_ShotsFired++;     //Shot計數
             }
         }
@@ -146,6 +158,7 @@ void App::Update() {
                 if (!enemy->IsAlive()) continue;
                 if (enemy->IfCollides(b->GetPosition(), 25.0f)) {
                     enemy->TakeDamage(1);       //敵人扣血
+                    m_EnemyExplodeSound->Play();
                     m_Hits++;
                     if (!enemy->IsAlive()) {
                     auto explosion = std::make_shared<Explosion>(enemy->GetPosition());
@@ -193,6 +206,7 @@ void App::Update() {
                 m_Root.AddChild(expPlayer);
 
                 m_Player->TakeDamage();
+                m_PlayerExplodeSound->Play();
                 m_Lives = m_Player->GetHP();
                 UpdateLifeIcons();
                 m_Player->SetVisible(false);
@@ -287,6 +301,7 @@ void App::Update() {
             m_ResultRatioText->SetText("HIT-MISS RATIO:     " + std::to_string(static_cast<int>(ratio)) + "%");
 
             // 顯示文字
+            m_ResultText->SetVisible(true);
             m_ResultShotsText->SetVisible(true);
             m_ResultHitsText->SetVisible(true);
             m_ResultRatioText->SetVisible(true);
@@ -300,6 +315,7 @@ void App::Update() {
         // 也可以讓玩家按 Enter 直接跳過等待時間
         if (m_ResultTimer <= 0.0f || Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
             // 隱藏 Result 文字
+            m_ResultText->SetVisible(false);
             m_ResultShotsText->SetVisible(false);
             m_ResultHitsText->SetVisible(false);
             m_ResultRatioText->SetVisible(false);
@@ -330,8 +346,10 @@ void App::Update() {
 
             // 重置開場動畫狀態
             m_ShowingStart = false;
+            m_ShowingStage = false;
             m_ShowingReady = false;
             m_StartTimer = 0.0f;
+            m_StageTimer = 0.0f;
             m_ReadyTimer = 0.0f;
             m_IntroPlaying = true;
             m_IntroY = -500.0f;
