@@ -74,7 +74,17 @@ public:
                 std::make_shared<Boss_Galaga>(glm::vec2{400.0f, -150.0f}, fPos, path)
             );
         }
-        //
+        //Galaga左
+        for (int i = 39; i < 42; i++) {
+            glm::vec2 fPos = formationPositions[i];
+            std::vector<Enemy::BezierPath> path = {
+                { { {-700.0f, -150.0f}, {-450.0f, -100.0f},
+                    {-450.0f, -100.0f}, fPos } }
+            };
+            m_GalagaList.push_back(
+                std::make_shared<Boss_Galaga>(glm::vec2{-700.0f, -150.0f}, fPos, path)
+            );
+        }
     }
 
     void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) {

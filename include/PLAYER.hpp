@@ -36,7 +36,7 @@ public:
     }
 
     void ResetPosition() {
-        m_Transform.translation = {-150.0f, -300.0f};
+        m_Transform.translation = {-125.0f, -300.0f};
     }
 
     [[nodiscard]] bool IsDead() const { return m_HP <= 0; }
