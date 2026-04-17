@@ -229,9 +229,9 @@ void App::Update() {
         m_ReadyText->SetVisible(true);
         m_PlayerDeathTimer -= Util::Time::GetDeltaTimeMs();
 
-        /*for (auto& enemy : m_Enemies) {
-            enemy->;
-        }*/
+        for (auto& enemy : m_Enemies) {
+            enemy->Playerdead();//敵人不俯衝
+        }
 
         // 爆炸動畫繼續更新
         for (auto& exp : m_Explosions) {
@@ -254,6 +254,10 @@ void App::Update() {
             m_Player->SetVisible(true);
             m_Player->ResetPosition();
             m_GameState = GameState::PLAYING;
+
+            for (auto& enemy : m_Enemies) {
+                enemy->Playernodead();//敵人可以俯衝
+            }
         }
     }
 

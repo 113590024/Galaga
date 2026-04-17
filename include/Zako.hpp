@@ -51,9 +51,14 @@ public:
                 break;
             case State::FORMATION:
                 updateFormation();
-                m_DiveTimer -= Util::Time::GetDeltaTimeMs();
-                if (m_DiveTimer <= 0.0f) {
-                    StartDive({0.0f, 0.0f}); // 先用假的玩家位置測試
+                if (stopdiving==false) {
+                    m_DiveTimer -= Util::Time::GetDeltaTimeMs();
+                    if (m_DiveTimer <= 0.0f) {
+                        StartDive({0.0f, 0.0f});
+                    }
+                }
+                else {
+                    m_DiveTimer =5000.0f;
                 }
                 break;
             case State::DIVING:

@@ -40,10 +40,10 @@ public:
 
     // 俯衝
     virtual void StartDive(const glm::vec2& playerPos) {
-        if (stopdiving==true) {
+        /*if (stopdiving==true) {
             m_State = State::FORMATION;
             return;
-        }
+        }*/
         m_State = State::DIVING;
     }
 
@@ -70,9 +70,13 @@ public:
         return m_Score;
     }
 
-    //
+    //敵人不能俯衝
      void Playerdead() {
         stopdiving=true;
+    }
+    //敵人可以俯衝
+    void Playernodead() {
+        stopdiving=false;
     }
 
     // 嘎嘎
