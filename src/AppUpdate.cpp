@@ -56,7 +56,9 @@ void App::Update() {
                 m_Text2P->SetVisible(false);
                 m_Cursor->SetVisible(false);
                 m_ScoreLabel->SetVisible(true);
-                m_LivesLabel->SetVisible(true);
+                m_ScoreLabel->SetText("SCORE\n0");
+                m_Lives = m_Player->GetHP();
+                UpdateLifeIcons();
                 m_StartText->SetVisible(true);
                 m_ShowingStart = true;
             }
@@ -191,7 +193,8 @@ void App::Update() {
                 m_Root.AddChild(expPlayer);
 
                 m_Player->TakeDamage();
-                m_LivesLabel->SetText("LIVES: " + std::to_string(m_Player->GetHP()));
+                m_Lives = m_Player->GetHP();
+                UpdateLifeIcons();
                 m_Player->SetVisible(false);
 
                 if (m_Player->IsDead()) {
@@ -311,8 +314,11 @@ void App::Update() {
             m_ScoreLabel->SetText("SCORE\n0");
             m_ScoreLabel->SetVisible(false);
             m_Player->ResetHP();
-            m_LivesLabel->SetText("LIVES: " + std::to_string(m_Player->GetHP()));
-            m_LivesLabel->SetVisible(false);
+            m_Lives = m_Player->GetHP();
+            // 隱藏玩家生命值圖片
+            for (auto& icon : m_LifeIcons) {
+                icon->SetVisible(false);
+            }
 
             // 重置開場動畫狀態
             m_ShowingStart = false;

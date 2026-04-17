@@ -81,22 +81,36 @@ void App::Start() {
     m_ReadyText->SetVisible(false);
     m_Root.AddChild(m_ReadyText);
 
-    //分數、生命值
+    //分數
     m_ScoreLabel = std::make_shared<Label>(
     RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 25, "SCORE",
-    Util::Color::FromRGB(255, 255, 0), 20
-);
+    Util::Color::FromRGB(255, 255, 0), 20);
     m_ScoreLabel->SetPosition({480.0f, 200.0f});
     m_Root.AddChild(m_ScoreLabel);
+    m_ScoreLabel->SetVisible(false);
 
+    // 生命值圖片
+    for (int i = 0; i < 3; i++) {
+        auto icon = std::make_shared<Sprite>(
+            RESOURCE_DIR"/Image/Character/player_1.png", 20
+        );
+        icon->SetScale({0.7f, 0.7f});
+        // 右側，由左到右排列
+        icon->SetPosition({430.0f + i * 40.0f, 0.0f});
+        icon->SetVisible(false);
+        m_LifeIcons.push_back(icon);
+        m_Root.AddChild(icon);
+    }
+
+    /*生命值
     m_LivesLabel = std::make_shared<Label>(
         RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 25, "LIVES: 3",
-        Util::Color::FromRGB(255, 255, 255), 20
-    );
+        Util::Color::FromRGB(255, 255, 255), 20);
     m_LivesLabel->SetPosition({480.0f, 100.0f});
     m_Root.AddChild(m_LivesLabel);
-    m_ScoreLabel->SetVisible(false);
     m_LivesLabel->SetVisible(false);
+    */
+
 
     //生人敵人
     m_Stage0_0 = std::make_shared<Stage0_0>();

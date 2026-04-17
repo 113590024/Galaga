@@ -35,6 +35,13 @@ public:
     void Update();
     void End();
 
+    // 更新玩家生命值圖片
+    void UpdateLifeIcons() {
+        for (int i = 0; i < (int)m_LifeIcons.size(); i++) {
+            m_LifeIcons[i]->SetVisible(i < m_Lives);
+        }
+    }
+
 private:
     State m_CurrentState = State::START;
     GameState m_GameState = GameState::START_SCREEN;
@@ -84,7 +91,9 @@ private:
 
     // 分數、生命值
     std::shared_ptr<Label> m_ScoreLabel;
-    std::shared_ptr<Label> m_LivesLabel;
+    // 生命值圖片
+    std::vector<std::shared_ptr<Sprite>> m_LifeIcons;
+    //std::shared_ptr<Label> m_LivesLabel;
     int m_Score = 0;
     int m_Lives = 3;
 

@@ -23,6 +23,7 @@ public:
     void SetImage(const std::string& imagePath) {
         m_Drawable = std::make_shared<Util::Image>(imagePath);
     }
+
 };
 
 #endif
