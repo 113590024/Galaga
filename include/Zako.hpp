@@ -58,7 +58,7 @@ public:
                     }
                 }
                 else {
-                    m_DiveTimer =5000.0f;
+                    m_DiveTimer =3000.0f;
                 }
                 break;
             case State::DIVING:
