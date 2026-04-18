@@ -29,7 +29,6 @@ public:
     }
 
     void Update() override {
-        m_PrevPosition = m_Transform.translation; // 記錄上一幀位置
 
         switch (m_State) {
             case State::ENTERING:
@@ -89,7 +88,6 @@ private:
     float m_FormationOffsetX = 0.0f;
     std::vector<std::string> m_IdleFrames;
     std::vector<std::string> m_DiveFrames;
-    glm::vec2 m_PrevPosition = {0.0f, 0.0f};
     float m_DiveTimer = 5000.0f;  // 5秒
 
     void updateFormation() {

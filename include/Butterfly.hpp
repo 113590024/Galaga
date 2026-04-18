@@ -27,40 +27,31 @@ public:
     }
 
     void Update() override {
-        m_PrevPosition = m_Transform.translation;
-
         switch (m_State) {
             case State::ENTERING:
                 UpdatePath();
-                updateDirectionAnimation();
-                if (m_State == State::FORMATION) {
-                    setAnimation(m_IdleFrames);
-                    m_Transform.rotation = 0.0f;
-                }
+                // 刪除：updateDirectionAnimation()
+                // 刪除：m_Transform.rotation = 0.0f
                 break;
             case State::FORMATION:
                 updateFormation();
                 break;
             case State::DIVING:
                 UpdatePath();
-                updateDirectionAnimation();
+                // 刪除：updateDirectionAnimation()
                 if (IsOutOfScreen()) {
                     StartReturn();
                 }
                 break;
             case State::RETURNING:
                 UpdatePath();
-                updateDirectionAnimation();
-                if (m_State == State::FORMATION) {
-                    setAnimation(m_IdleFrames);
-                    m_Transform.rotation = 0.0f;
-                }
+                // 刪除：updateDirectionAnimation()
+                // 刪除：m_Transform.rotation = 0.0f
                 break;
         }
     }
 
     void SetFormationOffset(float offsetX) {
-        // 關鍵差別：方向相反，用 -offsetX
         m_FormationOffsetX = -offsetX;
     }
 
@@ -91,7 +82,8 @@ private:
     float m_FormationOffsetX = 0.0f;
     std::vector<std::string> m_IdleFrames;
     std::vector<std::string> m_DiveFrames;
-    glm::vec2 m_PrevPosition = {0.0f, 0.0f};
+    // 刪除：glm::vec2 m_PrevPosition
+    std::vector<std::string> m_CurrentFrames;
 
     void setAnimation(const std::vector<std::string>& frames) {
         if (m_CurrentFrames == frames) return;
@@ -102,24 +94,13 @@ private:
         std::dynamic_pointer_cast<Util::Animation>(m_Drawable)->Play();
     }
 
-    std::vector<std::string> m_CurrentFrames;
-
     void updateFormation() {
         m_Transform.translation = {
             m_FormationPos.x + m_FormationOffsetX,
             m_FormationPos.y
         };
     }
-
-    void updateDirectionAnimation() {
-        glm::vec2 dir = m_Transform.translation - m_PrevPosition;
-        float len = glm::length(dir);
-        if (len < 0.01f) return;
-        dir = dir / len;
-
-        float angle = glm::degrees(std::atan2(dir.x, dir.y));
-        m_Transform.rotation = -angle;
-    }
+    // 刪除：updateDirectionAnimation() 整個方法
 
     void StartReturn() {
         m_Transform.translation = {m_FormationPos.x, 500.0f};

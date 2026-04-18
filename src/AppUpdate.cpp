@@ -67,7 +67,7 @@ void App::Update() {
         // START 文字顯示計時（每幀都跑）
         if (m_ShowingStart && !m_ShowingReady && !m_ShowingStage) {
             m_StartTimer += Util::Time::GetDeltaTimeMs();
-            if (m_StartTimer >= 8000.0f) {
+            if (m_StartTimer >= 7000.0f) {
                 m_StageSound->Play();
                 m_StartText->SetVisible(false);
                 m_Stage1Text->SetVisible(true);
@@ -106,6 +106,7 @@ void App::Update() {
 
         //m_StageManager->Update();
         m_Stage0_0->Update(m_Enemies, m_Root);
+
         // 更新所有敵人
         for (auto& enemy : m_Enemies) {
             enemy->Update();
@@ -240,7 +241,7 @@ void App::Update() {
 
     //玩家受傷
     if (m_GameState == GameState::PLAYER_DEAD) {
-        m_ReadyText->SetVisible(true);
+        m_Player->Update();
         m_PlayerDeathTimer -= Util::Time::GetDeltaTimeMs();
 
         for (auto& enemy : m_Enemies) {
@@ -260,6 +261,14 @@ void App::Update() {
         // 敵人繼續動但玩家不能動
         for (auto& enemy : m_Enemies) {
             enemy->Update();
+        }
+
+        if (m_PlayerDeathTimer >= 3000.0f){
+            m_ReadyText->SetVisible(false);
+        }
+
+        if (m_PlayerDeathTimer >= 0.0f && m_PlayerDeathTimer <= 3000.0f){
+            m_ReadyText->SetVisible(true);
         }
 
         if (m_PlayerDeathTimer <= 0.0f) {
