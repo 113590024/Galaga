@@ -30,23 +30,24 @@ public:
         switch (m_State) {
             case State::ENTERING:
                 UpdatePath();
-                // 刪除：updateDirectionAnimation()
-                // 刪除：m_Transform.rotation = 0.0f
                 break;
             case State::FORMATION:
                 updateFormation();
+                if (stopdiving==false) {
+                    m_DiveTimer -= Util::Time::GetDeltaTimeMs();
+                    if (m_DiveTimer <= 0.0f) {
+                        StartDive({0.0f, 0.0f});
+                    }
+                }
+                else {
+                    m_DiveTimer =3000.0f;
+                }
                 break;
             case State::DIVING:
                 UpdatePath();
-                // 刪除：updateDirectionAnimation()
-                if (IsOutOfScreen()) {
-                    StartReturn();
-                }
                 break;
             case State::RETURNING:
                 UpdatePath();
-                // 刪除：updateDirectionAnimation()
-                // 刪除：m_Transform.rotation = 0.0f
                 break;
         }
     }
@@ -56,43 +57,39 @@ public:
     }
 
     void StartDive(const glm::vec2& playerPos) override {
-        if (m_State != State::FORMATION) return;
-
+        (void)playerPos;
+        m_FormationPos = m_Transform.translation;
         m_State = State::DIVING;
-        setAnimation(m_DiveFrames);
+        m_DiveTimer=3000.0f;
 
-        glm::vec2 currentPos = m_Transform.translation;
-        std::vector<BezierPath> divePath = {
-            {{ currentPos,
-               {(currentPos.x + playerPos.x) / 2.0f, currentPos.y - 100.0f},
-               playerPos }},
-            {{ playerPos,
-               {playerPos.x, playerPos.y - 150.0f},
-               {playerPos.x, -500.0f} }}
+        glm::vec2 start = m_Transform.translation;
+
+        // 俯衝路徑
+        std::vector<Enemy::BezierPath> divePath = {
+            { { start,
+                {start.x, start.y - 100.0f},
+                {start.x-50.0f,  + 100.0f},
+                {start.x-50.0f, -400.0f} } },
+
+            // 回到編隊位置
+            { { {m_FormationPos.x, -400.0f},
+                {m_FormationPos.x, -300.0f},
+                {m_FormationPos.x, -300.0f},
+                m_FormationPos } }
         };
+
         SetPath(divePath);
-        m_State = State::DIVING;
     }
 
-    [[nodiscard]] bool IsOutOfScreen() const {
+    /*[[nodiscard]] bool IsOutOfScreen() const {
         return m_Transform.translation.y < -450.0f;
-    }
+    }*/
 
 private:
     float m_FormationOffsetX = 0.0f;
     std::vector<std::string> m_IdleFrames;
     std::vector<std::string> m_DiveFrames;
-    // 刪除：glm::vec2 m_PrevPosition
-    std::vector<std::string> m_CurrentFrames;
-
-    void setAnimation(const std::vector<std::string>& frames) {
-        if (m_CurrentFrames == frames) return;
-        m_CurrentFrames = frames;
-        m_Drawable = std::make_shared<Util::Animation>(
-            frames, true, 120, true, 0
-        );
-        std::dynamic_pointer_cast<Util::Animation>(m_Drawable)->Play();
-    }
+    float m_DiveTimer = 5000.0f;  // 5秒
 
     void updateFormation() {
         m_Transform.translation = {
@@ -100,20 +97,21 @@ private:
             m_FormationPos.y
         };
     }
-    // 刪除：updateDirectionAnimation() 整個方法
 
-    void StartReturn() {
-        m_Transform.translation = {m_FormationPos.x, 500.0f};
-        std::vector<BezierPath> returnPath = {
-            {{ {m_FormationPos.x, 500.0f},
-               {m_FormationPos.x, 350.0f},
-               {m_FormationPos.x, 200.0f} }},
-            {{ {m_FormationPos.x, 200.0f},
-               {m_FormationPos.x, (m_FormationPos.y + 200.0f) / 2.0f},
-               m_FormationPos }}
-        };
-        SetPath(returnPath);
-        m_State = State::RETURNING;
+    // 避免每幀重複建立 Animation，記錄目前用的 frames
+    std::vector<std::string> m_CurrentFrames;
+
+    std::vector<std::string> getCurrentAnimFrames() {
+        return m_CurrentFrames;
+    }
+
+    void setAnimation(const std::vector<std::string>& frames) {
+        if (m_CurrentFrames == frames) return; // 已經是這個動畫就不重建
+        m_CurrentFrames = frames;
+        m_Drawable = std::make_shared<Util::Animation>(
+            frames, true, 120, true, 0
+        );
+        std::dynamic_pointer_cast<Util::Animation>(m_Drawable)->Play();
     }
 };
 

@@ -67,12 +67,12 @@ public:
 
         glm::vec2 start = m_Transform.translation;
 
-        // 俯衝路徑：從編隊位置飛向玩家，再飛出畫面
+        // 俯衝路徑
         std::vector<Enemy::BezierPath> divePath = {
             { { start,
-                {start.x, start.y - 100.0f},   // 先往下
+                {start.x, start.y - 100.0f},
                 {start.x-50.0f,  + 100.0f},
-                {start.x-50.0f, -400.0f} } },            // 飛出畫面下方
+                {start.x-50.0f, -400.0f} } },
 
             // 回到編隊位置
             { { {m_FormationPos.x, -400.0f},
