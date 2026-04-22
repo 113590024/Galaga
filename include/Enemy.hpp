@@ -85,7 +85,7 @@ public:
         m_Visible = false;
     }
 
-    void TakeDamage(int damage) {
+    virtual void TakeDamage(int damage) {
         m_health -= damage;
         if (m_health <= 0) {
             Kill();

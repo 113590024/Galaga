@@ -24,7 +24,7 @@ public:
 
         m_Transform.translation = startPos;
         m_Transform.scale = {0.9f, 0.9f};
-        m_health = 1;
+        m_health = 2;
         m_Score = 100;
         m_FormationPos = formationPos;
         SetPath(entryPath);
