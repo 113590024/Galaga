@@ -53,11 +53,10 @@ public:
         for (int i = 20; i < 36; i++) {
             glm::vec2 fPos = formationPositions[i];
             std::vector<Enemy::BezierPath> path = {
-                // 起點從右側進來，x 座標全部取正
-                { { {100.0f, 500.0f}, {100.0f, 350.0f},
-                    {100.0f, 350.0f}, {400.0f, 180.0f} } },
-                { { {400.0f, 180.0f}, {600.0f, 120.0f},
-                    {400.0f, -250.0f}, fPos } }
+                { { {-200.0f, 500.0f}, {-200.0f, 350.0f},
+                    {-200.0f, 350.0f}, {100.0f, 180.0f} } },
+                { { {100.0f, 180.0f}, {300.0f, 120.0f},
+                    {100.0f, -250.0f}, fPos } }
             };
             m_ButterflyList.push_back(
                 std::make_shared<Butterfly>(glm::vec2{100.0f, 500.0f}, fPos, path)

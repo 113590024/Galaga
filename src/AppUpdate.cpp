@@ -252,6 +252,10 @@ void App::Update() {
         for (auto& exp : m_Explosions) {
             exp->Update();
         }
+        //子彈繼續飛
+        for (auto& bullet : m_Bullets) {
+            bullet->flyUp();
+        }
         m_Explosions.erase(
             std::remove_if(m_Explosions.begin(), m_Explosions.end(),
                 [](const auto& e) { return e->IsFinished(); }),
