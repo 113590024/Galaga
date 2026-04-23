@@ -10,7 +10,7 @@
 #include "Label.hpp"
 #include "Cursor.hpp"
 #include "Player_bullet.hpp"
-#include "Zako.hpp"
+#include "Enemy_bullet.hpp"
 #include "Explosion.hpp"
 #include "Stage0_0.hpp"
 
@@ -89,6 +89,9 @@ private:
     std::vector<std::shared_ptr<Player_bullet>> m_Bullets;
     float m_ShootCooldown = 0.0f; // 射擊冷卻
     float m_DeathTimer = 0.0f;
+
+    //敵人子彈
+    std::vector<std::shared_ptr<Enemy_bullet>> m_EnemyBullets;
 
     // 最高分數、分數、生命值
     std::shared_ptr<Label> m_ScoreLabel;

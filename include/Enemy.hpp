@@ -74,6 +74,9 @@ public:
         stopdiving=false;
     }
 
+    //發射子彈
+    std::function<void(const glm::vec2&)> shoot;
+
     // 嘎嘎
     void Kill() {
         m_IsAlive = false;

@@ -65,6 +65,10 @@ public:
         m_State = State::DIVING;
         m_DiveTimer=randomTimer();
 
+        if (randomTimer50()>=50.0f) {
+            shoot(m_Transform.translation);
+        }
+
         glm::vec2 start = m_Transform.translation;
 
         // 俯衝路徑
@@ -100,6 +104,11 @@ private:
     float randomTimer() {
         static std::mt19937 rng(std::random_device{}());
         std::uniform_real_distribution<float> dist(3000.0f, 5000.0f);
+        return dist(rng);
+    }
+    float randomTimer50() {
+        static std::mt19937 rng(std::random_device{}());
+        std::uniform_real_distribution<float> dist(0.0f, 100.0f);
         return dist(rng);
     }
 

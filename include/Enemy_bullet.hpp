@@ -7,7 +7,7 @@
 
 class Enemy_bullet:public Util::GameObject {
 public:
-    explicit Player_bullet(const glm::vec2& startPos) {
+    explicit Enemy_bullet(const glm::vec2& startPos) {
         m_Drawable = std::make_unique<Util::Image>(
             RESOURCE_DIR"/Image/Character/bullet_enemy.png");
         m_Transform.translation = startPos;
@@ -17,7 +17,7 @@ public:
         m_Visible = true;
     }
 
-    void flyUp() {
+    void flyDown() {
         m_Transform.translation.y-=m_speed;
     }
     [[nodiscard]] glm::vec2 GetPosition() const {
@@ -43,7 +43,7 @@ public:
 
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
 private:
-    float m_speed=10.0f;
+    float m_speed=5.0f;
 };
 
 #endif //GALAGA_ENEMY_BULLET_HPP

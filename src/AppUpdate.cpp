@@ -2,6 +2,7 @@
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Time.hpp"
+#include "Enemy_bullet.hpp"
 #include "Stage0_0.hpp"
 
 //測試用
@@ -187,6 +188,20 @@ void App::Update() {
             return false;
         }
         );
+
+        // 敵人發射
+        for (auto& enemy : m_Enemies) {
+            enemy->shoot = [&](const glm::vec2& pos) {
+                auto bullet = std::make_shared<Enemy_bullet>(pos);
+                m_EnemyBullets.push_back(bullet);
+                m_Root.AddChild(bullet);
+            };
+        }
+        for (auto& bullet : m_EnemyBullets) {
+            bullet->flyDown();
+        }
+
+        //子彈打到玩家
 
         // 移除被嘎嘎敵人和嘎嘎子彈
         m_Enemies.erase(
