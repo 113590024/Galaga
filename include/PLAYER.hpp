@@ -45,6 +45,14 @@ public:
     [[nodiscard]] int GetVisibility() const { return m_IsInvincible; }
     void ResetHP() { m_HP = 3; }
 
+    // 碰撞偵測
+    [[nodiscard]] bool IfCollides(const glm::vec2& pos, float radius = 20.0f) const {
+        auto myPos = GetPosition();
+        float dx = myPos.x - pos.x;
+        float dy = myPos.y - pos.y;
+        return (dx * dx + dy * dy) < (radius * radius);
+    }
+
 private:
     float m_Speed = 10.0f;
     int m_HP = 3;

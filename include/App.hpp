@@ -105,7 +105,7 @@ private:
     // 敵人
     std::vector<std::shared_ptr<Enemy>> m_Enemies;
 
-    //已消滅敵人數
+    // 已消滅敵人數
     int totalEnemies = 0;
 
     // Explosion!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -117,13 +117,13 @@ private:
     bool m_ShowingStage = false;
     float m_StageTimer = 0.0f;
 
-    //GAMEOVER
+    // GAMEOVER
     std::shared_ptr<Label> m_GameOverText;
     float m_PlayerDeathTimer = 0.0f;
     float m_GameOverTimer = 0.0f;
     float m_ResultTimer = 0.0f;
 
-    //Result計數
+    // Result計數
     int m_ShotsFired = 0;   // 總射擊次數
     int m_Hits = 0;         // 命中次數
 

@@ -9,7 +9,7 @@
 #include "Util/Logger.hpp"
 
 void App::Update() {
-    // 背景捲動只在非暫停時執行
+    // 背景動畫 (在不是暫停時)
     if (m_GameState != GameState::PAUSED) {
         m_BgScrollY -= 1.0f;
         m_Bg1->SetPosition({-160.0f, m_BgScrollY});
@@ -70,7 +70,8 @@ void App::Update() {
                 }
             }
         }
-        // START 文字顯示計時（每幀都跑）
+
+        // START
         if (m_ShowingStart && !m_ShowingReady && !m_ShowingStage) {
             m_StartTimer += Util::Time::GetDeltaTimeMs();
             if (m_StartTimer >= 7000.0f) {
@@ -92,7 +93,7 @@ void App::Update() {
             totalEnemies=0;
         }
 
-        // READY 文字顯示計時（每幀都跑）
+        // READY
         if (m_ShowingReady) {
             m_ReadyTimer += Util::Time::GetDeltaTimeMs();
             if (m_ReadyTimer >= 2000.0f) {
@@ -111,6 +112,7 @@ void App::Update() {
     if (m_GameState == GameState::PLAYING) {
         m_Player->Update();
 
+        // 關卡 (目前一關)
         //m_StageManager->Update();
         m_Stage0_0->Update(m_Enemies, m_Root);
 
@@ -122,11 +124,11 @@ void App::Update() {
         if (Util::Input::IsKeyPressed(Util::Keycode::LEFT))  m_Player->Move(-1, 0);
         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);
 
-        //按Z或X發射子彈
+        // 按Z或X發射子彈
         m_ShootCooldown -= Util::Time::GetDeltaTimeMs();
         if ((Util::Input::IsKeyDown(Util::Keycode::Z) && m_ShootCooldown <= 0.0f)
             || (Util::Input::IsKeyDown(Util::Keycode::X) && m_ShootCooldown <= 0.0f)){
-            //最多兩顆子彈
+            // 最多兩顆子彈
             if (Player_bullet::getBulletcount()<2){
                 Player_bullet::setBulletcount(1);
                 auto bullet = std::make_shared<Player_bullet>(m_Player->GetPosition());
@@ -134,7 +136,7 @@ void App::Update() {
                 m_Root.AddChild(bullet);
                 m_ShootCooldown = 0.5f; // 0.0005秒冷卻
                 m_ShootSound->Play();   // 射擊音效
-                m_ShotsFired++;     //Shot計數
+                m_ShotsFired++;     // Shot計數
             }
         }
         // 更新子彈位置
@@ -152,7 +154,7 @@ void App::Update() {
             m_Explosions.end()
         );
 
-        //子彈超出螢幕
+        // 子彈超出螢幕
         Player_bullet::Remove(m_Bullets, [&](const auto& b) {
             if (b->IsOutOfScreen()) {
                 m_Root.RemoveChild(b);
@@ -160,12 +162,12 @@ void App::Update() {
             }
             return false;
         });
-        //子彈打到敵人
+        // 子彈打到敵人
         Player_bullet::Remove(m_Bullets, [&](const std::shared_ptr<Player_bullet>& b) {
             for (auto& enemy : m_Enemies) {
                 if (!enemy->IsAlive()) continue;
                 if (enemy->IfCollides(b->GetPosition(), 25.0f)) {
-                    enemy->TakeDamage(1);       //敵人扣血
+                    enemy->TakeDamage(1);       // 敵人扣血
                     m_EnemyExplodeSound->Play();
                     m_Hits++;
                     if (!enemy->IsAlive()) {
@@ -175,7 +177,7 @@ void App::Update() {
                         m_Score += enemy->GetScore(); // 加分
                         totalEnemies+=1;
                     }
-                    m_Root.RemoveChild(b);      //移除子彈
+                    m_Root.RemoveChild(b);      // 移除子彈
 
                     // 更新分數顯示
                     if (m_HighScore < m_Score){
@@ -201,7 +203,35 @@ void App::Update() {
             bullet->flyDown();
         }
 
-        //子彈打到玩家
+        // 子彈打到玩家
+        Enemy_bullet::Remove(m_EnemyBullets, [&](const std::shared_ptr<Enemy_bullet>& b) {
+            if (!m_Player->IsAlive()) return false;
+            if (m_Player->IfCollides(b->GetPosition(), 25.0f)) {
+                // 玩家爆炸動畫
+                auto expPlayer = std::make_shared<Explosion>(
+                    m_Player->GetPosition(), Explosion::Type::PLAYER);
+                m_Explosions.push_back(expPlayer);
+                m_Root.AddChild(expPlayer);
+
+                m_Player->TakeDamage();
+                m_Lives = m_Player->GetHP();
+                UpdateLifeIcons();
+                m_Player->SetVisible(false);
+                m_Root.RemoveChild(b);
+
+                if (m_Player->IsDead()) {
+                    m_GameState = GameState::GAME_OVER;
+                    m_GameOverText->SetVisible(true);
+                    m_GameOverTimer = 3000.0f;
+                } else {
+                    m_GameState = GameState::PLAYER_DEAD;
+                    m_PlayerDeathTimer = 5000.0f;
+                }
+                return true;
+            }
+            return false;
+        }
+        );
 
         // 移除被嘎嘎敵人和嘎嘎子彈
         m_Enemies.erase(
@@ -221,7 +251,7 @@ void App::Update() {
             m_Bullets.end()
         );
 
-        //敵人碰到玩家
+        // 敵人碰到玩家
         for (auto& enemy : m_Enemies) {
             if (!enemy->IsAlive()) continue;
             if (enemy->IfCollides(m_Player->GetPosition(), 30.0f)) {
@@ -265,7 +295,7 @@ void App::Update() {
             m_PauseText->SetVisible(true);
         }
 
-        //消滅所有敵人
+        // 消滅所有敵人
         if (totalEnemies>=m_Stage0_0->TotalEnemyCount()){
             m_GameState = GameState::GAME_OVER;
             m_GameOverText->SetVisible(true);
@@ -273,7 +303,7 @@ void App::Update() {
         }
     }
 
-    // 暫停中（什麼都不動，只等待繼續）
+    // 暫停中
     if (m_GameState == GameState::PAUSED) {
         if (Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
             m_GameState = GameState::PLAYING;
@@ -281,23 +311,29 @@ void App::Update() {
         }
     }
 
-    //玩家受傷
+    // 玩家受傷
     if (m_GameState == GameState::PLAYER_DEAD) {
         m_Player->Update();
         m_PlayerDeathTimer -= Util::Time::GetDeltaTimeMs();
 
         for (auto& enemy : m_Enemies) {
-            enemy->Playerdead();//敵人不俯衝
+            enemy->Playerdead();    // 敵人不俯衝
         }
 
-        // 爆炸動畫繼續更新
+        // 爆炸動畫繼續爆
         for (auto& exp : m_Explosions) {
             exp->Update();
         }
-        //子彈繼續飛
+        // 玩家子彈繼續飛
         for (auto& bullet : m_Bullets) {
             bullet->flyUp();
         }
+
+        // 敵人子彈繼續飛
+        for (auto& bullet : m_EnemyBullets) {
+            bullet->flyDown();
+        }
+
         m_Explosions.erase(
             std::remove_if(m_Explosions.begin(), m_Explosions.end(),
                 [](const auto& e) { return e->IsFinished(); }),
@@ -318,23 +354,33 @@ void App::Update() {
         }
 
         if (m_PlayerDeathTimer <= 0.0f) {
-            // 復活
+            // RE:0
             m_ReadyText->SetVisible(false);
             m_Player->SetVisible(true);
             m_Player->ResetPosition();
             m_GameState = GameState::PLAYING;
 
             for (auto& enemy : m_Enemies) {
-                enemy->Playernodead();//敵人可以俯衝
+                enemy->Playernodead();  // 敵人可以俯衝
             }
         }
     }
 
-    //結算
+    // 結算
     if (m_GameState == GameState::GAME_OVER){
         m_GameOverTimer -= Util::Time::GetDeltaTimeMs();
 
-        // 爆炸動畫繼續
+        // 玩家子彈繼續飛
+        for (auto& bullet : m_Bullets) {
+            bullet->flyUp();
+        }
+
+        // 敵人子彈繼續飛
+        for (auto& bullet : m_EnemyBullets) {
+            bullet->flyDown();
+        }
+
+        // 爆炸動畫繼續爆
         for (auto& exp : m_Explosions) {
             exp->Update();
         }
@@ -353,7 +399,7 @@ void App::Update() {
             }
             m_Enemies.clear();
 
-            // 計算比例 (避免除以零)
+            // 計算比例
             float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;
 
             // Result文字
@@ -381,7 +427,7 @@ void App::Update() {
             m_ResultHitsText->SetVisible(false);
             m_ResultRatioText->SetVisible(false);
 
-            // --- 重置數據
+            // 重置數據
             m_ShotsFired = 0;
             m_Hits = 0;
 

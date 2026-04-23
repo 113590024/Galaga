@@ -36,8 +36,6 @@ public:
     }
 
     void Update() override {
-        m_PrevPosition = m_Transform.translation; // 記錄上一幀位置
-
         switch (m_State) {
             case State::ENTERING:
                 UpdatePath();
