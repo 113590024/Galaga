@@ -90,11 +90,12 @@ private:
     float m_ShootCooldown = 0.0f; // 射擊冷卻
     float m_DeathTimer = 0.0f;
 
-    // 分數、生命值
+    // 最高分數、分數、生命值
     std::shared_ptr<Label> m_ScoreLabel;
+    std::shared_ptr<Label> m_HighScoreLabel;
     // 生命值圖片
     std::vector<std::shared_ptr<Sprite>> m_LifeIcons;
-    //std::shared_ptr<Label> m_LivesLabel;
+    int m_HighScore = 0;
     int m_Score = 0;
     int m_Lives = 3;
 

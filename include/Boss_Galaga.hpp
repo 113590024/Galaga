@@ -14,10 +14,15 @@ public:
          const std::vector<BezierPath>& entryPath)
         : Enemy("", 10) {
 
-        // 待機動畫
+        // 滿血的狀態
         m_IdleFrames = {
             RESOURCE_DIR"/Image/Character/enemy_Galaga_g1.png",
             RESOURCE_DIR"/Image/Character/enemy_Galaga_g2.png",
+        };
+        // 剩一滴血的狀態
+        m_DamagedFrames = {
+            RESOURCE_DIR"/Image/Character/enemy_Galaga_b1.png",
+            RESOURCE_DIR"/Image/Character/enemy_Galaga_b2.png",
         };
 
         setAnimation(m_IdleFrames);
@@ -87,9 +92,20 @@ public:
         SetPath(divePath);
     }
 
+    void TakeDamage(int damage) override {
+        m_health -= damage;
+        if (m_health == 1) {
+            setAnimation(m_DamagedFrames);
+        }
+        if (m_health <= 0) {
+            Kill();
+        }
+    }
+
 private:
     float m_FormationOffsetX = 0.0f;
     std::vector<std::string> m_IdleFrames;
+    std::vector<std::string> m_DamagedFrames;
     std::vector<std::string> m_DiveFrames;
     glm::vec2 m_PrevPosition = {0.0f, 0.0f};
     float m_DiveTimer = 5000.0f;  // 5秒

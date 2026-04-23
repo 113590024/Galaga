@@ -55,8 +55,10 @@ void App::Update() {
                 m_Text1P->SetVisible(false);
                 m_Text2P->SetVisible(false);
                 m_Cursor->SetVisible(false);
+                m_HighScoreLabel->SetVisible(true);
+                m_HighScoreLabel->SetText("HIGH\n SCORE\n " + std::to_string(m_HighScore));
                 m_ScoreLabel->SetVisible(true);
-                m_ScoreLabel->SetText("SCORE\n0");
+                m_ScoreLabel->SetText("SCORE\n 0");
                 m_Lives = m_Player->GetHP();
                 UpdateLifeIcons();
                 m_StartMusic->Play();
@@ -170,6 +172,9 @@ void App::Update() {
                     m_Score += enemy->GetScore(); // 加分
 
                     // 更新分數顯示
+                    if (m_HighScore < m_Score){
+                        m_HighScoreLabel->SetText("HIGH\n SCORE\n " + std::to_string(m_Score));
+                    }
                     m_ScoreLabel->SetText("SCORE\n" + std::to_string(m_Score));
                     return true;
                 }
@@ -211,6 +216,8 @@ void App::Update() {
                 m_Lives = m_Player->GetHP();
                 UpdateLifeIcons();
                 m_Player->SetVisible(false);
+
+                //enemy->TakeDamage();
 
                 if (m_Player->IsDead()) {
                     m_GameState = GameState::GAME_OVER;
@@ -305,6 +312,12 @@ void App::Update() {
         if (m_GameOverTimer <= 0.0f) {
             m_GameOverText->SetVisible(false);
 
+            // 清除所有敵人
+            for (auto& enemy : m_Enemies) {
+                m_Root.RemoveChild(enemy);
+            }
+            m_Enemies.clear();
+
             // 計算比例 (避免除以零)
             float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;
 
@@ -340,15 +353,15 @@ void App::Update() {
             // 回到大廳：重置所有狀態
             m_Player->SetVisible(false);
 
-            // 清除所有敵人
-            for (auto& enemy : m_Enemies) {
-                m_Root.RemoveChild(enemy);
+            // 紀錄最高分數
+            if (m_HighScore < m_Score){
+                m_HighScore = m_Score;
             }
-            m_Enemies.clear();
+            m_HighScoreLabel->SetVisible(false);
 
             // 重置分數、生命
             m_Score = 0;
-            m_ScoreLabel->SetText("SCORE\n0");
+            m_ScoreLabel->SetText("SCORE\n 0");
             m_ScoreLabel->SetVisible(false);
             m_Player->ResetHP();
             m_Lives = m_Player->GetHP();
