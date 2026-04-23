@@ -81,9 +81,6 @@ public:
         SetPath(divePath);
     }
 
-    /*[[nodiscard]] bool IsOutOfScreen() const {
-        return m_Transform.translation.y < -450.0f;
-    }*/
 
 private:
     float m_FormationOffsetX = 0.0f;

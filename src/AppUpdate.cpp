@@ -217,7 +217,15 @@ void App::Update() {
                 UpdateLifeIcons();
                 m_Player->SetVisible(false);
 
-                //enemy->TakeDamage();
+                enemy->TakeDamage(2);
+
+                m_Score += enemy->GetScore(); // 加分
+
+                // 更新分數顯示
+                if (m_HighScore < m_Score){
+                    m_HighScoreLabel->SetText("HIGH\n SCORE\n " + std::to_string(m_Score));
+                }
+                m_ScoreLabel->SetText("SCORE\n" + std::to_string(m_Score));
 
                 if (m_Player->IsDead()) {
                     m_GameState = GameState::GAME_OVER;
