@@ -1,7 +1,3 @@
-//
-// Created by TUF on 2026/3/20.
-//
-
 #ifndef Player_bullet_hpp
 #define Player_bullet_hpp
 
