@@ -2,6 +2,7 @@
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Time.hpp"
+#include "Stage0_0.hpp"
 
 //測試用
 #include "Util/Logger.hpp"
@@ -50,20 +51,22 @@ void App::Update() {
                 m_MenuIndex = 1;
                 m_Cursor->SetPosition({-130.0f, -90.0f});
             }
-            if (Util::Input::IsKeyUp(Util::Keycode::RETURN)){
-                m_Logo->SetVisible(false);
-                m_Text1P->SetVisible(false);
-                m_Text2P->SetVisible(false);
-                m_Cursor->SetVisible(false);
-                m_HighScoreLabel->SetVisible(true);
-                m_HighScoreLabel->SetText("HIGH\n SCORE\n " + std::to_string(m_HighScore));
-                m_ScoreLabel->SetVisible(true);
-                m_ScoreLabel->SetText("SCORE\n 0");
-                m_Lives = m_Player->GetHP();
-                UpdateLifeIcons();
-                m_StartMusic->Play();
-                m_StartText->SetVisible(true);
-                m_ShowingStart = true;
+            if (m_MenuIndex == 0){
+                if (Util::Input::IsKeyUp(Util::Keycode::RETURN)){
+                    m_Logo->SetVisible(false);
+                    m_Text1P->SetVisible(false);
+                    m_Text2P->SetVisible(false);
+                    m_Cursor->SetVisible(false);
+                    m_HighScoreLabel->SetVisible(true);
+                    m_HighScoreLabel->SetText("HIGH\n SCORE\n " + std::to_string(m_HighScore));
+                    m_ScoreLabel->SetVisible(true);
+                    m_ScoreLabel->SetText("SCORE\n 0");
+                    m_Lives = m_Player->GetHP();
+                    UpdateLifeIcons();
+                    m_StartMusic->Play();
+                    m_StartText->SetVisible(true);
+                    m_ShowingStart = true;
+                }
             }
         }
         // START 文字顯示計時（每幀都跑）
@@ -85,6 +88,7 @@ void App::Update() {
                 m_ReadyText->SetVisible(true);
                 m_ShowingReady = true;
             }
+            totalEnemies=0;
         }
 
         // READY 文字顯示計時（每幀都跑）
@@ -164,12 +168,13 @@ void App::Update() {
                     m_EnemyExplodeSound->Play();
                     m_Hits++;
                     if (!enemy->IsAlive()) {
-                    auto explosion = std::make_shared<Explosion>(enemy->GetPosition());
-                    m_Explosions.push_back(explosion);
-                    m_Root.AddChild(explosion);
-    }
+                        auto explosion = std::make_shared<Explosion>(enemy->GetPosition());
+                        m_Explosions.push_back(explosion);
+                        m_Root.AddChild(explosion);
+                        m_Score += enemy->GetScore(); // 加分
+                        totalEnemies+=1;
+                    }
                     m_Root.RemoveChild(b);      //移除子彈
-                    m_Score += enemy->GetScore(); // 加分
 
                     // 更新分數顯示
                     if (m_HighScore < m_Score){
@@ -218,6 +223,7 @@ void App::Update() {
                 m_Player->SetVisible(false);
 
                 enemy->TakeDamage(2);
+                totalEnemies+=1;
 
                 m_Score += enemy->GetScore(); // 加分
 
@@ -244,6 +250,12 @@ void App::Update() {
             m_PauseText->SetVisible(true);
         }
 
+        //消滅所有敵人
+        if (totalEnemies>=m_Stage0_0->TotalEnemyCount()){
+            m_GameState = GameState::GAME_OVER;
+            m_GameOverText->SetVisible(true);
+            m_GameOverTimer = 3000.0f;
+        }
     }
 
     // 暫停中（什麼都不動，只等待繼續）
@@ -319,7 +331,7 @@ void App::Update() {
 
         if (m_GameOverTimer <= 0.0f) {
             m_GameOverText->SetVisible(false);
-
+            m_Player->SetVisible(false);
             // 清除所有敵人
             for (auto& enemy : m_Enemies) {
                 m_Root.RemoveChild(enemy);

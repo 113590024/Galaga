@@ -102,6 +102,9 @@ private:
     // 敵人
     std::vector<std::shared_ptr<Enemy>> m_Enemies;
 
+    //已消滅敵人數
+    int totalEnemies = 0;
+
     // Explosion!!!!!!!!!!!!!!!!!!!!!!!!!!!
     std::vector<std::shared_ptr<Explosion>> m_Explosions;
 

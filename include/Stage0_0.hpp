@@ -89,7 +89,6 @@ public:
     void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) {
         m_Timer -= Util::Time::GetDeltaTimeMs();
         if (m_Timer <= 0) {
-            // Zako 和 Butterfly 同時各派一隻
             if (m_ZakoIndex < (int)m_ZakoList.size()) {
                 enemies.push_back(m_ZakoList[m_ZakoIndex]);
                 root.AddChild(m_ZakoList[m_ZakoIndex]);
@@ -109,10 +108,14 @@ public:
         }
     }
 
-    [[nodiscard]] bool IsSpawnDone() const {
+    [[nodiscard]] bool IsSpawnDone() {
         return m_ZakoIndex >= (int)m_ZakoList.size() &&
                m_ButterflyIndex >= (int)m_ButterflyList.size() &&
                m_GalagaIndex >= (int)m_GalagaList.size() ;
+    }
+
+    [[nodiscard]] int TotalEnemyCount(){
+        return totalEnemies;
     }
 
 private:
@@ -122,6 +125,7 @@ private:
     int m_ZakoIndex = 0;
     int m_ButterflyIndex = 0;
     int m_GalagaIndex = 0;
+    int totalEnemies = 42;
     float m_Timer = 0.0f;
 };
 
