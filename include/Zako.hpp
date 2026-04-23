@@ -4,6 +4,7 @@
 #include "Enemy.hpp"
 #include "Util/Animation.hpp"
 #include "Util/Time.hpp"
+#include <random>
 
 class Zako : public Enemy {
 public:
@@ -29,7 +30,6 @@ public:
     }
 
     void Update() override {
-
         switch (m_State) {
             case State::ENTERING:
                 UpdatePath();
@@ -63,7 +63,7 @@ public:
         (void)playerPos;
         m_FormationPos = m_Transform.translation;
         m_State = State::DIVING;
-        m_DiveTimer=3000.0f;
+        m_DiveTimer=randomTimer();
 
         glm::vec2 start = m_Transform.translation;
 
@@ -97,6 +97,11 @@ private:
         };
     }
 
+    float randomTimer() {
+        static std::mt19937 rng(std::random_device{}());
+        std::uniform_real_distribution<float> dist(3000.0f, 5000.0f);
+        return dist(rng);
+    }
 
     // 避免每幀重複建立 Animation，記錄目前用的 frames
     std::vector<std::string> m_CurrentFrames;

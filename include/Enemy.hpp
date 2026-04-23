@@ -27,7 +27,6 @@ public:
         m_Visible = true;
     }
 
-    // 在子類別實作
     virtual void Update() = 0;
 
     [[nodiscard]] glm::vec2 GetPosition() const {
@@ -40,10 +39,6 @@ public:
 
     // 俯衝
     virtual void StartDive(const glm::vec2& playerPos) {
-        /*if (stopdiving==true) {
-            m_State = State::FORMATION;
-            return;
-        }*/
         m_State = State::DIVING;
     }
 
@@ -85,6 +80,7 @@ public:
         m_Visible = false;
     }
 
+    //受到傷害
     virtual void TakeDamage(int damage) {
         m_health -= damage;
         if (m_health <= 0) {
@@ -100,7 +96,7 @@ public:
         return (dx * dx + dy * dy) < (radius * radius);
     }
 
-    // 由 AppUpdate 或 Stage 給入場路徑
+    // 入場路徑
     void SetPath(const std::vector<BezierPath>& path) {
         m_Path = path;
         m_PathIndex = 0;
@@ -145,33 +141,11 @@ protected:
         float u = 1.0f - m_T;
         int n = seg.points.size();
         glm::vec2 prevPos = m_Transform.translation;
-
-        if (n == 2) {
-            m_Transform.translation =
-                u     * seg.points[0] +
-                m_T   * seg.points[1];
-
-        } else if (n == 3) {
-            m_Transform.translation =
-                u*u       * seg.points[0] +
-                2*u*m_T   * seg.points[1] +
-                m_T*m_T   * seg.points[2];
-
-        } else if (n == 4) {
-            m_Transform.translation =
+        m_Transform.translation =
                 u*u*u         * seg.points[0] +
                 3*u*u*m_T     * seg.points[1] +
                 3*u*m_T*m_T   * seg.points[2] +
                 m_T*m_T*m_T   * seg.points[3];
-        }
-
-        // 計算移動方向並旋轉
-        /*glm::vec2 dir = m_Transform.translation - prevPos;
-        if (glm::length(dir) > 0.001f) {
-            // atan2 算出角度，+90度是因為圖片預設朝上
-            float angle = glm::degrees(std::atan2(dir.x, dir.y));
-            m_Transform.rotation = -angle;
-        }*/
     }
 };
 

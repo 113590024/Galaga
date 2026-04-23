@@ -71,7 +71,7 @@ public:
         (void)playerPos;
         m_FormationPos = m_Transform.translation;
         m_State = State::DIVING;
-        m_DiveTimer=3000.0f;
+        m_DiveTimer=randomTimer();
 
         glm::vec2 start = m_Transform.translation;
 
@@ -115,6 +115,12 @@ private:
             m_FormationPos.x + m_FormationOffsetX,
             m_FormationPos.y
         };
+    }
+
+    float randomTimer() {
+        static std::mt19937 rng(std::random_device{}());
+        std::uniform_real_distribution<float> dist(3000.0f, 5000.0f);
+        return dist(rng);
     }
 
     // 避免每幀重複建立 Animation，記錄目前用的 frames
