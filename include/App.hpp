@@ -140,7 +140,6 @@ private:
     std::shared_ptr<Util::SFX> m_ShootSound;
     std::shared_ptr<Util::SFX> m_EnemyExplodeSound;
     std::shared_ptr<Util::SFX> m_PlayerExplodeSound;
-
 };
 
 #endif
