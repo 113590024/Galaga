@@ -131,6 +131,14 @@ void App::Start() {
     m_GameOverText->SetVisible(false);
     m_Root.AddChild(m_GameOverText);
 
+    // CLEAR文字
+    m_ClearText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 40, "CLEAR",
+    Util::Color::FromRGB(255, 255, 0), 50);
+    m_ClearText->SetPosition({-150.0f, 0.0f});
+    m_ClearText->SetVisible(false);
+    m_Root.AddChild(m_ClearText);
+
     // Result文字
     m_ResultText = std::make_shared<Label>(
     RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 35, "- RESULT -",
