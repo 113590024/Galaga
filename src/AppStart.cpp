@@ -38,14 +38,6 @@ void App::Start() {
     m_Text1P->SetPosition({0.0f, -50.0f});
     m_Root.AddChild(m_Text1P);
 
-    // 字幕：2 PLAYER
-    m_Text2P = std::make_shared<Label>(
-        RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 20, "2 PLAYERS",
-        Util::Color::FromRGB(255, 255, 255), 10
-    );
-    m_Text2P->SetPosition({0.0f, -90.0f});
-    m_Root.AddChild(m_Text2P);
-
     // 玩家(剛開始時消失)
     m_Player = std::make_shared<PLAYER>(RESOURCE_DIR"/Image/Character/player_1.png");
     m_Player->SetVisible(false);

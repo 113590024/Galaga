@@ -51,12 +51,11 @@ private:
 
     // 玩家
     std::shared_ptr<PLAYER> m_Player;
-    int m_MenuIndex = 0; // 0 = 1 PLAYER, 1 = 2 PLAYERS
+    int m_MenuIndex = 0;
 
     // 封面
     std::shared_ptr<Sprite> m_Logo;
     std::shared_ptr<Label> m_Text1P;
-    std::shared_ptr<Label> m_Text2P;
     bool m_IntroPlaying = true;   // 開場動畫進行中
     float m_IntroY = -500.0f;     // 從畫面底部開始
     float m_IntroTargetY = 0.0f;  // 最終停止的y軸位置

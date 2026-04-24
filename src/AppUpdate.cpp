@@ -37,7 +37,6 @@ void App::Update() {
             }
             m_Logo->SetPosition({0.0f, m_IntroY + 80.0f});
             m_Text1P->SetPosition({0.0f, m_IntroY - 50.0f});
-            m_Text2P->SetPosition({0.0f, m_IntroY - 90.0f});
             m_Cursor->SetVisible(false);
         }
 
@@ -48,15 +47,10 @@ void App::Update() {
                 m_MenuIndex = 0;
                 m_Cursor->SetPosition({-130.0f, -50.0f});
             }
-            if (Util::Input::IsKeyUp(Util::Keycode::DOWN)) {
-                m_MenuIndex = 1;
-                m_Cursor->SetPosition({-130.0f, -90.0f});
-            }
             if (m_MenuIndex == 0){
                 if (Util::Input::IsKeyUp(Util::Keycode::RETURN)){
                     m_Logo->SetVisible(false);
                     m_Text1P->SetVisible(false);
-                    m_Text2P->SetVisible(false);
                     m_Cursor->SetVisible(false);
                     m_HighScoreLabel->SetVisible(true);
                     m_HighScoreLabel->SetText("HIGH\n SCORE\n " + std::to_string(m_HighScore));
@@ -464,7 +458,6 @@ void App::Update() {
             // 顯示選單
             m_Logo->SetVisible(true);
             m_Text1P->SetVisible(true);
-            m_Text2P->SetVisible(true);
 
             // 重建關卡
             m_Stage0_0 = std::make_unique<Stage0_0>();

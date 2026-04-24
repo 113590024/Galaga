@@ -62,7 +62,7 @@ public:
                 std::make_shared<Butterfly>(glm::vec2{100.0f, 500.0f}, fPos, path)
             );
         }
-        //Galaga右
+        // Galaga右
         for (int i = 36; i < 39; i++) {
             glm::vec2 fPos = formationPositions[i];
             std::vector<Enemy::BezierPath> path = {
@@ -73,7 +73,7 @@ public:
                 std::make_shared<Boss_Galaga>(glm::vec2{400.0f, -150.0f}, fPos, path)
             );
         }
-        //Galaga左
+        // Galaga左
         for (int i = 39; i < 42; i++) {
             glm::vec2 fPos = formationPositions[i];
             std::vector<Enemy::BezierPath> path = {
