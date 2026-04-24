@@ -11,7 +11,7 @@
 class Stage1 {
 public:
     Stage1() {
-        
+
     };
 private:
     std::vector<std::shared_ptr<Enemy>> m_ZakoList;

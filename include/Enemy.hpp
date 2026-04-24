@@ -11,6 +11,7 @@ public:
         ENTERING,   // 入場中
         FORMATION,  // 編隊待機
         DIVING,     // 俯衝中
+        CAPTURING,  //抓人
         RETURNING,  // 返回編隊
     };
 

@@ -55,6 +55,8 @@ public:
             case State::DIVING:
                 UpdatePath();
                 break;
+            case State::CAPTURING:
+                //
             case State::RETURNING:
                 UpdatePath();
                 break;
@@ -71,27 +73,42 @@ public:
         m_State = State::DIVING;
         m_DiveTimer=randomTimer();
 
-        if (randomTimer0to100()>=90.0f) {
-            shoot(m_Transform.translation);
+        //30%抓人
+        if (randomTimer0to100()>=2000.0f) {
+            m_capturing = true;
+            glm::vec2 start = m_Transform.translation;
+            std::vector<Enemy::BezierPath> divePath = {
+                {
+                    { start,{start.x, - 100.0f}} }
+            };
+            SetPath(divePath);
+        }
+        else {
+            if (randomTimer0to100()>=90.0f) {
+                shoot(m_Transform.translation);
+            }
+
+            glm::vec2 start = m_Transform.translation;
+
+            // 俯衝路徑
+            std::vector<Enemy::BezierPath> divePath = {
+                { { start,
+                    {start.x, start.y - 100.0f},
+                    {start.x-50.0f,  + 100.0f},
+                    {start.x-50.0f, -400.0f} } },
+
+                // 回到編隊位置
+                { { {m_FormationPos.x, -400.0f},
+                    {m_FormationPos.x, -300.0f},
+                    {m_FormationPos.x, -300.0f},
+                    m_FormationPos } }
+            };
+
+            SetPath(divePath);
         }
 
-        glm::vec2 start = m_Transform.translation;
 
-        // 俯衝路徑
-        std::vector<Enemy::BezierPath> divePath = {
-            { { start,
-                {start.x, start.y - 100.0f},
-                {start.x-50.0f,  + 100.0f},
-                {start.x-50.0f, -400.0f} } },
 
-            // 回到編隊位置
-            { { {m_FormationPos.x, -400.0f},
-                {m_FormationPos.x, -300.0f},
-                {m_FormationPos.x, -300.0f},
-                m_FormationPos } }
-        };
-
-        SetPath(divePath);
     }
 
     void TakeDamage(int damage) override {
@@ -111,6 +128,8 @@ private:
     std::vector<std::string> m_DiveFrames;
     glm::vec2 m_PrevPosition = {0.0f, 0.0f};
     float m_DiveTimer = 5000.0f;  // 5秒
+    float m_DiveTimer0 = 5000.0f;//抓人等待的計時
+    bool m_capturing = false;     //抓人
 
     void updateFormation() {
         m_Transform.translation = {
