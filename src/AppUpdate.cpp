@@ -292,9 +292,9 @@ void App::Update() {
 
         // 消滅所有敵人
         if (totalEnemies>=m_Stage0_0->TotalEnemyCount()){
-            m_GameState = GameState::GAME_OVER;
-            m_GameOverText->SetVisible(true);
-            m_GameOverTimer = 3000.0f;
+            m_GameState = GameState::CLEAR;
+            m_ClearText->SetVisible(true);
+            m_ClearTimer = 3000.0f;
         }
     }
 
@@ -412,6 +412,53 @@ void App::Update() {
             m_GameState = GameState::RESULT; // 跳轉狀態
         }
     }
+
+    if (m_GameState == GameState::CLEAR){
+        m_ClearTimer -= Util::Time::GetDeltaTimeMs();
+
+        // 玩家子彈繼續飛
+        for (auto& bullet : m_Bullets) {
+            bullet->flyUp();
+        }
+
+        // 敵人子彈繼續飛
+        for (auto& bullet : m_EnemyBullets) {
+            bullet->flyDown();
+        }
+
+        // 爆炸動畫繼續爆
+        for (auto& exp : m_Explosions) {
+            exp->Update();
+        }
+        m_Explosions.erase(
+            std::remove_if(m_Explosions.begin(), m_Explosions.end(),
+                [](const auto& e) { return e->IsFinished(); }),
+            m_Explosions.end()
+        );
+
+        if (m_ClearTimer <= 0.0f) {
+            m_ClearText->SetVisible(false);
+            m_Player->SetVisible(false);
+
+            // 計算比例
+            float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;
+
+            // Result文字
+            m_ResultShotsText->SetText("SHOTS FIRED:        " + std::to_string(m_ShotsFired));
+            m_ResultHitsText->SetText("NUMBER OF HITS:      " + std::to_string(m_Hits));
+            m_ResultRatioText->SetText("HIT-MISS RATIO:     " + std::to_string(static_cast<int>(ratio)) + "%");
+
+            // 顯示文字
+            m_ResultText->SetVisible(true);
+            m_ResultShotsText->SetVisible(true);
+            m_ResultHitsText->SetVisible(true);
+            m_ResultRatioText->SetVisible(true);
+
+            m_ResultTimer = 5000.0f; // 給玩家 5 秒看分數
+            m_GameState = GameState::RESULT; // 跳轉狀態
+        }
+    }
+
     if (m_GameState == GameState::RESULT) {
         m_ResultTimer -= Util::Time::GetDeltaTimeMs();
         // 按 Enter 直接跳過等待時間

@@ -27,6 +27,7 @@ public:
         PLAYER_DEAD,
         PAUSED,
         GAME_OVER,
+        CLEAR,
         RESULT
     };
 
@@ -122,11 +123,15 @@ private:
     std::shared_ptr<Label> m_GameOverText;
     float m_PlayerDeathTimer = 0.0f;
     float m_GameOverTimer = 0.0f;
-    float m_ResultTimer = 0.0f;
+
+    // CLEAR
+    std::shared_ptr<Label> m_ClearText;
+    float m_ClearTimer = 0.0f;
 
     // Result計數
     int m_ShotsFired = 0;   // 總射擊次數
     int m_Hits = 0;         // 命中次數
+    float m_ResultTimer = 0.0f;
 
     // Result畫面的文字物件
     std::shared_ptr<Label> m_ResultText;
