@@ -52,6 +52,7 @@ void App::Update() {
                     m_Logo->SetVisible(false);
                     m_Text1P->SetVisible(false);
                     m_Cursor->SetVisible(false);
+                    m_StageText->SetVisible(true);
                     m_HighScoreLabel->SetVisible(true);
                     m_HighScoreLabel->SetText("HIGH\n SCORE\n " + std::to_string(m_HighScore));
                     m_ScoreLabel->SetVisible(true);
@@ -413,7 +414,7 @@ void App::Update() {
     }
     if (m_GameState == GameState::RESULT) {
         m_ResultTimer -= Util::Time::GetDeltaTimeMs();
-        // 也可以讓玩家按 Enter 直接跳過等待時間
+        // 按 Enter 直接跳過等待時間
         if (m_ResultTimer <= 0.0f || Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
             // 隱藏 Result 文字
             m_ResultText->SetVisible(false);
@@ -444,6 +445,9 @@ void App::Update() {
             for (auto& icon : m_LifeIcons) {
                 icon->SetVisible(false);
             }
+
+            // 右下角關卡隱藏
+            m_StageText->SetVisible(false);
 
             // 重置開場動畫狀態
             m_ShowingStart = false;

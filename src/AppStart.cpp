@@ -32,7 +32,7 @@ void App::Start() {
 
     // 字幕：1 PLAYER
     m_Text1P = std::make_shared<Label>(
-        RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 20, "1 PLAYER ",
+        RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 20, "PLAY ",
         Util::Color::FromRGB(255, 255, 255), 10
     );
     m_Text1P->SetPosition({0.0f, -50.0f});
@@ -73,6 +73,15 @@ void App::Start() {
     m_Stage1Text->SetPosition({-150.0f, 0.0f});
     m_Stage1Text->SetVisible(false);
     m_Root.AddChild(m_Stage1Text);
+
+    //右下角的關卡文字
+    m_StageText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "Stage 1",
+    Util::Color::FromRGB(0, 0, 255), 20 // 黃色，最上層
+    );
+    m_StageText->SetPosition({480.0f, -300.0f});
+    m_StageText->SetVisible(false);
+    m_Root.AddChild(m_StageText);
 
     // READY
     m_ReadyText = std::make_shared<Label>(

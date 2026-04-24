@@ -116,6 +116,7 @@ private:
     std::shared_ptr<Label> m_Stage1Text;
     bool m_ShowingStage = false;
     float m_StageTimer = 0.0f;
+    std::shared_ptr<Label> m_StageText;
 
     // GAMEOVER
     std::shared_ptr<Label> m_GameOverText;
