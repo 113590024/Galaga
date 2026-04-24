@@ -142,7 +142,6 @@ protected:
         // Bezier 公式
         //(u + t)^3 = u³ + 3u²t + 3ut² + t³，u=1-t
         float u = 1.0f - m_T;
-        int n = seg.points.size();
         glm::vec2 prevPos = m_Transform.translation;
         m_Transform.translation =
                 u*u*u         * seg.points[0] +
