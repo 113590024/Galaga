@@ -49,7 +49,7 @@ public:
                     }
                 }
                 else {
-                    m_DiveTimer =3000.0f;
+                    m_DiveTimer =randomTimer();
                 }
                 break;
             case State::DIVING:
@@ -71,7 +71,7 @@ public:
         m_State = State::DIVING;
         m_DiveTimer=randomTimer();
 
-        if (randomTimer50()>=50.0f) {
+        if (randomTimer0to100()>=90.0f) {
             shoot(m_Transform.translation);
         }
 
@@ -121,10 +121,10 @@ private:
 
     float randomTimer() {
         static std::mt19937 rng(std::random_device{}());
-        std::uniform_real_distribution<float> dist(3000.0f, 5000.0f);
+        std::uniform_real_distribution<float> dist(2000.0f, 10000.0f);
         return dist(rng);
     }
-    float randomTimer50() {
+    float randomTimer0to100() {
         static std::mt19937 rng(std::random_device{}());
         std::uniform_real_distribution<float> dist(0.0f, 100.0f);
         return dist(rng);
