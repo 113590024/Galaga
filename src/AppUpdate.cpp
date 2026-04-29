@@ -42,7 +42,8 @@ void App::Update() {
 
         // 動畫結束
         if (!m_IntroPlaying && !m_ShowingStart) {
-            m_Cursor->SetVisible(true); // 顯示箭頭
+            m_Cursor->SetVisible(true);
+
             if (Util::Input::IsKeyUp(Util::Keycode::UP)) {
                 m_MenuIndex = 0;
                 m_Cursor->SetPosition({-130.0f, -50.0f});

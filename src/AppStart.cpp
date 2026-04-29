@@ -45,7 +45,7 @@ void App::Start() {
 
     // 箭頭
     m_Cursor = std::make_shared<Cursor>();
-    m_Cursor->SetPosition({-130.0f, -50.0f}); // 對齊 1 PLAYER 左邊
+    m_Cursor->SetPosition({-80.0f, -50.0f});
     m_Root.AddChild(m_Cursor);
 
     // START (剛開始)
