@@ -46,7 +46,7 @@ void App::Update() {
 
             if (Util::Input::IsKeyUp(Util::Keycode::UP)) {
                 m_MenuIndex = 0;
-                m_Cursor->SetPosition({-130.0f, -50.0f});
+                m_Cursor->SetPosition({-80.0f, -50.0f});
             }
             if (m_MenuIndex == 0){
                 if (Util::Input::IsKeyUp(Util::Keycode::RETURN)){
@@ -292,7 +292,7 @@ void App::Update() {
         }
 
         // 消滅所有敵人
-        if (totalEnemies>=m_Stage0_0->TotalEnemyCount()){
+        if (totalEnemies>=m_Stage0_0->TotalEnemyCount() && m_Player->IsAlive()){
             m_GameState = GameState::CLEAR;
             m_ClearText->SetVisible(true);
             m_ClearTimer = 3000.0f;
