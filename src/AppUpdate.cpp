@@ -281,6 +281,7 @@ void App::Update() {
                 } else {
                     m_GameState = GameState::PLAYER_DEAD;
                     m_PlayerDeathTimer = 5000.0f;
+                    //m_Stages[m_Stagenumber]->
                 }
                 break;
             }
@@ -296,6 +297,8 @@ void App::Update() {
             m_GameState = GameState::CLEAR;
             m_ClearText->SetVisible(true);
             m_ClearTimer = 3000.0f;
+            m_Stagenumber++;
+            totalEnemies=0;
         }
     }
 

@@ -116,6 +116,12 @@ public:
         return totalEnemies;
     }
 
+    void addWave() {
+        if () {
+            wave++;
+        }
+    }
+
 private:
     std::vector<std::shared_ptr<Enemy>> m_ZakoList;
     std::vector<std::shared_ptr<Enemy>> m_ButterflyList;
@@ -124,6 +130,9 @@ private:
     int m_ButterflyIndex = 0;
     int m_GalagaIndex = 0;
     float m_Timer = 0.0f;
+    int wave=1;         //第幾波
+    int wave1count=0;   //波次總敵人數
+    //int               //目前波次擊殺
 };
 
 #endif //GALAGA_STAGE0_0_HPP
