@@ -2,14 +2,17 @@
 // Created by TUF on 2026/4/6.
 //
 
-#ifndef GALAGA_STAGE0_0_HPP
-#define GALAGA_STAGE0_0_HPP
+#ifndef GALAGA_STAGE2_HPP
+#define GALAGA_STAGE2_HPP
 
 #include "Stage.hpp"
 
 class Stage2 :public Stage{
 public:
     Stage2(){
+        stagelevel=0;
+        stageclear=false;
+        totalEnemies = 8;
         //獎勵關卡 沒有編隊位置
         for (int i = 0; i < 8; i++) {
             glm::vec2 fPos = formationPositions[i];
@@ -62,8 +65,7 @@ private:
     int m_ZakoIndex = 0;
     int m_ButterflyIndex = 0;
     int m_GalagaIndex = 0;
-    int totalEnemies = 42;
     float m_Timer = 0.0f;
 };
 
-#endif //GALAGA_STAGE0_0_HPP
+#endif //GALAGA_STAGE2_HPP
