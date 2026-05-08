@@ -37,6 +37,9 @@ public:
     void Update();
     void End();
 
+    std::unique_ptr<Stage> m_Stages[2];  // 固定2關
+    int m_CurrentStage = 0;
+
     // 更新玩家生命值圖片
     void UpdateLifeIcons() {
         for (int i = 0; i < (int)m_LifeIcons.size(); i++) {

@@ -131,7 +131,7 @@ void App::Update() {
                 m_Root.AddChild(bullet);
                 m_ShootCooldown = 0.5f; // 0.0005秒冷卻
                 m_ShootSound->Play();   // 射擊音效
-                m_ShotsFired++;     // Shot計數
+                m_ShotsFired++;     // Shot計
             }
         }
         // 更新子彈位置

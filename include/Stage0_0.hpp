@@ -5,16 +5,11 @@
 #ifndef GALAGA_STAGE0_0_HPP
 #define GALAGA_STAGE0_0_HPP
 
-#include "Zako.hpp"
-#include "Butterfly.hpp"
-#include "Boss_Galaga.hpp"
-#include "Util/Time.hpp"
-#include <vector>
-#include <memory>
+#include "Stage.hpp"
 
-class Stage0_0 {
+class Stage0_0 :public Stage{
 public:
-    Stage0_0() {
+    Stage0_0(){
         //編隊位置
         std::vector<glm::vec2> formationPositions = {
             // ZAKO
