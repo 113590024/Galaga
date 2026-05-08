@@ -1,16 +1,12 @@
 #ifndef GALAGA_STAGE1_HPP
 #define GALAGA_STAGE1_HPP
 
-#include "Zako.hpp"
-#include "Butterfly.hpp"
-#include "Boss_Galaga.hpp"
-#include "Util/Time.hpp"
-#include <vector>
-#include <memory>
+#include "Stage.hpp"
 
-class Stage1 {
+class Stage1 :public Stage {
 public:
     Stage1() {
+        stagelevel=1;
 
     };
 private:

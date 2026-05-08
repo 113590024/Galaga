@@ -3,7 +3,8 @@
 #include "Util/Color.hpp"
 #include "Sprite.hpp"
 #include "Label.hpp"
-#include "Player_bullet.hpp"
+#include "Stage0_0.hpp"
+#include "Stage1.hpp"
 
 void App::Start() {
     LOG_TRACE("Start");
@@ -120,8 +121,10 @@ void App::Start() {
         m_Root.AddChild(icon);
     }
 
-    //生人敵人
-    m_Stage0_0 = std::make_shared<Stage0_0>();
+    //關卡
+    m_Stages.push_back(std::make_unique<Stage0_0>());
+    //m_Stages.push_back(std::make_unique<Stage1>());
+
 
     // GAMEOVER文字
     m_GameOverText = std::make_shared<Label>(

@@ -4,6 +4,7 @@
 #include "Util/Time.hpp"
 #include "Enemy_bullet.hpp"
 #include "Stage0_0.hpp"
+#include "Stage1.hpp"
 
 //測試用
 #include "Util/Logger.hpp"
@@ -108,9 +109,8 @@ void App::Update() {
     if (m_GameState == GameState::PLAYING) {
         m_Player->Update();
 
-        // 關卡 (目前一關)
-        //m_StageManager->Update();
-        m_Stage0_0->Update(m_Enemies, m_Root);
+        // 關卡
+        m_Stages[m_Stagenumber]->Update(m_Enemies, m_Root);
 
         // 更新所有敵人
         for (auto& enemy : m_Enemies) {
@@ -292,7 +292,7 @@ void App::Update() {
         }
 
         // 消滅所有敵人
-        if (totalEnemies>=m_Stage0_0->TotalEnemyCount() && m_Player->IsAlive()){
+        if (totalEnemies>=m_Stages[m_Stagenumber]->TotalEnemyCount() && m_Player->IsAlive()){
             m_GameState = GameState::CLEAR;
             m_ClearText->SetVisible(true);
             m_ClearTimer = 3000.0f;
@@ -512,7 +512,10 @@ void App::Update() {
             m_Text1P->SetVisible(true);
 
             // 重建關卡
-            m_Stage0_0 = std::make_unique<Stage0_0>();
+            m_Stages.clear();
+            m_Stages.push_back(std::make_unique<Stage0_0>());
+            //m_Stages.push_back(std::make_unique<Stage1>());
+            m_Stagenumber = 0;
 
             m_GameState = GameState::START_SCREEN;
         }

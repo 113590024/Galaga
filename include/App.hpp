@@ -12,7 +12,7 @@
 #include "Player_bullet.hpp"
 #include "Enemy_bullet.hpp"
 #include "Explosion.hpp"
-#include "Stage0_0.hpp"
+#include "Stage.hpp"
 
 class App {
 public:
@@ -36,9 +36,6 @@ public:
     void Start();
     void Update();
     void End();
-
-    std::unique_ptr<Stage> m_Stages[2];  // 固定2關
-    int m_CurrentStage = 0;
 
     // 更新玩家生命值圖片
     void UpdateLifeIcons() {
@@ -116,7 +113,8 @@ private:
     std::vector<std::shared_ptr<Explosion>> m_Explosions;
 
     // 關卡 (第幾關)
-    std::shared_ptr<Stage0_0> m_Stage0_0;
+    std::vector<std::unique_ptr<Stage>> m_Stages;
+    int m_Stagenumber = 1;
     std::shared_ptr<Label> m_Stage1Text;
     bool m_ShowingStage = false;
     float m_StageTimer = 0.0f;

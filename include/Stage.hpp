@@ -10,7 +10,22 @@
 
 class Stage {
 public:
+    int getStageLevel() {
+        return stagelevel;
+    }
+    bool getstageclear() {
+        return stageclear;
+    }
 
+    int TotalEnemyCount(){
+        return totalEnemies;
+    }
+
+    virtual void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) = 0;
+
+    int stagelevel=0;
+    bool stageclear=false;
+    int totalEnemies=100;
 private:
 };
 

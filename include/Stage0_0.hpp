@@ -10,6 +10,9 @@
 class Stage0_0 :public Stage{
 public:
     Stage0_0(){
+        stagelevel=0;
+        stageclear=false;
+        totalEnemies = 42;
         //編隊位置
         std::vector<glm::vec2> formationPositions = {
             // ZAKO
@@ -81,7 +84,7 @@ public:
         }
     }
 
-    void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) {
+    void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) override{
         m_Timer -= Util::Time::GetDeltaTimeMs();
         if (m_Timer <= 0) {
             if (m_ZakoIndex < (int)m_ZakoList.size()) {
@@ -120,7 +123,6 @@ private:
     int m_ZakoIndex = 0;
     int m_ButterflyIndex = 0;
     int m_GalagaIndex = 0;
-    int totalEnemies = 42;
     float m_Timer = 0.0f;
 };
 
