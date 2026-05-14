@@ -116,11 +116,11 @@ public:
         return totalEnemies;
     }
 
-    void addWave() {
+    /*void addWave() {
         if () {
             wave++;
         }
-    }
+    }*/
 
 private:
     std::vector<std::shared_ptr<Enemy>> m_ZakoList;

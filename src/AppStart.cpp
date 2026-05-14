@@ -5,6 +5,7 @@
 #include "Label.hpp"
 #include "Stage0_0.hpp"
 #include "Stage1.hpp"
+#include "Stage2.hpp"
 
 void App::Start() {
     LOG_TRACE("Start");
@@ -122,8 +123,9 @@ void App::Start() {
     }
 
     //關卡
-    m_Stages.push_back(std::make_unique<Stage0_0>());
-    //m_Stages.push_back(std::make_unique<Stage1>());
+    m_Stages.push_back(std::make_unique<Stage0_0>()); // 第一關
+    m_Stages.push_back(std::make_unique<Stage1>());   // 第二關
+    m_Stages.push_back(std::make_unique<Stage2>());   // 第三關
 
 
     // GAMEOVER文字

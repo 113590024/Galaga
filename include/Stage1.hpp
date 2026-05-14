@@ -6,9 +6,16 @@
 class Stage1 :public Stage {
 public:
     Stage1() {
-        stagelevel=1;
+        stagelevel = 1;
+        stageclear = false;
+        totalEnemies = 0; // 還沒設計，所以暫時沒有敵人
+    }
 
-    };
+    void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) override {
+        (void)enemies;
+        (void)root;
+        stageclear = true;
+    }
 private:
     std::vector<std::shared_ptr<Enemy>> m_ZakoList;
     std::vector<std::shared_ptr<Enemy>> m_ButterflyList;

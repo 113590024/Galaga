@@ -10,10 +10,16 @@
 class Stage2 :public Stage{
 public:
     Stage2(){
-        stagelevel=0;
+        stagelevel=2;
         stageclear=false;
         totalEnemies = 8;
-        //獎勵關卡 沒有編隊位置
+        //編隊位置
+        std::vector<glm::vec2> formationPositions = {
+            // ZAKO
+            {-350.0f, 100.0f},{-300.0f,  100.0f},{-250.0f, 100.0f},
+            {-350.0f, 100.0f},{-300.0f,  100.0f},{-250.0f, 100.0f},
+            {-350.0f, 100.0f},{-300.0f,  100.0f}
+        };
         for (int i = 0; i < 8; i++) {
             glm::vec2 fPos = formationPositions[i];
             std::vector<Enemy::BezierPath> path = {

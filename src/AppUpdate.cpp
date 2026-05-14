@@ -294,11 +294,20 @@ void App::Update() {
 
         // 消滅所有敵人
         if (totalEnemies>=m_Stages[m_Stagenumber]->TotalEnemyCount() && m_Player->IsAlive()){
-            m_GameState = GameState::CLEAR;
-            m_ClearText->SetVisible(true);
-            m_ClearTimer = 3000.0f;
+            totalEnemies = 0;
             m_Stagenumber++;
-            totalEnemies=0;
+
+            if (m_Stagenumber < static_cast<int>(m_Stages.size())) {
+                m_GameState = GameState::CLEAR;
+
+                m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
+                m_Stage1Text->SetVisible(true);
+
+                m_ClearTimer = 2000.0f;
+            } else {
+                m_GameState = GameState::RESULT;
+                m_ResultTimer = 5000.0f;
+            }
         }
     }
 
@@ -398,20 +407,6 @@ void App::Update() {
             }
             m_Enemies.clear();
 
-            // 計算比例
-            float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;
-
-            // Result文字
-            m_ResultShotsText->SetText("SHOTS FIRED:        " + std::to_string(m_ShotsFired));
-            m_ResultHitsText->SetText("NUMBER OF HITS:      " + std::to_string(m_Hits));
-            m_ResultRatioText->SetText("HIT-MISS RATIO:     " + std::to_string(static_cast<int>(ratio)) + "%");
-
-            // 顯示文字
-            m_ResultText->SetVisible(true);
-            m_ResultShotsText->SetVisible(true);
-            m_ResultHitsText->SetVisible(true);
-            m_ResultRatioText->SetVisible(true);
-
             m_ResultTimer = 5000.0f; // 給玩家 5 秒看分數
             m_GameState = GameState::RESULT; // 跳轉狀態
         }
@@ -441,30 +436,27 @@ void App::Update() {
         );
 
         if (m_ClearTimer <= 0.0f) {
-            m_ClearText->SetVisible(false);
-            m_Player->SetVisible(false);
-
-            // 計算比例
-            float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;
-
-            // Result文字
-            m_ResultShotsText->SetText("SHOTS FIRED:        " + std::to_string(m_ShotsFired));
-            m_ResultHitsText->SetText("NUMBER OF HITS:      " + std::to_string(m_Hits));
-            m_ResultRatioText->SetText("HIT-MISS RATIO:     " + std::to_string(static_cast<int>(ratio)) + "%");
-
-            // 顯示文字
-            m_ResultText->SetVisible(true);
-            m_ResultShotsText->SetVisible(true);
-            m_ResultHitsText->SetVisible(true);
-            m_ResultRatioText->SetVisible(true);
-
-            m_ResultTimer = 5000.0f; // 給玩家 5 秒看分數
-            m_GameState = GameState::RESULT; // 跳轉狀態
+            m_Stage1Text->SetVisible(false);
+            m_GameState = GameState::PLAYING;
         }
     }
 
     if (m_GameState == GameState::RESULT) {
         m_ResultTimer -= Util::Time::GetDeltaTimeMs();
+        // 計算比例
+        float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;
+
+        // Result文字
+        m_ResultShotsText->SetText("SHOTS FIRED:        " + std::to_string(m_ShotsFired));
+        m_ResultHitsText->SetText("NUMBER OF HITS:      " + std::to_string(m_Hits));
+        m_ResultRatioText->SetText("HIT-MISS RATIO:     " + std::to_string(static_cast<int>(ratio)) + "%");
+
+        // 顯示文字
+        m_ResultText->SetVisible(true);
+        m_ResultShotsText->SetVisible(true);
+        m_ResultHitsText->SetVisible(true);
+        m_ResultRatioText->SetVisible(true);
+
         // 按 Enter 直接跳過等待時間
         if (m_ResultTimer <= 0.0f || Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
             // 隱藏 Result 文字
