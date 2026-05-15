@@ -221,6 +221,7 @@ void App::Update() {
                         m_Root.AddChild(explosion);
                         m_Score += enemy->GetScore(); // 加分
                         totalEnemies+=1;
+                        m_Stages[m_Stagenumber]->OnEnemyKilled();
                     }
                     m_Root.RemoveChild(b);      // 移除子彈
 
@@ -314,6 +315,8 @@ void App::Update() {
 
                 enemy->TakeDamage(2);
                 totalEnemies+=1;
+
+                m_Stages[m_Stagenumber]->OnEnemyKilled();
 
                 m_Score += enemy->GetScore(); // 加分
 
