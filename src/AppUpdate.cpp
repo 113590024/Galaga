@@ -114,6 +114,7 @@ void App::Update() {
 
         // 更新所有敵人
         for (auto& enemy : m_Enemies) {
+            enemy->SetPlayerPosition(m_Player->GetPosition());
             enemy->Update();
         }
 

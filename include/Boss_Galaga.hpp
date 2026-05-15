@@ -74,7 +74,7 @@ public:
         m_DiveTimer=randomTimer();
 
         //30%抓人
-        if (randomTimer0to100()>=2000.0f) {
+        if (randomTimer0to100()>=30.0f) {
             m_capturing = true;
             glm::vec2 start = m_Transform.translation;
             std::vector<Enemy::BezierPath> divePath = {

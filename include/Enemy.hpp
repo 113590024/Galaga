@@ -109,6 +109,10 @@ public:
         m_State = State::ENTERING;
     }
 
+    void SetPlayerPosition(const glm::vec2& pos) {
+        m_PlayerPos = pos;
+    }
+
 protected:
     bool m_IsAlive = true;
     int m_health=1;
@@ -116,6 +120,7 @@ protected:
     State m_State = State::ENTERING;
     glm::vec2 m_FormationPos;
     bool stopdiving=false;
+    glm::vec2 m_PlayerPos = {0.0f, 0.0f};
 
     std::vector<BezierPath> m_Path;//這隻敵人的所有路徑段
     int m_PathIndex = 0;//目前走到第幾段曲線
