@@ -24,8 +24,9 @@ public:
     virtual void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) = 0;
 
     int stagelevel=0;
-    bool stageclear=false;
+    //bool stageclear=false;
     int totalEnemies=100;
+    int EnemiesKill = 0;    //這關擊殺數
 private:
 };
 

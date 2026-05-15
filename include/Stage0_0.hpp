@@ -11,7 +11,7 @@ class Stage0_0 :public Stage{
 public:
     Stage0_0(){
         stagelevel=0;
-        stageclear=false;
+        //stageclear=false;
         totalEnemies = 42;
         //編隊位置
         std::vector<glm::vec2> formationPositions = {
@@ -112,9 +112,9 @@ public:
                m_GalagaIndex >= (int)m_GalagaList.size() ;
     }
 
-    [[nodiscard]] int TotalEnemyCount(){
+    /*[[nodiscard]] int TotalEnemyCount(){
         return totalEnemies;
-    }
+    }*/
 
     /*void addWave() {
         if () {
