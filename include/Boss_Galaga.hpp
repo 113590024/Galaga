@@ -68,7 +68,19 @@ public:
 
                 if (m_DiveTimer0 <= 0.0f) {
                     m_capturing = false;
-                    m_State = State::FORMATION;
+
+                    glm::vec2 start = m_Transform.translation;
+                    m_FormationPos = m_OriginalFormationPos;
+
+                    std::vector<Enemy::BezierPath> returnPath = {
+                        { { start,
+                            {start.x, start.y + 100.0f},
+                            {m_FormationPos.x, m_FormationPos.y - 100.0f},
+                            m_FormationPos } }
+                    };
+
+                    SetPath(returnPath);
+                    m_State = State::RETURNING;
                     m_DiveTimer = randomTimer();
                 }
                 break;
@@ -93,12 +105,16 @@ public:
             m_PreparingCapture = true;
             m_capturing = false;
 
+            m_OriginalFormationPos = m_FormationPos;
+
             glm::vec2 start = m_Transform.translation;
 
             glm::vec2 capturePos = {
                 m_PlayerPos.x,
-                120.0f
+                -170.0f
             };
+
+            m_FormationPos = capturePos;
 
             std::vector<Enemy::BezierPath> capturePath = {
                 { { start,
@@ -108,6 +124,7 @@ public:
             };
 
             SetPath(capturePath);
+            m_State = State::DIVING;
         }
         else {
             if (randomTimer0to100()>=90.0f) {
@@ -172,6 +189,7 @@ private:
     float m_DiveTimer0 = 5000.0f;//抓人等待的計時
     bool m_capturing = false;     //抓人
     bool m_PreparingCapture = false;    //準備抓人
+    glm::vec2 m_OriginalFormationPos = {0.0f, 0.0f};
 
 
     void updateFormation() {

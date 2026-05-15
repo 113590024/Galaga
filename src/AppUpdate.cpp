@@ -132,33 +132,30 @@ void App::Update() {
                 m_TractorBeam->SetVisible(true);
                 m_TractorBeam->SetPosition({
                     bossPos.x,
-                    bossPos.y - 300.0f
+                    bossPos.y - 100.0f
                 });
 
                 break;
             }
         }
 
-        // 判斷有沒有被Galaga抓到
+        // 判斷有沒有被 Galaga 抓到
         for (auto& enemy : m_Enemies) {
             auto boss = std::dynamic_pointer_cast<Boss_Galaga>(enemy);
             if (!boss) continue;
 
-            if (boss->IsTractorBeamActive() &&
+            if (!m_Player->IsInvincible() &&
+                boss->IsTractorBeamActive() &&
                 boss->IsPlayerInTractorBeam(m_Player->GetPosition())) {
 
                 m_Player->TakeDamage();
                 m_Lives = m_Player->GetHP();
                 UpdateLifeIcons();
-                m_Player->SetVisible(false);
 
                 if (m_Player->IsDead()) {
                     m_GameState = GameState::GAME_OVER;
                     m_GameOverText->SetVisible(true);
                     m_GameOverTimer = 3000.0f;
-                } else {
-                    m_GameState = GameState::PLAYER_DEAD;
-                    m_PlayerDeathTimer = 5000.0f;
                 }
 
                 break;

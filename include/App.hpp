@@ -114,7 +114,7 @@ private:
 
     // 關卡 (第幾關)
     std::vector<std::unique_ptr<Stage>> m_Stages;
-    int m_Stagenumber = 0;      //從Stage0_0開始
+    int m_Stagenumber = 1;      //從Stage1開始
     std::shared_ptr<Label> m_Stage1Text;
     bool m_ShowingStage = false;
     float m_StageTimer = 0.0f;

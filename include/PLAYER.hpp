@@ -53,6 +53,16 @@ public:
         return (dx * dx + dy * dy) < (radius * radius);
     }
 
+    void SetInvincible(float timeMs) {
+        m_IsInvincible = true;
+        m_InvincibleTimer = timeMs;
+    }
+
+    bool IsInvincible() const {
+        return m_IsInvincible;
+    }
+
+
 private:
     float m_Speed = 10.0f;
     int m_HP = 3;
