@@ -111,7 +111,7 @@ public:
 
             glm::vec2 capturePos = {
                 m_PlayerPos.x,
-                -170.0f
+                -100.0f
             };
 
             m_FormationPos = capturePos;

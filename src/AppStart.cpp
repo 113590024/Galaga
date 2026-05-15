@@ -187,7 +187,7 @@ void App::Start() {
     RESOURCE_DIR"/Image/Character/TractorBeam_1.png", 15
     );
     m_TractorBeam->SetVisible(false);
-    m_TractorBeam->SetScale({1.5f, 2.5f});
+    m_TractorBeam->SetScale({2.5f, 3.5f});
     m_Root.AddChild(m_TractorBeam);
 
 
