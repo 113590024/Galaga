@@ -54,9 +54,24 @@ public:
                 break;
             case State::DIVING:
                 UpdatePath();
+
+                if (m_PreparingCapture && m_State == State::FORMATION) {
+                    m_PreparingCapture = false;
+                    m_capturing = true;
+                    m_State = State::CAPTURING;
+                    m_DiveTimer0 = 3000.0f;
+                }
                 break;
+
             case State::CAPTURING:
-                //
+                m_DiveTimer0 -= Util::Time::GetDeltaTimeMs();
+
+                if (m_DiveTimer0 <= 0.0f) {
+                    m_capturing = false;
+                    m_State = State::FORMATION;
+                    m_DiveTimer = randomTimer();
+                }
+                break;
             case State::RETURNING:
                 UpdatePath();
                 break;
@@ -74,14 +89,25 @@ public:
         m_DiveTimer=randomTimer();
 
         //30%抓人
-        if (randomTimer0to100()>=30.0f) {
-            m_capturing = true;
+        if (randomTimer0to100() <= 30.0f) {
+            m_PreparingCapture = true;
+            m_capturing = false;
+
             glm::vec2 start = m_Transform.translation;
-            std::vector<Enemy::BezierPath> divePath = {
-                {
-                    { start,{start.x, - 100.0f}} }
+
+            glm::vec2 capturePos = {
+                m_PlayerPos.x,
+                120.0f
             };
-            SetPath(divePath);
+
+            std::vector<Enemy::BezierPath> capturePath = {
+                { { start,
+                    {start.x, start.y - 80.0f},
+                    {capturePos.x, capturePos.y + 80.0f},
+                    capturePos } }
+            };
+
+            SetPath(capturePath);
         }
         else {
             if (randomTimer0to100()>=90.0f) {
@@ -121,6 +147,21 @@ public:
         }
     }
 
+    bool IsTractorBeamActive() const {
+        return m_capturing;
+    }
+
+    bool IsPlayerInTractorBeam(const glm::vec2& playerPos) const {
+        glm::vec2 bossPos = GetPosition();
+
+        if (playerPos.y > bossPos.y) return false;
+
+        float dx = std::abs(playerPos.x - bossPos.x);
+        float dy = bossPos.y - playerPos.y;
+
+        return dx < 60.0f && dy < 350.0f;
+    }
+
 private:
     float m_FormationOffsetX = 0.0f;
     std::vector<std::string> m_IdleFrames;
@@ -130,6 +171,8 @@ private:
     float m_DiveTimer = 5000.0f;  // 5秒
     float m_DiveTimer0 = 5000.0f;//抓人等待的計時
     bool m_capturing = false;     //抓人
+    bool m_PreparingCapture = false;    //準備抓人
+
 
     void updateFormation() {
         m_Transform.translation = {

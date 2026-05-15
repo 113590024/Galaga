@@ -146,6 +146,9 @@ private:
     std::shared_ptr<Util::SFX> m_ShootSound;
     std::shared_ptr<Util::SFX> m_EnemyExplodeSound;
     std::shared_ptr<Util::SFX> m_PlayerExplodeSound;
+
+    // Galaga光束圖片
+    std::shared_ptr<Sprite> m_TractorBeam;
 };
 
 #endif

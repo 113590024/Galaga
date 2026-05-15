@@ -5,6 +5,7 @@
 #include "Enemy_bullet.hpp"
 #include "Stage0_0.hpp"
 #include "Stage1.hpp"
+#include "Boss_Galaga.hpp"
 
 //測試用
 #include "Util/Logger.hpp"
@@ -117,6 +118,53 @@ void App::Update() {
             enemy->SetPlayerPosition(m_Player->GetPosition());
             enemy->Update();
         }
+
+        // 顯示 / 隱藏 Boss Galaga 的抓人光束
+        m_TractorBeam->SetVisible(false);
+
+        for (auto& enemy : m_Enemies) {
+            auto boss = std::dynamic_pointer_cast<Boss_Galaga>(enemy);
+            if (!boss) continue;
+
+            if (boss->IsTractorBeamActive()) {
+                glm::vec2 bossPos = boss->GetPosition();
+
+                m_TractorBeam->SetVisible(true);
+                m_TractorBeam->SetPosition({
+                    bossPos.x,
+                    bossPos.y - 300.0f
+                });
+
+                break;
+            }
+        }
+
+        // 判斷有沒有被Galaga抓到
+        for (auto& enemy : m_Enemies) {
+            auto boss = std::dynamic_pointer_cast<Boss_Galaga>(enemy);
+            if (!boss) continue;
+
+            if (boss->IsTractorBeamActive() &&
+                boss->IsPlayerInTractorBeam(m_Player->GetPosition())) {
+
+                m_Player->TakeDamage();
+                m_Lives = m_Player->GetHP();
+                UpdateLifeIcons();
+                m_Player->SetVisible(false);
+
+                if (m_Player->IsDead()) {
+                    m_GameState = GameState::GAME_OVER;
+                    m_GameOverText->SetVisible(true);
+                    m_GameOverTimer = 3000.0f;
+                } else {
+                    m_GameState = GameState::PLAYER_DEAD;
+                    m_PlayerDeathTimer = 5000.0f;
+                }
+
+                break;
+                }
+        }
+
 
         if (Util::Input::IsKeyPressed(Util::Keycode::LEFT))  m_Player->Move(-1, 0);
         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);

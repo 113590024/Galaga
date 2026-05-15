@@ -182,5 +182,14 @@ void App::Start() {
     m_EnemyExplodeSound->SetVolume(32);
     m_PlayerExplodeSound->SetVolume(32);
 
+    // 建立光束圖片
+    m_TractorBeam = std::make_shared<Sprite>(
+    RESOURCE_DIR"/Image/Character/TractorBeam_1.png", 15
+    );
+    m_TractorBeam->SetVisible(false);
+    m_TractorBeam->SetScale({1.5f, 2.5f});
+    m_Root.AddChild(m_TractorBeam);
+
+
     m_CurrentState = State::UPDATE;
 }
