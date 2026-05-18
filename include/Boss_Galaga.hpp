@@ -68,7 +68,7 @@ public:
 
                 if (m_DiveTimer0 <= 0.0f) {
                     m_capturing = false;
-
+                    s_IsAnyoneCapturing = false; // 有人開始抓了 所以要false
                     glm::vec2 start = m_Transform.translation;
                     m_FormationPos = m_OriginalFormationPos;
 
@@ -102,6 +102,7 @@ public:
 
         //30%抓人
         if (randomTimer0to100() <= 30.0f) {
+            s_IsAnyoneCapturing = true; // 設定Galga正在抓人
             m_PreparingCapture = true;
             m_capturing = false;
 

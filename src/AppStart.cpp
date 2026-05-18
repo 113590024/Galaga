@@ -7,6 +7,9 @@
 #include "Stage1.hpp"
 #include "Stage2.hpp"
 
+
+// Galaga抓人
+bool Enemy::s_IsAnyoneCapturing = false;
 void App::Start() {
     LOG_TRACE("Start");
 
@@ -189,6 +192,8 @@ void App::Start() {
     m_TractorBeam->SetVisible(false);
     m_TractorBeam->SetScale({2.5f, 3.5f});
     m_Root.AddChild(m_TractorBeam);
+
+
 
 
     m_CurrentState = State::UPDATE;

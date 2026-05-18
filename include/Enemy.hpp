@@ -121,6 +121,7 @@ protected:
     glm::vec2 m_FormationPos;
     bool stopdiving=false;
     glm::vec2 m_PlayerPos = {0.0f, 0.0f};
+    static bool s_IsAnyoneCapturing;    //是否有一個Galaga開始抓人 (一次只有一個)
 
     std::vector<BezierPath> m_Path;//這隻敵人的所有路徑段
     int m_PathIndex = 0;//目前走到第幾段曲線
