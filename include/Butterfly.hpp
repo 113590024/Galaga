@@ -71,14 +71,21 @@ public:
         // 俯衝路徑
         std::vector<Enemy::BezierPath> divePath = {
             { { start,
-                {start.x, start.y - 100.0f},
-                {start.x-50.0f,  + 100.0f},
-                {start.x-50.0f, -400.0f} } },
+                {start.x+150.0f, start.y - 50.0f},
+                {start.x-150.0f,  -100.0f},
+                {start.x+200.0f, -150.0f}} },
+
+            {{
+                {start.x+200.0f, -150.0f},
+                {start.x+300.0f, -180.0f},
+                {start.x-300.0f, -220.0f},
+                {start.x+300.0f, -400.0f}
+                }},
 
             // 回到編隊位置
-            { { {m_FormationPos.x, -400.0f},
-                {m_FormationPos.x, -300.0f},
-                {m_FormationPos.x, -300.0f},
+            { { {m_FormationPos.x, 400.0f},
+                {m_FormationPos.x+100.0f, 200.0f},
+                {m_FormationPos.x-200.0f, 100.0f},
                 m_FormationPos } }
         };
 
