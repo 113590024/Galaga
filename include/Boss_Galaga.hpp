@@ -100,8 +100,8 @@ public:
         m_State = State::DIVING;
         m_DiveTimer=randomTimer();
 
-        //30%抓人
-        if (!s_IsAnyoneCapturing && randomTimer0to100() <= 30.0f) {
+        //5%抓人
+        if (!s_IsAnyoneCapturing && randomTimer0to100() <= 5.0f) {
             s_IsAnyoneCapturing = true; // 設定Galga正在抓人
             m_PreparingCapture = true;
             m_capturing = false;
