@@ -62,6 +62,9 @@ public:
         return m_IsInvincible;
     }
 
+    void SetImage(const std::string& imagePath) {
+        m_Drawable = std::make_shared<Util::Image>(imagePath);
+    }
 
 private:
     float m_Speed = 10.0f;

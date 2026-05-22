@@ -193,8 +193,17 @@ void App::Start() {
     m_TractorBeam->SetScale({2.5f, 3.5f});
     m_Root.AddChild(m_TractorBeam);
 
-
-
+    // 抓到玩家後的字幕
+    m_CapturedText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 25, "FIGHTER CAPTURED",
+    Util::Color::FromRGB(255, 0, 0), 50
+    );
+    m_CapturedText->SetPosition({-200.0f, 0.0f});
+    m_CapturedText->SetVisible(false);
+    m_Root.AddChild(m_CapturedText);
+    m_RedPlayer = std::make_shared<Sprite>(RESOURCE_DIR"/Image/Character/RedPlayer_1.png", 20);
+    m_RedPlayer->SetVisible(false);
+    m_Root.AddChild(m_RedPlayer);
 
     m_CurrentState = State::UPDATE;
 }

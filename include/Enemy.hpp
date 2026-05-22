@@ -113,6 +113,18 @@ public:
         m_PlayerPos = pos;
     }
 
+    virtual void ReturnToFormation() {
+        if (m_State == State::FORMATION) return;
+        // 設定路徑回到編隊位置
+        std::vector<BezierPath> returnPath = {
+            {{ m_Transform.translation,
+               {m_FormationPos.x, m_Transform.translation.y},
+               m_FormationPos }}
+        };
+        SetPath(returnPath);
+        m_State = State::RETURNING;
+    }
+
 protected:
     bool m_IsAlive = true;
     int m_health=1;
@@ -130,7 +142,7 @@ protected:
     void UpdatePath() {
         if (m_PathIndex >= m_Path.size()) {
             // 路徑走完
-            if (m_State == State::ENTERING || m_State == State::DIVING) {
+            if (m_State == State::ENTERING || m_State == State::DIVING || m_State == State::RETURNING) {
                 m_State = State::FORMATION;
                 m_Transform.translation = m_FormationPos;
             }

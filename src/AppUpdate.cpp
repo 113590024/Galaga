@@ -146,18 +146,23 @@ void App::Update() {
 
             if (!m_Player->IsInvincible() &&
                 boss->IsTractorBeamActive() &&
-                boss->IsPlayerInTractorBeam(m_Player->GetPosition())) {
+                boss->IsPlayerInTractorBeam(m_Player->GetPosition()) &&
+                !m_PlayerCaptured) {
 
-                m_Player->TakeDamage();
-                m_Lives = m_Player->GetHP();
-                UpdateLifeIcons();
+                m_PlayerCaptured = true;
+                m_CapturingBoss = boss;
+                m_GameState = GameState::PLAYER_CAPTURED;
 
-                if (m_Player->IsDead()) {
-                    m_GameState = GameState::GAME_OVER;
-                    m_GameOverText->SetVisible(true);
-                    m_GameOverTimer = 3000.0f;
-                }
+                // 換成紅色玩家圖片
+                m_Player->SetVisible(false);
+                m_RedPlayer->SetPosition(m_Player->GetPosition());
+                m_RedPlayer->SetVisible(true);
 
+                // 目標位置：Boss 正下方
+                m_CaptureTargetPos = {
+                    boss->GetPosition().x,
+                    boss->GetPosition().y - 60.0f
+                };
                 break;
                 }
         }
@@ -341,7 +346,6 @@ void App::Update() {
             m_PauseText->SetVisible(true);
         }
 
-        // 消滅所有敵人
         if (totalEnemies>=m_Stages[m_Stagenumber]->TotalEnemyCount() && m_Player->IsAlive()){
             totalEnemies = 0;
             m_Stagenumber++;
@@ -360,7 +364,110 @@ void App::Update() {
         }
     }
 
-    // 暫停中
+    // Boss 抓到玩家後的狀態
+    if (m_GameState == GameState::PLAYER_CAPTURED) {
+        // 玩家子彈繼續飛
+        for (auto& bullet : m_Bullets) {
+            bullet->flyUp();
+        }
+
+        // 敵人子彈繼續飛
+        for (auto& bullet : m_EnemyBullets) {
+            bullet->flyDown();
+        }
+
+        // 爆炸動畫繼續爆
+        for (auto& exp : m_Explosions) {
+            exp->Update();
+        }
+        m_Explosions.erase(
+            std::remove_if(m_Explosions.begin(), m_Explosions.end(),
+                [](const auto& e) { return e->IsFinished(); }),
+            m_Explosions.end()
+        );
+        for (auto& enemy : m_Enemies) {
+            enemy->Playerdead();    //敵人不俯衝
+            enemy->Update();
+        }
+
+        if (m_CapturingBoss && m_CapturingBoss->IsTractorBeamActive()) {
+            glm::vec2 bossPos = m_CapturingBoss->GetPosition();
+            m_TractorBeam->SetVisible(true);
+            m_TractorBeam->SetPosition({
+                bossPos.x,
+                bossPos.y - 100.0f
+            });
+        }
+        else {
+            m_TractorBeam->SetVisible(false);
+        }
+
+        if (!m_CapturingBoss) {
+            m_PlayerCaptured = false;
+            m_MovingToFormation = false;
+            m_RedPlayer->SetVisible(false);
+            m_Player->SetVisible(true);
+            m_CapturedText->SetVisible(false);
+            m_GameState = GameState::PLAYING;
+        }
+        else if (!m_MovingToFormation) {
+            glm::vec2 playerPos = m_RedPlayer->GetPosition();
+            m_CaptureTargetPos = {
+                m_CapturingBoss->GetPosition().x,
+                m_CapturingBoss->GetPosition().y - 60.0f
+            };
+            glm::vec2 dir = m_CaptureTargetPos - playerPos;
+            float dist = glm::length(dir);
+
+            if (dist > 3.0f) {
+                dir = glm::normalize(dir);
+                m_RedPlayer->SetPosition(playerPos + dir * 2.0f);
+            }
+            else {
+                m_RedPlayer->SetPosition(m_CaptureTargetPos);
+                m_CapturedText->SetVisible(true);
+                m_CapturedTimer = 3000.0f;
+                m_MovingToFormation = true;
+            }
+        }
+        else {
+            m_CapturedTimer -= Util::Time::GetDeltaTimeMs();
+
+            glm::vec2 bossPos = m_CapturingBoss->GetPosition();
+            m_RedPlayer->SetPosition({bossPos.x, bossPos.y + 40.0f});
+
+            if (m_CapturedTimer <= 0.0f) {
+                m_CapturedText->SetVisible(false);
+
+                if (m_CapturingBoss->IsInFormation()) {
+                    m_PlayerCaptured = false;
+                    m_MovingToFormation = false;
+                    m_CapturingBoss = nullptr;
+
+                    m_Player->TakeDamage();
+                    m_Lives = m_Player->GetHP();
+                    UpdateLifeIcons();
+                    m_RedPlayer->SetVisible(false);
+
+                    if (m_Player->IsDead()) {
+                        m_GameState = GameState::GAME_OVER;
+                        m_GameOverText->SetVisible(true);
+                        m_GameOverTimer = 3000.0f;
+                    }
+                    else {
+                        m_Player->SetVisible(false);
+                        m_GameState = GameState::PLAYER_DEAD;
+                        m_PlayerDeathTimer = 5000.0f;
+                    }
+
+                    for (auto& enemy : m_Enemies) {
+                        enemy->Playernodead();
+                    }
+                }
+            }
+        }
+    }
+
     if (m_GameState == GameState::PAUSED) {
         if (Util::Input::IsKeyUp(Util::Keycode::RETURN)) {
             m_GameState = GameState::PLAYING;
@@ -413,6 +520,7 @@ void App::Update() {
         if (m_PlayerDeathTimer <= 0.0f) {
             // RE:0
             m_ReadyText->SetVisible(false);
+            m_RedPlayer->SetVisible(false);
             m_Player->SetVisible(true);
             m_Player->ResetPosition();
             m_GameState = GameState::PLAYING;
@@ -450,6 +558,7 @@ void App::Update() {
         if (m_GameOverTimer <= 0.0f) {
             m_GameOverText->SetVisible(false);
             m_Player->SetVisible(false);
+            m_RedPlayer->SetVisible(false);
             // 清除所有敵人
             for (auto& enemy : m_Enemies) {
                 m_Root.RemoveChild(enemy);
@@ -510,6 +619,7 @@ void App::Update() {
                 [](const auto& e) { return e->IsFinished(); }),
             m_Explosions.end()
         );
+
         m_ResultTimer -= Util::Time::GetDeltaTimeMs();
         // 計算比例
         float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;

@@ -24,6 +24,7 @@ public:
     enum class GameState {
         START_SCREEN,
         PLAYING,
+        PLAYER_CAPTURED,
         PLAYER_DEAD,
         PAUSED,
         GAME_OVER,
@@ -149,6 +150,15 @@ private:
 
     // Galaga光束圖片
     std::shared_ptr<Sprite> m_TractorBeam;
+
+    // 光束抓到玩家
+    bool m_PlayerCaptured = false;
+    glm::vec2 m_CaptureTargetPos;     // 玩家要移動到的目標位置
+    std::shared_ptr<Boss_Galaga> m_CapturingBoss; // 哪隻 Boss 在抓
+    std::shared_ptr<Label> m_CapturedText;
+    float m_CapturedTimer = 0.0f;
+    bool m_MovingToFormation = false;  // 玩家是否在跟著 Boss 回編隊
+    std::shared_ptr<Sprite> m_RedPlayer;
 };
 
 #endif

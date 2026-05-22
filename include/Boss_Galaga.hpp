@@ -101,7 +101,7 @@ public:
         m_DiveTimer=randomTimer();
 
         //30%抓人
-        if (randomTimer0to100() <= 30.0f) {
+        if (!s_IsAnyoneCapturing && randomTimer0to100() <= 30.0f) {
             s_IsAnyoneCapturing = true; // 設定Galga正在抓人
             m_PreparingCapture = true;
             m_capturing = false;
@@ -161,8 +161,21 @@ public:
             setAnimation(m_DamagedFrames);
         }
         if (m_health <= 0) {
+            if (m_capturing || m_PreparingCapture || m_State == State::CAPTURING) {
+                s_IsAnyoneCapturing = false;
+            }
             Kill();
         }
+    }
+
+    void ReturnToFormation() override {
+        if (m_capturing || m_PreparingCapture || m_State == State::CAPTURING) {
+            m_capturing = false;
+            m_PreparingCapture = false;
+            s_IsAnyoneCapturing = false;
+            m_FormationPos = m_OriginalFormationPos;
+        }
+        Enemy::ReturnToFormation();
     }
 
     bool IsTractorBeamActive() const {
