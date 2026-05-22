@@ -491,6 +491,25 @@ void App::Update() {
     }
 
     if (m_GameState == GameState::RESULT) {
+        // 玩家子彈繼續飛
+        for (auto& bullet : m_Bullets) {
+            bullet->flyUp();
+        }
+
+        // 敵人子彈繼續飛
+        for (auto& bullet : m_EnemyBullets) {
+            bullet->flyDown();
+        }
+
+        // 爆炸動畫繼續爆
+        for (auto& exp : m_Explosions) {
+            exp->Update();
+        }
+        m_Explosions.erase(
+            std::remove_if(m_Explosions.begin(), m_Explosions.end(),
+                [](const auto& e) { return e->IsFinished(); }),
+            m_Explosions.end()
+        );
         m_ResultTimer -= Util::Time::GetDeltaTimeMs();
         // 計算比例
         float ratio = (m_ShotsFired > 0) ? (static_cast<float>(m_Hits) / m_ShotsFired) * 100.0f : 0.0f;
