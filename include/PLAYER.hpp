@@ -26,6 +26,11 @@ public:
         m_IsInvincible = true;
         m_InvincibleTimer = 5000.0f;  // 死亡後5秒無敵
     }
+
+    void AddHP() {
+        m_HP ++;
+    }
+
     void Update() {
         if (m_IsInvincible) {
             m_InvincibleTimer -= Util::Time::GetDeltaTimeMs();

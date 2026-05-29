@@ -356,6 +356,8 @@ void App::Update() {
                 m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
                 m_Stage1Text->SetVisible(true);
 
+                m_Player->AddHP();
+
                 m_ClearTimer = 2000.0f;
             } else {
                 m_GameState = GameState::RESULT;
