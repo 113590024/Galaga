@@ -19,9 +19,11 @@ public:
 
     void OnEnemyKilled() override {
         m_WaveEnemiesKilled++;
-        if (m_WaveEnemiesKilled >=nowWaveEnemies  && IsSpawnDone()) {
+        if (m_MissEnemies+m_WaveEnemiesKilled >=nowWaveEnemies  && IsSpawnDone()) {
             m_CurrentWave++;          // 切到下一波
-            //m_WaveEnemiesKilled = 0;  // 重置擊殺數
+            m_TotalEnemieskill+=m_WaveEnemiesKilled;
+            m_WaveEnemiesKilled = 0;  // 重置擊殺數
+            m_MissEnemies=0;
             m_ZakoIndex = 0;          // 重置索引
             m_ButterflyIndex = 0;
             m_GalagaIndex = 0;
@@ -73,11 +75,19 @@ public:
             }
             m_Timer = 300.0f;
         }
+        //跑出螢幕外的敵人
+        if () {
+            m_MissEnemies++;
+        }
     }
     [[nodiscard]] bool IsSpawnDone() {
         return m_ZakoIndex >= (int)m_ZakoList[m_CurrentWave].size() &&
                m_ButterflyIndex >= (int)m_ButterflyList[m_CurrentWave].size() &&
                m_GalagaIndex >= (int)m_GalagaList[m_CurrentWave].size() ;
+    }
+
+    int TotalEnemieskill() {
+        return m_TotalEnemieskill;
     }
 private:
     std::vector<std::vector<std::shared_ptr<Enemy>>> m_ZakoList;
@@ -87,6 +97,8 @@ private:
     int m_ButterflyIndex = 0;
     int m_GalagaIndex = 0;
     float m_Timer = 0.0f;
+    int m_MissEnemies = 0;
+    int m_TotalEnemieskill = 0; //獎勵關卡總擊殺
 };
 
 #endif //GALAGA_STAGE2_HPP
