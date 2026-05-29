@@ -76,9 +76,9 @@ public:
             m_Timer = 300.0f;
         }
         //跑出螢幕外的敵人
-        if () {
-            m_MissEnemies++;
-        }
+        //if () {
+        //    m_MissEnemies++;
+        //}
     }
     [[nodiscard]] bool IsSpawnDone() {
         return m_ZakoIndex >= (int)m_ZakoList[m_CurrentWave].size() &&

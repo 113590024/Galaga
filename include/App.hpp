@@ -45,6 +45,15 @@ public:
         }
     }
 
+    // 更新關卡圖案
+    void UpdateStageFlagIcons() {
+        int currentStageCount = m_Stages[m_Stagenumber]->getStageLevel();
+
+        for (int i = 0; i < (int)m_StageFlagIcons.size(); i++) {
+            m_StageFlagIcons[i]->SetVisible(i < currentStageCount);
+        }
+    }
+
 private:
     State m_CurrentState = State::START;
     GameState m_GameState = GameState::START_SCREEN;
@@ -115,11 +124,13 @@ private:
 
     // 關卡 (第幾關)
     std::vector<std::unique_ptr<Stage>> m_Stages;
-    int m_Stagenumber = 1;      //從Stage1開始
+    int m_Stagenumber = 0;      //Stage1 = 0 ，Stage2 = 1
     std::shared_ptr<Label> m_Stage1Text;
     bool m_ShowingStage = false;
     float m_StageTimer = 0.0f;
-    std::shared_ptr<Label> m_StageText;
+
+    // 關卡圖案
+    std::vector<std::shared_ptr<Sprite>> m_StageFlagIcons;
 
     // GAMEOVER
     std::shared_ptr<Label> m_GameOverText;

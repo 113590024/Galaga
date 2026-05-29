@@ -5,6 +5,7 @@
 #include "Enemy_bullet.hpp"
 #include "Stage0_0.hpp"
 #include "Stage1.hpp"
+#include "Stage2.hpp"
 #include "Boss_Galaga.hpp"
 
 //測試用
@@ -55,13 +56,13 @@ void App::Update() {
                     m_Logo->SetVisible(false);
                     m_Text1P->SetVisible(false);
                     m_Cursor->SetVisible(false);
-                    m_StageText->SetVisible(true);
                     m_HighScoreLabel->SetVisible(true);
                     m_HighScoreLabel->SetText("HIGH\n SCORE\n " + std::to_string(m_HighScore));
                     m_ScoreLabel->SetVisible(true);
                     m_ScoreLabel->SetText("SCORE\n 0");
                     m_Lives = m_Player->GetHP();
                     UpdateLifeIcons();
+                    UpdateStageFlagIcons();
                     m_StartMusic->Play();
                     m_StartText->SetVisible(true);
                     m_ShowingStart = true;
@@ -354,6 +355,7 @@ void App::Update() {
         if (totalEnemies>=m_Stages[m_Stagenumber]->TotalEnemyCount() && m_Player->IsAlive() && m_GameState!=GameState::PLAYER_DEAD) {
             totalEnemies = 0;
             m_Stagenumber++;
+            UpdateStageFlagIcons();
 
             if (m_Stagenumber < static_cast<int>(m_Stages.size())) {
                 m_GameState = GameState::CLEAR;
@@ -673,9 +675,9 @@ void App::Update() {
             for (auto& icon : m_LifeIcons) {
                 icon->SetVisible(false);
             }
-
-            // 右下角關卡隱藏
-            m_StageText->SetVisible(false);
+            for (auto& flag : m_StageFlagIcons) {
+                flag->SetVisible(false);
+            }
 
             // 重置開場動畫狀態
             m_ShowingStart = false;
@@ -693,8 +695,8 @@ void App::Update() {
 
             // 重建關卡
             m_Stages.clear();
-            m_Stages.push_back(std::make_unique<Stage0_0>());
-            //m_Stages.push_back(std::make_unique<Stage1>());
+            m_Stages.push_back(std::make_unique<Stage1>());
+            m_Stages.push_back(std::make_unique<Stage2>());
             m_Stagenumber = 0;
 
             m_GameState = GameState::START_SCREEN;

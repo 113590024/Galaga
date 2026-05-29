@@ -79,14 +79,6 @@ void App::Start() {
     m_Stage1Text->SetVisible(false);
     m_Root.AddChild(m_Stage1Text);
 
-    //右下角的關卡文字
-    m_StageText = std::make_shared<Label>(
-    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "Stage 1",
-    Util::Color::FromRGB(0, 0, 255), 20 // 黃色，最上層
-    );
-    m_StageText->SetPosition({480.0f, -300.0f});
-    m_StageText->SetVisible(false);
-    m_Root.AddChild(m_StageText);
 
     // READY
     m_ReadyText = std::make_shared<Label>(
@@ -126,9 +118,20 @@ void App::Start() {
     }
 
     //關卡
-    m_Stages.push_back(std::make_unique<Stage0_0>()); // 第一關
-    m_Stages.push_back(std::make_unique<Stage1>());   // 第二關
-    m_Stages.push_back(std::make_unique<Stage2>());   // 第三關
+    //m_Stages.push_back(std::make_unique<Stage0_0>()); // 測試用關卡
+    m_Stages.push_back(std::make_unique<Stage1>());   // 第一關    index=0
+    m_Stages.push_back(std::make_unique<Stage2>());   // 第二關    index=1
+
+    for (int i = 0; i < 3; i++) {
+        auto flag = std::make_shared<Sprite>(
+            RESOURCE_DIR"/Image/Character/StageFlag.png", 20
+        );
+        flag->SetScale({0.7f, 0.7f});
+        flag->SetPosition({430.0f + i * 40.0f, -300.0f});
+        flag->SetVisible(false);
+        m_StageFlagIcons.push_back(flag);
+        m_Root.AddChild(flag);
+    }
 
 
     // GAMEOVER文字
