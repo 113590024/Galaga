@@ -171,6 +171,13 @@ void App::Update() {
         if (Util::Input::IsKeyPressed(Util::Keycode::LEFT))  m_Player->Move(-1, 0);
         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);
 
+        //按=加10HP
+        if (Util::Input::IsKeyDown(Util::Keycode::P) && m_ShootCooldown <= 0.0f) {
+            for (int i=0;i<10;i++) {
+                m_Player->AddHP();
+            }
+        }
+
         // 按Z或X發射子彈
         m_ShootCooldown -= Util::Time::GetDeltaTimeMs();
         if ((Util::Input::IsKeyDown(Util::Keycode::Z) && m_ShootCooldown <= 0.0f)
