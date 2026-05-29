@@ -318,8 +318,6 @@ void App::Update() {
                 enemy->TakeDamage(2);
                 totalEnemies+=1;
 
-                m_Stages[m_Stagenumber]->OnEnemyKilled();
-
                 m_Score += enemy->GetScore(); // 加分
 
                 // 更新分數顯示
@@ -335,7 +333,7 @@ void App::Update() {
                 } else {
                     m_GameState = GameState::PLAYER_DEAD;
                     m_PlayerDeathTimer = 5000.0f;
-                    //m_Stages[m_Stagenumber]->
+                    m_Stages[m_Stagenumber]->OnEnemyKilled();
                 }
                 break;
             }
@@ -346,7 +344,7 @@ void App::Update() {
             m_PauseText->SetVisible(true);
         }
 
-        if (totalEnemies>=m_Stages[m_Stagenumber]->TotalEnemyCount() && m_Player->IsAlive()){
+        if (totalEnemies>=m_Stages[m_Stagenumber]->TotalEnemyCount() && m_Player->IsAlive() && m_GameState!=GameState::PLAYER_DEAD) {
             totalEnemies = 0;
             m_Stagenumber++;
 
@@ -700,4 +698,4 @@ void App::Update() {
     }
 
     m_Root.Update();
-}
+};

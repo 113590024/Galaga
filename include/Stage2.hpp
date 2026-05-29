@@ -9,65 +9,80 @@
 
 class Stage2 :public Stage{
 public:
-    Stage2(){
-        stagelevel=2;
-        stageclear=false;
+    Stage2() {
+        stagelevel = 2;
         totalEnemies = 8;
-        //編隊位置
-        std::vector<glm::vec2> formationPositions = {
-            // ZAKO
-            {-350.0f, 100.0f},{-300.0f,  100.0f},{-250.0f, 100.0f},
-            {-350.0f, 100.0f},{-300.0f,  100.0f},{-250.0f, 100.0f},
-            {-350.0f, 100.0f},{-300.0f,  100.0f}
-        };
-        for (int i = 0; i < 8; i++) {
-            glm::vec2 fPos = formationPositions[i];
+        nowWaveEnemies=8;
+        m_WaveEnemiesKilled=0;
+        Wave1();
+    }
+
+    void OnEnemyKilled() override {
+        m_WaveEnemiesKilled++;
+        if (m_WaveEnemiesKilled >=nowWaveEnemies  && IsSpawnDone()) {
+            m_CurrentWave++;          // 切到下一波
+            //m_WaveEnemiesKilled = 0;  // 重置擊殺數
+            m_ZakoIndex = 0;          // 重置索引
+            m_ButterflyIndex = 0;
+            m_GalagaIndex = 0;
+            switch (m_CurrentWave+1) {
+                case 2:
+                    //Wave2();
+                    //nowWaveEnemies=;
+                    break;
+            }
+        }
+    }
+
+    void Wave1() {
+        m_ZakoList.push_back({});
+        m_ButterflyList.push_back({});
+        m_GalagaList.push_back({});
+
+        // ZAKO
+        for (int i = 0; i < 20; i++) {
             std::vector<Enemy::BezierPath> path = {
-                { { {350.0f, 350.0f}, {-390.0f, 430.0f}, {-300.0f, -80.0f}, {-150.0f, -100.0f} } },
-                { { {350.0f, 350.0f}, {-390.0f, 430.0f}, {-300.0f, -80.0f},{-150.0f, -100.0f} } }
+                { { {-100.0f, 500.0f}, {-100.0f, 350.0f}, {-100.0f, 350.0f}, {-400.0f, 180.0f} } },
+                { { {-400.0f, 180.0f}, {-600.0f, 120.0f}, {-400.0f, -250.0f}, {-999.0f,-999.0f} } }
             };
-            m_ZakoList.push_back(
+            glm::vec2 fPos={-999.0f,-999.0f};
+            m_ZakoList[m_CurrentWave].push_back(
                 std::make_shared<Zako>(glm::vec2{-100.0f, 500.0f}, fPos, path)
             );
         }
     }
-
-    void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) {
+    void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) override {
+        (void)enemies;
+        (void)root;
         m_Timer -= Util::Time::GetDeltaTimeMs();
         if (m_Timer <= 0) {
-            if (m_ZakoIndex < (int)m_ZakoList.size()) {
-                enemies.push_back(m_ZakoList[m_ZakoIndex]);
-                root.AddChild(m_ZakoList[m_ZakoIndex]);
+            if (m_ZakoIndex < (int)m_ZakoList[m_CurrentWave].size()) {
+                enemies.push_back(m_ZakoList[m_CurrentWave][m_ZakoIndex]);
+                root.AddChild(m_ZakoList[m_CurrentWave][m_ZakoIndex]);
                 m_ZakoIndex++;
             }
-            if (m_ButterflyIndex < (int)m_ButterflyList.size()) {
-                enemies.push_back(m_ButterflyList[m_ButterflyIndex]);
-                root.AddChild(m_ButterflyList[m_ButterflyIndex]);
+            if (m_ButterflyIndex < (int)m_ButterflyList[m_CurrentWave].size()) {
+                enemies.push_back(m_ButterflyList[m_CurrentWave][m_ButterflyIndex]);
+                root.AddChild(m_ButterflyList[m_CurrentWave][m_ButterflyIndex]);
                 m_ButterflyIndex++;
             }
-            if (m_GalagaIndex < (int)m_GalagaList.size()) {
-                enemies.push_back(m_GalagaList[m_GalagaIndex]);
-                root.AddChild(m_GalagaList[m_GalagaIndex]);
+            if (m_GalagaIndex < (int)m_GalagaList[m_CurrentWave].size()) {
+                enemies.push_back(m_GalagaList[m_CurrentWave][m_GalagaIndex]);
+                root.AddChild(m_GalagaList[m_CurrentWave][m_GalagaIndex]);
                 m_GalagaIndex++;
             }
             m_Timer = 300.0f;
         }
     }
-
     [[nodiscard]] bool IsSpawnDone() {
-        return m_ZakoIndex >= (int)m_ZakoList.size() &&
-               m_ButterflyIndex >= (int)m_ButterflyList.size() &&
-               m_GalagaIndex >= (int)m_GalagaList.size() ;
+        return m_ZakoIndex >= (int)m_ZakoList[m_CurrentWave].size() &&
+               m_ButterflyIndex >= (int)m_ButterflyList[m_CurrentWave].size() &&
+               m_GalagaIndex >= (int)m_GalagaList[m_CurrentWave].size() ;
     }
-
-    [[nodiscard]] int TotalEnemyCount(){
-        return totalEnemies;
-    }
-
 private:
-    std::vector<std::shared_ptr<Enemy>> m_ZakoList;
-    std::vector<std::shared_ptr<Enemy>> m_ButterflyList;
-    std::vector<std::shared_ptr<Enemy>> m_GalagaList;
+    std::vector<std::vector<std::shared_ptr<Enemy>>> m_ZakoList;
+    std::vector<std::vector<std::shared_ptr<Enemy>>> m_ButterflyList;
+    std::vector<std::vector<std::shared_ptr<Enemy>>> m_GalagaList;
     int m_ZakoIndex = 0;
     int m_ButterflyIndex = 0;
     int m_GalagaIndex = 0;
