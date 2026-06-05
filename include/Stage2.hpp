@@ -1,7 +1,3 @@
-//
-// Created by TUF on 2026/4/6.
-//
-
 #ifndef GALAGA_STAGE2_HPP
 #define GALAGA_STAGE2_HPP
 
