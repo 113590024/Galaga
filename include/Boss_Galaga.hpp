@@ -7,238 +7,246 @@
 
 #include "Enemy.hpp"
 
-class Boss_Galaga:public Enemy {
-public:
-    Boss_Galaga(const glm::vec2& startPos,
-         const glm::vec2& formationPos,
-         const std::vector<BezierPath>& entryPath)
-        : Enemy("", 10) {
+    class Boss_Galaga:public Enemy {
+    public:
+        Boss_Galaga(const glm::vec2& startPos,
+             const glm::vec2& formationPos,
+             const std::vector<BezierPath>& entryPath)
+            : Enemy("", 10) {
 
-        // 滿血的狀態
-        m_IdleFrames = {
-            RESOURCE_DIR"/Image/Character/enemy_Galaga_g1.png",
-            RESOURCE_DIR"/Image/Character/enemy_Galaga_g2.png",
-        };
-        // 剩一滴血的狀態
-        m_DamagedFrames = {
-            RESOURCE_DIR"/Image/Character/enemy_Galaga_b1.png",
-            RESOURCE_DIR"/Image/Character/enemy_Galaga_b2.png",
-        };
+            // 滿血的狀態
+            m_IdleFrames = {
+                RESOURCE_DIR"/Image/Character/enemy_Galaga_g1.png",
+                RESOURCE_DIR"/Image/Character/enemy_Galaga_g2.png",
+            };
+            // 剩一滴血的狀態
+            m_DamagedFrames = {
+                RESOURCE_DIR"/Image/Character/enemy_Galaga_b1.png",
+                RESOURCE_DIR"/Image/Character/enemy_Galaga_b2.png",
+            };
 
-        setAnimation(m_IdleFrames);
+            setAnimation(m_IdleFrames);
 
-        m_Transform.translation = startPos;
-        m_Transform.scale = {0.9f, 0.9f};
-        m_health = 2;
-        m_Score = 100;
-        m_FormationPos = formationPos;
-        SetPath(entryPath);
-    }
+            m_Transform.translation = startPos;
+            m_Transform.scale = {0.9f, 0.9f};
+            m_health = 2;
+            m_Score = 100;
+            m_FormationPos = formationPos;
+            SetPath(entryPath);
+        }
 
-    void Update() override {
-        switch (m_State) {
-            case State::ENTERING:
-                UpdatePath();
-                break;
-            case State::FORMATION:
-                updateFormation();
-                if (stopdiving==false) {
-                    m_DiveTimer -= Util::Time::GetDeltaTimeMs();
-                    if (m_DiveTimer <= 0.0f) {
-                        StartDive({0.0f, 0.0f});
+        void Update() override {
+            switch (m_State) {
+                case State::ENTERING:
+                    UpdatePath();
+                    break;
+                case State::FORMATION:
+                    updateFormation();
+                    if (stopdiving==false) {
+                        m_DiveTimer -= Util::Time::GetDeltaTimeMs();
+                        if (m_DiveTimer <= 0.0f) {
+                            StartDive({0.0f, 0.0f});
+                        }
                     }
-                }
-                else {
-                    m_DiveTimer =randomTimer();
-                }
-                break;
-            case State::DIVING:
-                UpdatePath();
+                    else {
+                        m_DiveTimer =randomTimer();
+                    }
+                    break;
+                case State::DIVING:
+                    UpdatePath();
 
-                if (m_PreparingCapture && m_State == State::FORMATION) {
-                    m_PreparingCapture = false;
-                    m_capturing = true;
-                    m_State = State::CAPTURING;
-                    m_DiveTimer0 = 3000.0f;
-                }
-                break;
+                    if (m_PreparingCapture && m_State == State::FORMATION) {
+                        m_PreparingCapture = false;
+                        m_capturing = true;
+                        m_State = State::CAPTURING;
+                        m_DiveTimer0 = 3000.0f;
+                    }
+                    break;
 
-            case State::CAPTURING:
-                m_DiveTimer0 -= Util::Time::GetDeltaTimeMs();
+                case State::CAPTURING:
+                    m_DiveTimer0 -= Util::Time::GetDeltaTimeMs();
 
-                if (m_DiveTimer0 <= 0.0f) {
-                    m_capturing = false;
-                    s_IsAnyoneCapturing = false; // 有人開始抓了 所以要false
-                    glm::vec2 start = m_Transform.translation;
-                    m_FormationPos = m_OriginalFormationPos;
+                    if (m_DiveTimer0 <= 0.0f) {
+                        m_capturing = false;
+                        s_IsAnyoneCapturing = false; // 有人開始抓了 所以要false
+                        glm::vec2 start = m_Transform.translation;
+                        m_FormationPos = m_OriginalFormationPos;
 
-                    std::vector<Enemy::BezierPath> returnPath = {
-                        { { start,
-                            {start.x, start.y + 100.0f},
-                            {m_FormationPos.x, m_FormationPos.y - 100.0f},
-                            m_FormationPos } }
-                    };
+                        std::vector<Enemy::BezierPath> returnPath = {
+                            { { start,
+                                {start.x, start.y + 100.0f},
+                                {m_FormationPos.x, m_FormationPos.y - 100.0f},
+                                m_FormationPos } }
+                        };
 
-                    SetPath(returnPath);
-                    m_State = State::RETURNING;
-                    m_DiveTimer = randomTimer();
-                }
-                break;
-            case State::RETURNING:
-                UpdatePath();
-                break;
+                        SetPath(returnPath);
+                        m_State = State::RETURNING;
+                        m_DiveTimer = randomTimer();
+                    }
+                    break;
+                case State::RETURNING:
+                    UpdatePath();
+                    break;
+            }
         }
-    }
 
-    void SetFormationOffset(float offsetX) {
-        m_FormationOffsetX = offsetX;
-    }
+        void SetFormationOffset(float offsetX) {
+            m_FormationOffsetX = offsetX;
+        }
 
-    void StartDive(const glm::vec2& playerPos) override {
-        (void)playerPos;
-        m_FormationPos = m_Transform.translation;
-        m_State = State::DIVING;
-        m_DiveTimer=randomTimer();
-
-        //5%抓人
-        if (!s_IsAnyoneCapturing && randomTimer0to100() <= 5.0f) {
-            s_IsAnyoneCapturing = true; // 設定Galga正在抓人
-            m_PreparingCapture = true;
-            m_capturing = false;
-
-            m_OriginalFormationPos = m_FormationPos;
-
-            glm::vec2 start = m_Transform.translation;
-
-            glm::vec2 capturePos = {
-                m_PlayerPos.x,
-                -100.0f
-            };
-
-            m_FormationPos = capturePos;
-
-            std::vector<Enemy::BezierPath> capturePath = {
-                { { start,
-                    {start.x, start.y - 80.0f},
-                    {capturePos.x, capturePos.y + 80.0f},
-                    capturePos } }
-            };
-
-            SetPath(capturePath);
+        void StartDive(const glm::vec2& playerPos) override {
+            (void)playerPos;
+            m_FormationPos = m_Transform.translation;
             m_State = State::DIVING;
-        }
-        else {
-            if (randomTimer0to100()>=90.0f) {
-                shoot(m_Transform.translation);
+            m_DiveTimer=randomTimer();
+
+            //5%抓人
+            if (!s_IsAnyoneCapturing && randomTimer0to100() <= 5.0f) {
+                s_IsAnyoneCapturing = true; // 設定Galga正在抓人
+                m_PreparingCapture = true;
+                m_capturing = false;
+
+                m_OriginalFormationPos = m_FormationPos;
+
+                glm::vec2 start = m_Transform.translation;
+
+                glm::vec2 capturePos = {
+                    m_PlayerPos.x,
+                    -100.0f
+                };
+
+                m_FormationPos = capturePos;
+
+                std::vector<Enemy::BezierPath> capturePath = {
+                    { { start,
+                        {start.x, start.y - 80.0f},
+                        {capturePos.x, capturePos.y + 80.0f},
+                        capturePos } }
+                };
+
+                SetPath(capturePath);
+                m_State = State::DIVING;
+            }
+            else {
+                if (randomTimer0to100()>=90.0f) {
+                    shoot(m_Transform.translation);
+                }
+
+                glm::vec2 start = m_Transform.translation;
+
+                // 俯衝路徑
+                std::vector<Enemy::BezierPath> divePath = {
+                    { { start,
+                        {start.x, start.y - 100.0f},
+                        {start.x-50.0f,  + 100.0f},
+                        {start.x-50.0f, -400.0f} } },
+
+                    // 回到編隊位置
+                    { { {m_FormationPos.x, -400.0f},
+                        {m_FormationPos.x, -300.0f},
+                        {m_FormationPos.x, -300.0f},
+                        m_FormationPos } }
+                };
+
+                SetPath(divePath);
             }
 
-            glm::vec2 start = m_Transform.translation;
 
-            // 俯衝路徑
-            std::vector<Enemy::BezierPath> divePath = {
-                { { start,
-                    {start.x, start.y - 100.0f},
-                    {start.x-50.0f,  + 100.0f},
-                    {start.x-50.0f, -400.0f} } },
 
-                // 回到編隊位置
-                { { {m_FormationPos.x, -400.0f},
-                    {m_FormationPos.x, -300.0f},
-                    {m_FormationPos.x, -300.0f},
-                    m_FormationPos } }
-            };
-
-            SetPath(divePath);
         }
 
-
-
-    }
-
-    void TakeDamage(int damage) override {
-        m_health -= damage;
-        if (m_health == 1) {
-            setAnimation(m_DamagedFrames);
+        void TakeDamage(int damage) override {
+            m_health -= damage;
+            if (m_health == 1) {
+                setAnimation(m_DamagedFrames);
+            }
+            if (m_health <= 0) {
+                if (m_capturing || m_PreparingCapture || m_State == State::CAPTURING) {
+                    s_IsAnyoneCapturing = false;
+                }
+                Kill();
+            }
         }
-        if (m_health <= 0) {
+
+        void ReturnToFormation() override {
             if (m_capturing || m_PreparingCapture || m_State == State::CAPTURING) {
+                m_capturing = false;
+                m_PreparingCapture = false;
                 s_IsAnyoneCapturing = false;
+                m_FormationPos = m_OriginalFormationPos;
             }
-            Kill();
+            Enemy::ReturnToFormation();
         }
-    }
 
-    void ReturnToFormation() override {
-        if (m_capturing || m_PreparingCapture || m_State == State::CAPTURING) {
+        bool IsTractorBeamActive() const {
+            return m_capturing;
+        }
+
+        bool IsPlayerInTractorBeam(const glm::vec2& playerPos) const {
+            glm::vec2 bossPos = GetPosition();
+
+            if (playerPos.y > bossPos.y) return false;
+
+            float dx = std::abs(playerPos.x - bossPos.x);
+            float dy = bossPos.y - playerPos.y;
+
+            return dx < 60.0f && dy < 350.0f;
+        }
+
+        // 讓 Boss 回到編隊
+        void StopCapture() {
             m_capturing = false;
             m_PreparingCapture = false;
-            s_IsAnyoneCapturing = false;
-            m_FormationPos = m_OriginalFormationPos;
+            Enemy::s_IsAnyoneCapturing = false;
+            ReturnToFormation();
         }
-        Enemy::ReturnToFormation();
-    }
 
-    bool IsTractorBeamActive() const {
-        return m_capturing;
-    }
-
-    bool IsPlayerInTractorBeam(const glm::vec2& playerPos) const {
-        glm::vec2 bossPos = GetPosition();
-
-        if (playerPos.y > bossPos.y) return false;
-
-        float dx = std::abs(playerPos.x - bossPos.x);
-        float dy = bossPos.y - playerPos.y;
-
-        return dx < 60.0f && dy < 350.0f;
-    }
-
-private:
-    float m_FormationOffsetX = 0.0f;
-    std::vector<std::string> m_IdleFrames;
-    std::vector<std::string> m_DamagedFrames;
-    std::vector<std::string> m_DiveFrames;
-    glm::vec2 m_PrevPosition = {0.0f, 0.0f};
-    float m_DiveTimer = 5000.0f;  // 5秒
-    float m_DiveTimer0 = 5000.0f;//抓人等待的計時
-    bool m_capturing = false;     //抓人
-    bool m_PreparingCapture = false;    //準備抓人
-    glm::vec2 m_OriginalFormationPos = {0.0f, 0.0f};
+    private:
+        float m_FormationOffsetX = 0.0f;
+        std::vector<std::string> m_IdleFrames;
+        std::vector<std::string> m_DamagedFrames;
+        std::vector<std::string> m_DiveFrames;
+        glm::vec2 m_PrevPosition = {0.0f, 0.0f};
+        float m_DiveTimer = 5000.0f;  // 5秒
+        float m_DiveTimer0 = 5000.0f;//抓人等待的計時
+        bool m_capturing = false;     //抓人
+        bool m_PreparingCapture = false;    //準備抓人
+        glm::vec2 m_OriginalFormationPos = {0.0f, 0.0f};
 
 
-    void updateFormation() {
-        m_Transform.translation = {
-            m_FormationPos.x + m_FormationOffsetX,
-            m_FormationPos.y
-        };
-    }
+        void updateFormation() {
+            m_Transform.translation = {
+                m_FormationPos.x + m_FormationOffsetX,
+                m_FormationPos.y
+            };
+        }
 
-    float randomTimer() {
-        static std::mt19937 rng(std::random_device{}());
-        std::uniform_real_distribution<float> dist(2000.0f, 10000.0f);
-        return dist(rng);
-    }
-    float randomTimer0to100() {
-        static std::mt19937 rng(std::random_device{}());
-        std::uniform_real_distribution<float> dist(0.0f, 100.0f);
-        return dist(rng);
-    }
+        float randomTimer() {
+            static std::mt19937 rng(std::random_device{}());
+            std::uniform_real_distribution<float> dist(2000.0f, 10000.0f);
+            return dist(rng);
+        }
+        float randomTimer0to100() {
+            static std::mt19937 rng(std::random_device{}());
+            std::uniform_real_distribution<float> dist(0.0f, 100.0f);
+            return dist(rng);
+        }
 
-    // 避免每幀重複建立 Animation，記錄目前用的 frames
-    std::vector<std::string> m_CurrentFrames;
+        // 避免每幀重複建立 Animation，記錄目前用的 frames
+        std::vector<std::string> m_CurrentFrames;
 
-    std::vector<std::string> getCurrentAnimFrames() {
-        return m_CurrentFrames;
-    }
+        std::vector<std::string> getCurrentAnimFrames() {
+            return m_CurrentFrames;
+        }
 
-    void setAnimation(const std::vector<std::string>& frames) {
-        if (m_CurrentFrames == frames) return; // 已經是這個動畫就不重建
-        m_CurrentFrames = frames;
-        m_Drawable = std::make_shared<Util::Animation>(
-            frames, true, 120, true, 0
-        );
-        std::dynamic_pointer_cast<Util::Animation>(m_Drawable)->Play();
-    }
-};
+        void setAnimation(const std::vector<std::string>& frames) {
+            if (m_CurrentFrames == frames) return; // 已經是這個動畫就不重建
+            m_CurrentFrames = frames;
+            m_Drawable = std::make_shared<Util::Animation>(
+                frames, true, 120, true, 0
+            );
+            std::dynamic_pointer_cast<Util::Animation>(m_Drawable)->Play();
+        }
+    };
 
 #endif //GALAGA_BOSS_GALAGA_HPP

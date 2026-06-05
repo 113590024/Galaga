@@ -139,7 +139,7 @@ private:
 
     // 關卡 (第幾關)
     std::vector<std::unique_ptr<Stage>> m_Stages;
-    int m_Stagenumber = 1;      //Stage1 = 0 ，Stage2 = 1
+    int m_Stagenumber = 0;      //Stage1 = 0 ，Stage2 = 1
     std::shared_ptr<Label> m_Stage1Text;
     bool m_ShowingStage = false;
     float m_StageTimer = 0.0f;
@@ -194,6 +194,9 @@ private:
     std::shared_ptr<Label> m_PerfectText;
     float m_Stage2ResultTimer = 0.0f;
     int m_Stage2Hits = 0;
+
+    // 通用更新爆炸、子彈、敵人
+    void UpdateCommon();
 };
 
 #endif
