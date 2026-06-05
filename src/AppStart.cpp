@@ -105,17 +105,23 @@ void App::Start() {
     m_ScoreLabel->SetVisible(false);
 
     // 生命值圖片
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
         auto icon = std::make_shared<Sprite>(
             RESOURCE_DIR"/Image/Character/player_1.png", 20
         );
         icon->SetScale({0.7f, 0.7f});
-        // 右側，由左到右排列
         icon->SetPosition({430.0f + i * 40.0f, -100.0f});
         icon->SetVisible(false);
         m_LifeIcons.push_back(icon);
         m_Root.AddChild(icon);
     }
+    m_LifeCountLabel = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 20, "0",
+    Util::Color::FromRGB(255, 255, 255), 20
+        );
+    m_LifeCountLabel->SetPosition({480.0f, -100.0f});
+    m_LifeCountLabel->SetVisible(false);
+    m_Root.AddChild(m_LifeCountLabel);
 
     //關卡
     //m_Stages.push_back(std::make_unique<Stage0_0>()); // 測試用關卡
@@ -207,6 +213,14 @@ void App::Start() {
     m_RedPlayer = std::make_shared<Sprite>(RESOURCE_DIR"/Image/Character/RedPlayer_1.png", 20);
     m_RedPlayer->SetVisible(false);
     m_Root.AddChild(m_RedPlayer);
+
+    //測試關卡敵人消滅數量
+    m_EnermyKill = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "EnermyKill : 0\nMiss Enermy",
+    Util::Color::FromRGB(255, 120, 0), 20);
+    m_EnermyKill->SetPosition({-500.0f, 300.0f});
+    m_EnermyKill->SetVisible(false);
+    m_Root.AddChild(m_EnermyKill);
 
     m_CurrentState = State::UPDATE;
 }

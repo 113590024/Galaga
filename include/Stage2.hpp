@@ -11,14 +11,16 @@ class Stage2 :public Stage{
 public:
     Stage2() {
         stagelevel = 2;
-        totalEnemies = 8;
-        nowWaveEnemies=8;
+        totalEnemies = 40;
+        nowWaveEnemies=40;
         m_WaveEnemiesKilled=0;
         Wave1();
     }
 
     void OnEnemyKilled() override {
         m_WaveEnemiesKilled++;
+        m_TotalEnemieskill++;
+
         if (m_MissEnemies+m_WaveEnemiesKilled >=nowWaveEnemies  && IsSpawnDone()) {
             m_CurrentWave++;          // 切到下一波
             m_TotalEnemieskill+=m_WaveEnemiesKilled;

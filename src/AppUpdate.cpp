@@ -114,6 +114,19 @@ void App::Update() {
         // 關卡
         m_Stages[m_Stagenumber]->Update(m_Enemies, m_Root);
 
+        if (auto stage2 = dynamic_cast<Stage2*>(m_Stages[m_Stagenumber].get())) {
+            int killed = stage2->TotalEnemieskill();
+            int missed = stage2->TotalMissEnemies();
+
+            m_EnermyKill->SetVisible(true);
+            m_EnermyKill->SetText(
+                "KILL: " + std::to_string(killed) +
+                "\nMISS: " + std::to_string(missed)
+            );
+        } else {
+            m_EnermyKill->SetVisible(false);
+        }
+
         // 更新所有敵人
         for (auto& enemy : m_Enemies) {
             enemy->SetPlayerPosition(m_Player->GetPosition());
@@ -172,11 +185,13 @@ void App::Update() {
         if (Util::Input::IsKeyPressed(Util::Keycode::LEFT))  m_Player->Move(-1, 0);
         if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);
 
-        //按=加10HP
+        //按P加2HP
         if (Util::Input::IsKeyDown(Util::Keycode::P) && m_ShootCooldown <= 0.0f) {
-            for (int i=0;i<10;i++) {
+            for (int i=0;i<2;i++) {
                 m_Player->AddHP();
             }
+            m_Lives = m_Player->GetHP();
+            UpdateLifeIcons();
         }
 
         // 按Z或X發射子彈

@@ -40,8 +40,21 @@ public:
 
     // 更新玩家生命值圖片
     void UpdateLifeIcons() {
-        for (int i = 0; i < (int)m_LifeIcons.size(); i++) {
-            m_LifeIcons[i]->SetVisible(i < m_Lives);
+        if (m_Lives <= 5) {
+            for (int i = 0; i < (int)m_LifeIcons.size(); i++) {
+                m_LifeIcons[i]->SetVisible(i < m_Lives);
+                m_LifeIcons[i]->SetPosition({430.0f + i * 40.0f, -100.0f});
+            }
+            m_LifeCountLabel->SetVisible(false);
+        } else {
+            for (int i = 0; i < (int)m_LifeIcons.size(); i++) {
+                m_LifeIcons[i]->SetVisible(i == 0);
+            }
+
+            m_LifeIcons[0]->SetPosition({430.0f, -100.0f});
+            m_LifeCountLabel->SetVisible(true);
+            m_LifeCountLabel->SetText("x" + std::to_string(m_Lives));
+            m_LifeCountLabel->SetPosition({500.0f, -100.0f});
         }
     }
 
@@ -112,6 +125,7 @@ private:
     int m_HighScore = 0;
     int m_Score = 0;
     int m_Lives = 3;
+    std::shared_ptr<Label> m_LifeCountLabel;
 
     // 敵人
     std::vector<std::shared_ptr<Enemy>> m_Enemies;
@@ -170,6 +184,9 @@ private:
     float m_CapturedTimer = 0.0f;
     bool m_MovingToFormation = false;  // 玩家是否在跟著 Boss 回編隊
     std::shared_ptr<Sprite> m_RedPlayer;
+
+    //測試關卡敵人消滅數量
+    std::shared_ptr<Label> m_EnermyKill;
 };
 
 #endif
