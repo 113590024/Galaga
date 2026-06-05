@@ -51,6 +51,7 @@ add_executable(Galaga ${SRC_FILES} ${HEADER_FILES}
         include/Stage.hpp
         include/Stage2.hpp
         include/Dragonfly.hpp
+        include/Stage3.hpp
 )
 
 if(MSVC)
