@@ -71,10 +71,10 @@ public:
             { { start,
                 {start.x, start.y + 200.0f},
                 {start.x-50.0f,  -50.0f},
-                {start.x-50.0f, -10000.0f} } },
+                {start.x-50.0f, -300.0f} } },
 
             // 回到編隊位置
-            { { {m_FormationPos.x, -10000.0f},
+            { { {m_FormationPos.x, -300.0f},
                 {m_FormationPos.x, -300.0f},
                 {m_FormationPos.x, -300.0f},
                 m_FormationPos } }
