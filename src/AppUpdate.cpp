@@ -85,6 +85,7 @@ void App::Update() {
         if (m_ShowingStage && !m_ShowingReady){
             m_StageTimer += Util::Time::GetDeltaTimeMs();
             if (m_StageTimer >= 2000.0f) {
+                m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
                 m_Stage1Text->SetVisible(false);
                 m_ReadyText->SetVisible(true);
                 m_ShowingReady = true;
@@ -117,12 +118,22 @@ void App::Update() {
         if (auto stage2 = dynamic_cast<Stage2*>(m_Stages[m_Stagenumber].get())) {
             int killed = stage2->TotalEnemieskill();
             int missed = stage2->TotalMissEnemies();
+            int finished = killed + missed;
 
             m_EnermyKill->SetVisible(true);
             m_EnermyKill->SetText(
                 "KILL: " + std::to_string(killed) +
                 "\nMISS: " + std::to_string(missed)
-            );
+                );
+            if (stage2->getstageclear()) {
+                m_Stage2Hits = stage2->TotalEnemieskill();
+                m_Stage2HitsText->SetText("NUMBER OF HITS: " + std::to_string(m_Stage2Hits));
+                m_Stage2HitsText->SetVisible(true);
+                m_PerfectText->SetVisible(false);
+                m_Stage2ResultTimer = 0.0f;
+                m_GameState = GameState::STAGE2_RESULT;
+                return;
+            }
         } else {
             m_EnermyKill->SetVisible(false);
         }
@@ -367,7 +378,10 @@ void App::Update() {
             m_PauseText->SetVisible(true);
         }
 
-        if (totalEnemies>=m_Stages[m_Stagenumber]->TotalEnemyCount() && m_Player->IsAlive() && m_GameState!=GameState::PLAYER_DEAD) {
+        if (!dynamic_cast<Stage2*>(m_Stages[m_Stagenumber].get()) &&
+            totalEnemies >= m_Stages[m_Stagenumber]->TotalEnemyCount() &&
+            m_Player->IsAlive() &&
+            m_GameState != GameState::PLAYER_DEAD) {
             totalEnemies = 0;
             m_Stagenumber++;
             UpdateStageFlagIcons();
@@ -385,6 +399,47 @@ void App::Update() {
                 m_GameState = GameState::RESULT;
                 m_ResultTimer = 5000.0f;
             }
+        }
+    }
+
+    // 獎勵關卡(關卡二)結算
+    if (m_GameState == GameState::STAGE2_RESULT) {
+        // 玩家子彈繼續飛
+        for (auto& bullet : m_Bullets) {
+            bullet->flyUp();
+        }
+
+        // 敵人子彈繼續飛
+        for (auto& bullet : m_EnemyBullets) {
+            bullet->flyDown();
+        }
+
+        // 爆炸動畫繼續爆
+        for (auto& exp : m_Explosions) {
+            exp->Update();
+        }
+        m_Explosions.erase(
+            std::remove_if(m_Explosions.begin(), m_Explosions.end(),
+                [](const auto& e) { return e->IsFinished(); }),
+            m_Explosions.end()
+        );
+        for (auto& enemy : m_Enemies) {
+            enemy->Playerdead();    //敵人不俯衝
+            enemy->Update();
+        }
+        m_Stage2ResultTimer += Util::Time::GetDeltaTimeMs();
+
+        if (m_Stage2Hits >= m_Stages[m_Stagenumber]->TotalEnemyCount()
+            && m_Stage2ResultTimer >= 2000.0f) {
+            m_PerfectText->SetVisible(true);
+        }
+
+        if (m_Stage2ResultTimer >= 5000.0f) {
+            m_Stage2HitsText->SetVisible(false);
+            m_PerfectText->SetVisible(false);
+
+            m_GameState = GameState::RESULT;
+            m_ResultTimer = 5000.0f;
         }
     }
 

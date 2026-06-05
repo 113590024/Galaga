@@ -29,6 +29,7 @@ public:
         PAUSED,
         GAME_OVER,
         CLEAR,
+        STAGE2_RESULT,
         RESULT
     };
 
@@ -138,7 +139,7 @@ private:
 
     // 關卡 (第幾關)
     std::vector<std::unique_ptr<Stage>> m_Stages;
-    int m_Stagenumber = 0;      //Stage1 = 0 ，Stage2 = 1
+    int m_Stagenumber = 1;      //Stage1 = 0 ，Stage2 = 1
     std::shared_ptr<Label> m_Stage1Text;
     bool m_ShowingStage = false;
     float m_StageTimer = 0.0f;
@@ -187,6 +188,12 @@ private:
 
     //測試關卡敵人消滅數量
     std::shared_ptr<Label> m_EnermyKill;
+
+    //獎勵關卡(關卡二)文字
+    std::shared_ptr<Label> m_Stage2HitsText;
+    std::shared_ptr<Label> m_PerfectText;
+    float m_Stage2ResultTimer = 0.0f;
+    int m_Stage2Hits = 0;
 };
 
 #endif

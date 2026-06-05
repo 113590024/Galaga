@@ -222,5 +222,22 @@ void App::Start() {
     m_EnermyKill->SetVisible(false);
     m_Root.AddChild(m_EnermyKill);
 
+    //獎勵關卡(第二關)文字
+    m_Stage2HitsText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 25, "NUMBER OF HITS: 0",
+        Util::Color::FromRGB(0, 0, 255), 50
+    );
+    m_Stage2HitsText->SetPosition({-160.0f, 40.0f});
+    m_Stage2HitsText->SetVisible(false);
+    m_Root.AddChild(m_Stage2HitsText);
+
+    m_PerfectText = std::make_shared<Label>(
+        RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "PERFECT!!",
+        Util::Color::FromRGB(255, 255, 0), 50
+    );
+    m_PerfectText->SetPosition({-150.0f, 90.0f});
+    m_PerfectText->SetVisible(false);
+    m_Root.AddChild(m_PerfectText);
+
     m_CurrentState = State::UPDATE;
 }

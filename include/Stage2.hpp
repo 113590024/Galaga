@@ -17,25 +17,24 @@ public:
         Wave1();
     }
 
+    // 敵人消滅
     void OnEnemyKilled() override {
         m_WaveEnemiesKilled++;
-        m_TotalEnemieskill++;
+        CheckWaveFinished();
+    }
 
-        if (m_MissEnemies+m_WaveEnemiesKilled >=nowWaveEnemies  && IsSpawnDone()) {
-            m_CurrentWave++;          // 切到下一波
-            m_TotalEnemieskill+=m_WaveEnemiesKilled;
-            m_WaveEnemiesKilled = 0;  // 重置擊殺數
-            m_MissEnemies=0;
-            m_ZakoIndex = 0;          // 重置索引
-            m_ButterflyIndex = 0;
-            m_GalagaIndex = 0;
-            switch (m_CurrentWave+1) {
-                case 2:
-                    //Wave2();
-                    //nowWaveEnemies=;
-                    break;
-            }
-        }
+    // 看波結束了沒
+    void CheckWaveFinished() {
+        if (m_MissEnemies + m_WaveEnemiesKilled < nowWaveEnemies) return;
+        if (!IsSpawnDone()) return;
+
+        m_TotalEnemieskill += m_WaveEnemiesKilled;
+        m_TotalMissEnemies += m_MissEnemies;
+
+        m_WaveEnemiesKilled = 0;
+        m_MissEnemies = 0;
+
+        stageclear = true;
     }
 
     void Wave1() {
@@ -44,7 +43,7 @@ public:
         m_GalagaList.push_back({});
 
         // ZAKO
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 40; i++) {
             std::vector<Enemy::BezierPath> path = {
                 { { {-100.0f, 500.0f}, {-100.0f, 350.0f}, {-100.0f, 350.0f}, {-400.0f, 180.0f} } },
                 { { {-400.0f, 180.0f}, {-600.0f, 120.0f}, {-400.0f, -250.0f}, {-999.0f,-999.0f} } }
@@ -56,6 +55,7 @@ public:
         }
     }
     void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) override {
+        if (stageclear) return;
         (void)enemies;
         (void)root;
         m_Timer -= Util::Time::GetDeltaTimeMs();
@@ -82,6 +82,7 @@ public:
             if (enemy->IsOutOfScreen() && enemy->IsAlive()) {
                 enemy->Kill();
                 m_MissEnemies++;
+                CheckWaveFinished();
             }
         }
     }
@@ -95,7 +96,7 @@ public:
         return m_TotalEnemieskill;
     }
     int TotalMissEnemies() {
-        return m_MissEnemies;
+        return m_TotalMissEnemies;
     }
 private:
     std::vector<std::vector<std::shared_ptr<Enemy>>> m_ZakoList;
@@ -105,8 +106,9 @@ private:
     int m_ButterflyIndex = 0;
     int m_GalagaIndex = 0;
     float m_Timer = 0.0f;
-    int m_MissEnemies = 0;
-    int m_TotalEnemieskill = 0; //獎勵關卡總擊殺
+    int m_MissEnemies = 0;          // 目前 wave miss
+    int m_TotalEnemieskill = 0;     // 已完成 wave 的 kill 總數
+    int m_TotalMissEnemies = 0;     // 已完成 wave 的 miss 總數
 };
 
 #endif //GALAGA_STAGE2_HPP
