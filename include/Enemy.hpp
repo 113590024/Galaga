@@ -92,6 +92,13 @@ public:
         }
     }
 
+    //超出螢幕
+    [[nodiscard]] bool IsOutOfScreen() const {
+        return m_Transform.translation.y < -700.0f ||
+               m_Transform.translation.y > 700.0f  ||
+               m_Transform.translation.x > 700.0f;
+    }
+
     // 碰撞偵測
     [[nodiscard]] bool IfCollides(const glm::vec2& pos, float radius = 20.0f) const {
         auto myPos = GetPosition();

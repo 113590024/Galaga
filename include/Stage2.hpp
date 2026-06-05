@@ -76,9 +76,12 @@ public:
             m_Timer = 300.0f;
         }
         //跑出螢幕外的敵人
-        //if () {
-        //    m_MissEnemies++;
-        //}
+        for (auto& enemy : enemies) {
+            if (enemy->IsOutOfScreen() && enemy->IsAlive()) {
+                enemy->Kill();
+                m_MissEnemies++;
+            }
+        }
     }
     [[nodiscard]] bool IsSpawnDone() {
         return m_ZakoIndex >= (int)m_ZakoList[m_CurrentWave].size() &&
@@ -88,6 +91,9 @@ public:
 
     int TotalEnemieskill() {
         return m_TotalEnemieskill;
+    }
+    int TotalMissEnemies() {
+        return m_MissEnemies;
     }
 private:
     std::vector<std::vector<std::shared_ptr<Enemy>>> m_ZakoList;

@@ -1,6 +1,7 @@
 #ifndef GALAGA_STAGE_HPP
 #define GALAGA_STAGE_HPP
 
+#include "Enemy.hpp"
 #include "Zako.hpp"
 #include "Butterfly.hpp"
 #include "Boss_Galaga.hpp"
