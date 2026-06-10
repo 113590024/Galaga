@@ -8,7 +8,7 @@ public:
     Stage2() {
         stagelevel = 2;
         totalEnemies = 40;
-        nowWaveEnemies=40;
+        nowWaveEnemies=10;
         m_WaveEnemiesKilled=0;
         Wave1();
     }
@@ -39,17 +39,41 @@ public:
         m_GalagaList.push_back({});
 
         // ZAKO
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 10; i++) {
             std::vector<Enemy::BezierPath> path = {
-                { { {-100.0f, 500.0f}, {-100.0f, 350.0f}, {-100.0f, 350.0f}, {-400.0f, 180.0f} } },
-                { { {-400.0f, 180.0f}, {-600.0f, 120.0f}, {-400.0f, -250.0f}, {-999.0f,-999.0f} } }
+                { { {500.0f, 350.0f}, {-390.0f, 430.0f}, {-300.0f, -80.0f}, {-150.0f, -100.0f} } },
+                { { {-150.0f, -100.0f}, {40.0f, -100.0f}, {50.0f, 450.0f}, {-600.0f,350.0f} } },
+
+                { { {-600.0f, 350.0f}, {90.0f, 430.0f}, {0.0f, -80.0f}, {-150.0f, -100.0f} } },
+                { { {-150.0f, -100.0f}, {-270.0f, -110.0f}, {-450.0f, 390.0f}, {800.0f,350.0f} } }
             };
-            glm::vec2 fPos={-999.0f,-999.0f};
+            glm::vec2 fPos={800.0f,350.0f};
             m_ZakoList[m_CurrentWave].push_back(
                 std::make_shared<Zako>(glm::vec2{-100.0f, 500.0f}, fPos, path)
             );
         }
     }
+    void Wave2() {
+        m_ZakoList.push_back({});
+        m_ButterflyList.push_back({});
+        m_GalagaList.push_back({});
+
+        // ZAKO
+        for (int i = 0; i < 10; i++) {
+            std::vector<Enemy::BezierPath> path = {
+                { { {500.0f, 350.0f}, {-390.0f, 430.0f}, {-300.0f, -80.0f}, {-150.0f, -100.0f} } },
+                { { {-150.0f, -100.0f}, {40.0f, -100.0f}, {50.0f, 450.0f}, {-600.0f,350.0f} } },
+
+                { { {-600.0f, 350.0f}, {90.0f, 430.0f}, {0.0f, -80.0f}, {-150.0f, -100.0f} } },
+                { { {-150.0f, -100.0f}, {-270.0f, -110.0f}, {-450.0f, 390.0f}, {800.0f,350.0f} } }
+            };
+            glm::vec2 fPos={800.0f,350.0f};
+            m_ZakoList[m_CurrentWave].push_back(
+                std::make_shared<Zako>(glm::vec2{-100.0f, 500.0f}, fPos, path)
+            );
+        }
+    }
+    
     void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) override {
         if (stageclear) return;
         (void)enemies;
