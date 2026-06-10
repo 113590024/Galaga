@@ -35,13 +35,23 @@ public:
         switch (m_CurrentWave+1) {
             case 2:
                 Wave2();
+                nowWaveEnemies = 10;
+                m_ZakoIndex = 0;
+                m_ButterflyIndex = 0;
+                m_GalagaIndex = 0;
+                m_DragonflyIndex = 0;
                 nowWaveEnemies=10;
                 break;
-            /*case 3:
+            case 3:
                 Wave3();
+                nowWaveEnemies = 10;
+                m_ZakoIndex = 0;
+                m_ButterflyIndex = 0;
+                m_GalagaIndex = 0;
+                m_DragonflyIndex = 0;
                 nowWaveEnemies=10;
                 break;
-            case 4:
+            /*case 4:
                 Wave4();
                 nowWaveEnemies=10;
                 break;*/
@@ -54,6 +64,7 @@ public:
         m_ZakoList.push_back({});
         m_ButterflyList.push_back({});
         m_GalagaList.push_back({});
+        m_DragonflyList.push_back({});
 
         // ZAKO
         for (int i = 0; i < 10; i++) {
@@ -66,7 +77,7 @@ public:
             };
             glm::vec2 fPos={800.0f,350.0f};
             m_ZakoList[m_CurrentWave].push_back(
-                std::make_shared<Zako>(glm::vec2{-100.0f, 500.0f}, fPos, path)
+                std::make_shared<Zako>(glm::vec2{500.0f, 350.0f}, fPos, path)
             );
         }
     }
@@ -74,6 +85,7 @@ public:
         m_ZakoList.push_back({});
         m_ButterflyList.push_back({});
         m_GalagaList.push_back({});
+        m_DragonflyList.push_back({});
 
         // Butterfly
         for (int i = 0; i < 10; i++) {
@@ -82,11 +94,34 @@ public:
                 { { {-150.0f, 0.0f}, {300.0f, 250.0f}, {350.0f, -50.0f}, {-150.0f,0.0f} } },
 
                 { { {-150.0f, 0.0f}, {-600.0f, 250.0f}, {-650.0f, -50.0f}, {-150.0f, 0.0f} } },
-                { { {-150.0f, 0.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f}, {800.0f,-800.0f} } }
+                { { {-150.0f, 0.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f}, {1500.0f,-800.0f} } }
             };
-            glm::vec2 fPos={800.0f,800.0f};
+            glm::vec2 fPos={1500.0f,-800.0f};
             m_ButterflyList[m_CurrentWave].push_back(
-                std::make_shared<Butterfly>(glm::vec2{-100.0f, 500.0f}, fPos, path)
+                std::make_shared<Butterfly>(glm::vec2{-800.0f, -300.0f}, fPos, path)
+            );
+        }
+    }
+
+    void Wave3() {
+        m_ZakoList.push_back({});
+        m_ButterflyList.push_back({});
+        m_GalagaList.push_back({});
+        m_DragonflyList.push_back({});
+
+        // Dragonfly
+        for (int i = 0; i < 10; i++) {
+            std::vector<Enemy::BezierPath> path = {
+                { { {-800.0f, 250.0f},{-133.0f, 250.0f},{ 133.0f, 250.0f},{ 400.0f, 250.0f}}},
+                { { { 400.0f,  250.0f},{ 133.0f,   83.0f},{-133.0f,  -83.0f},{-500.0f, -150.0f}}},
+                { { {-500.0f, -150.0f},{-133.0f, -150.0f},{ 133.0f, -150.0f},{ 600.0f, -150.0f}}},
+                { { { 600.0f, -150.0f},{-133.0f, -150.0f},{ 133.0f, -150.0f},{-500.0f, -150.0f}}},
+                { { {-500.0f, -150.0f},{ 133.0f,   83.0f},{-133.0f,  -83.0f},{ 400.0f,  250.0f}}},
+                { { { 400.0f, 250.0f},{-133.0f, 250.0f},{ 133.0f, 250.0f},{-800.0f, 250.0f}}}
+            };
+            glm::vec2 fPos={800.0f,-150.0f};
+            m_DragonflyList[m_CurrentWave].push_back(
+                std::make_shared<Dragonfly>(glm::vec2{-800.0f, 250.0f}, fPos, path)
             );
         }
     }
@@ -112,6 +147,11 @@ public:
                 root.AddChild(m_GalagaList[m_CurrentWave][m_GalagaIndex]);
                 m_GalagaIndex++;
             }
+            if (m_DragonflyIndex < (int)m_DragonflyList[m_CurrentWave].size()) {
+                enemies.push_back(m_DragonflyList[m_CurrentWave][m_DragonflyIndex]);
+                root.AddChild(m_DragonflyList[m_CurrentWave][m_DragonflyIndex]);
+                m_DragonflyIndex++;
+            }
             m_Timer = 300.0f;
         }
         //跑出螢幕外的敵人
@@ -126,7 +166,8 @@ public:
     [[nodiscard]] bool IsSpawnDone() {
         return m_ZakoIndex >= (int)m_ZakoList[m_CurrentWave].size() &&
                m_ButterflyIndex >= (int)m_ButterflyList[m_CurrentWave].size() &&
-               m_GalagaIndex >= (int)m_GalagaList[m_CurrentWave].size() ;
+               m_GalagaIndex >= (int)m_GalagaList[m_CurrentWave].size() &&
+               m_DragonflyIndex >= (int)m_DragonflyList[m_CurrentWave].size();
     }
 
     int TotalEnemieskill() {
@@ -139,9 +180,11 @@ private:
     std::vector<std::vector<std::shared_ptr<Enemy>>> m_ZakoList;
     std::vector<std::vector<std::shared_ptr<Enemy>>> m_ButterflyList;
     std::vector<std::vector<std::shared_ptr<Enemy>>> m_GalagaList;
+    std::vector<std::vector<std::shared_ptr<Enemy>>> m_DragonflyList;
     int m_ZakoIndex = 0;
     int m_ButterflyIndex = 0;
     int m_GalagaIndex = 0;
+    int m_DragonflyIndex = 0;
     float m_Timer = 0.0f;
     int m_MissEnemies = 0;          // 目前 wave miss
     int m_TotalEnemieskill = 0;     // 已完成 wave 的 kill 總數

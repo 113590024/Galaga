@@ -5,6 +5,7 @@
 #include "Zako.hpp"
 #include "Butterfly.hpp"
 #include "Boss_Galaga.hpp"
+#include "Dragonfly.hpp"
 #include "Util/Time.hpp"
 #include <vector>
 #include <memory>

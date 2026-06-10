@@ -9,10 +9,12 @@ public:
         : Enemy("", 10) {
 
         // 待機動畫
-        /*m_IdleFrames = {
-            RESOURCE_DIR"/Image/Character/.png",
-            RESOURCE_DIR"/Image/Character/.png",
-        };*/
+        m_IdleFrames = {
+            RESOURCE_DIR"/Image/Character/enemy_dragonfly1.png",
+            RESOURCE_DIR"/Image/Character/enemy_dragonfly2.png",
+            RESOURCE_DIR"/Image/Character/enemy_dragonfly3.png",
+            RESOURCE_DIR"/Image/Character/enemy_dragonfly4.png",
+        };
 
         setAnimation(m_IdleFrames);
 
@@ -58,7 +60,7 @@ public:
         (void)playerPos;
         m_FormationPos = m_Transform.translation;
         m_State = State::DIVING;
-        m_DiveTimer=randomTimer();
+        m_DiveTimer = randomTimer();
 
         if (randomTimer0to100()>=90.0f) {
             shoot(m_Transform.translation);
