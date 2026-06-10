@@ -215,12 +215,15 @@ void App::Start() {
     m_Root.AddChild(m_RedPlayer);
 
     //測試關卡敵人消滅數量
+    /*
     m_EnermyKill = std::make_shared<Label>(
     RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 30, "EnermyKill : 0\nMiss Enermy",
     Util::Color::FromRGB(255, 120, 0), 20);
     m_EnermyKill->SetPosition({-500.0f, 300.0f});
     m_EnermyKill->SetVisible(false);
     m_Root.AddChild(m_EnermyKill);
+    */
+
 
     //獎勵關卡(第二關)文字
     m_Stage2HitsText = std::make_shared<Label>(

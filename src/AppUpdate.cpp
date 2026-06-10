@@ -140,11 +140,14 @@ void App::Update() {
             int missed = stage2->TotalMissEnemies();
             int finished = killed + missed;
 
+            /* 第二關測試用文字
             m_EnermyKill->SetVisible(true);
             m_EnermyKill->SetText(
                 "KILL: " + std::to_string(killed) +
                 "\nMISS: " + std::to_string(missed)
                 );
+            */
+
             if (stage2->getstageclear()) {
                 m_Stage2Hits = stage2->TotalEnemieskill();
                 m_Stage2HitsText->SetText("NUMBER OF HITS: " + std::to_string(m_Stage2Hits));
@@ -155,7 +158,9 @@ void App::Update() {
                 return;
             }
         } else {
+            /*
             m_EnermyKill->SetVisible(false);
+            */
         }
 
         // 更新所有敵人
@@ -398,7 +403,10 @@ void App::Update() {
                 m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
                 m_Stage1Text->SetVisible(true);
 
+                // 生命值+1
                 m_Player->AddHP();
+                m_Lives = m_Player->GetHP();
+                UpdateLifeIcons();
 
                 m_ClearTimer = 2000.0f;
             } else {
@@ -421,7 +429,7 @@ void App::Update() {
         if (m_Stage2ResultTimer >= 5000.0f) {
             m_Stage2HitsText->SetVisible(false);
             m_PerfectText->SetVisible(false);
-            m_EnermyKill->SetVisible(false);
+            // m_EnermyKill->SetVisible(false);
             m_GameState = GameState::RESULT;
             m_ResultTimer = 5000.0f;
         }
