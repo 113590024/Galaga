@@ -6,6 +6,7 @@
 #include "Stage0_0.hpp"
 #include "Stage1.hpp"
 #include "Stage2.hpp"
+#include "Stage3.hpp"
 
 
 // Galaga抓人
@@ -127,6 +128,7 @@ void App::Start() {
     //m_Stages.push_back(std::make_unique<Stage0_0>()); // 測試用關卡
     m_Stages.push_back(std::make_unique<Stage1>());   // 第一關    index=0
     m_Stages.push_back(std::make_unique<Stage2>());   // 第二關    index=1
+    m_Stages.push_back(std::make_unique<Stage3>());   // 第三關    index=2
 
     for (int i = 0; i < 3; i++) {
         auto flag = std::make_shared<Sprite>(

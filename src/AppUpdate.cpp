@@ -6,6 +6,7 @@
 #include "Stage0_0.hpp"
 #include "Stage1.hpp"
 #include "Stage2.hpp"
+#include "Stage3.hpp"
 #include "Boss_Galaga.hpp"
 
 //測試用
@@ -430,8 +431,26 @@ void App::Update() {
             m_Stage2HitsText->SetVisible(false);
             m_PerfectText->SetVisible(false);
             // m_EnermyKill->SetVisible(false);
-            m_GameState = GameState::RESULT;
-            m_ResultTimer = 5000.0f;
+            totalEnemies = 0;
+            m_Stagenumber++;
+            UpdateStageFlagIcons();
+
+            if (m_Stagenumber < static_cast<int>(m_Stages.size())) {
+                m_GameState = GameState::CLEAR;
+
+                m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
+                m_Stage1Text->SetVisible(true);
+
+                // 生命值+1
+                m_Player->AddHP();
+                m_Lives = m_Player->GetHP();
+                UpdateLifeIcons();
+
+                m_ClearTimer = 2000.0f;
+            } else {
+                m_GameState = GameState::RESULT;
+                m_ResultTimer = 5000.0f;
+            }
         }
     }
 
@@ -679,6 +698,7 @@ void App::Update() {
             m_Stages.clear();
             m_Stages.push_back(std::make_unique<Stage1>());
             m_Stages.push_back(std::make_unique<Stage2>());
+            m_Stages.push_back(std::make_unique<Stage3>());
             m_Stagenumber = 0;
 
             m_GameState = GameState::START_SCREEN;
