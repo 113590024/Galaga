@@ -30,7 +30,24 @@ public:
         m_WaveEnemiesKilled = 0;
         m_MissEnemies = 0;
 
-        stageclear = true;
+        m_CurrentWave++;
+
+        switch (m_CurrentWave+1) {
+            case 2:
+                Wave2();
+                nowWaveEnemies=10;
+                break;
+            /*case 3:
+                Wave3();
+                nowWaveEnemies=10;
+                break;
+            case 4:
+                Wave4();
+                nowWaveEnemies=10;
+                break;*/
+            default:
+                stageclear = true;
+        }
     }
 
     void Wave1() {
@@ -58,22 +75,22 @@ public:
         m_ButterflyList.push_back({});
         m_GalagaList.push_back({});
 
-        // ZAKO
+        // Butterfly
         for (int i = 0; i < 10; i++) {
             std::vector<Enemy::BezierPath> path = {
-                { { {500.0f, 350.0f}, {-390.0f, 430.0f}, {-300.0f, -80.0f}, {-150.0f, -100.0f} } },
-                { { {-150.0f, -100.0f}, {40.0f, -100.0f}, {50.0f, 450.0f}, {-600.0f,350.0f} } },
+                { { {-800.0f, -300.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f} } },
+                { { {-150.0f, 0.0f}, {300.0f, 250.0f}, {350.0f, -50.0f}, {-150.0f,0.0f} } },
 
-                { { {-600.0f, 350.0f}, {90.0f, 430.0f}, {0.0f, -80.0f}, {-150.0f, -100.0f} } },
-                { { {-150.0f, -100.0f}, {-270.0f, -110.0f}, {-450.0f, 390.0f}, {800.0f,350.0f} } }
+                { { {-150.0f, 0.0f}, {-600.0f, 250.0f}, {-650.0f, -50.0f}, {-150.0f, 0.0f} } },
+                { { {-150.0f, 0.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f}, {800.0f,-800.0f} } }
             };
-            glm::vec2 fPos={800.0f,350.0f};
-            m_ZakoList[m_CurrentWave].push_back(
-                std::make_shared<Zako>(glm::vec2{-100.0f, 500.0f}, fPos, path)
+            glm::vec2 fPos={800.0f,800.0f};
+            m_ButterflyList[m_CurrentWave].push_back(
+                std::make_shared<Butterfly>(glm::vec2{-100.0f, 500.0f}, fPos, path)
             );
         }
     }
-    
+
     void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) override {
         if (stageclear) return;
         (void)enemies;
