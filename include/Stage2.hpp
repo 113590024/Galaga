@@ -40,7 +40,6 @@ public:
                 m_ButterflyIndex = 0;
                 m_GalagaIndex = 0;
                 m_DragonflyIndex = 0;
-                nowWaveEnemies=10;
                 break;
             case 3:
                 Wave3();
@@ -49,12 +48,15 @@ public:
                 m_ButterflyIndex = 0;
                 m_GalagaIndex = 0;
                 m_DragonflyIndex = 0;
-                nowWaveEnemies=10;
                 break;
-            /*case 4:
+            case 4:
                 Wave4();
                 nowWaveEnemies=10;
-                break;*/
+                m_ZakoIndex = 0;
+                m_ButterflyIndex = 0;
+                m_GalagaIndex = 0;
+                m_DragonflyIndex = 0;
+                break;
             default:
                 stageclear = true;
         }
@@ -90,7 +92,7 @@ public:
         // Butterfly
         for (int i = 0; i < 10; i++) {
             std::vector<Enemy::BezierPath> path = {
-                { { {-800.0f, -300.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f} } },
+                { { {-650.0f, -300.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f}, {-150.0f, 0.0f} } },
                 { { {-150.0f, 0.0f}, {300.0f, 250.0f}, {350.0f, -50.0f}, {-150.0f,0.0f} } },
 
                 { { {-150.0f, 0.0f}, {-600.0f, 250.0f}, {-650.0f, -50.0f}, {-150.0f, 0.0f} } },
@@ -98,7 +100,7 @@ public:
             };
             glm::vec2 fPos={1500.0f,-800.0f};
             m_ButterflyList[m_CurrentWave].push_back(
-                std::make_shared<Butterfly>(glm::vec2{-800.0f, -300.0f}, fPos, path)
+                std::make_shared<Butterfly>(glm::vec2{-650.0f, -300.0f}, fPos, path)
             );
         }
     }
@@ -109,19 +111,42 @@ public:
         m_GalagaList.push_back({});
         m_DragonflyList.push_back({});
 
-        // Dragonfly
         for (int i = 0; i < 10; i++) {
             std::vector<Enemy::BezierPath> path = {
-                { { {-800.0f, 250.0f},{-133.0f, 250.0f},{ 133.0f, 250.0f},{ 400.0f, 250.0f}}},
-                { { { 400.0f,  250.0f},{ 133.0f,   83.0f},{-133.0f,  -83.0f},{-500.0f, -150.0f}}},
-                { { {-500.0f, -150.0f},{-133.0f, -150.0f},{ 133.0f, -150.0f},{ 600.0f, -150.0f}}},
-                { { { 600.0f, -150.0f},{-133.0f, -150.0f},{ 133.0f, -150.0f},{-500.0f, -150.0f}}},
-                { { {-500.0f, -150.0f},{ 133.0f,   83.0f},{-133.0f,  -83.0f},{ 400.0f,  250.0f}}},
-                { { { 400.0f, 250.0f},{-133.0f, 250.0f},{ 133.0f, 250.0f},{-800.0f, 250.0f}}}
+                { { {-650.0f, 250.0f},  {-300.0f,  250.0f}, {  50.0f,  250.0f}, { 400.0f,  250.0f} } },
+                { { { 400.0f, 250.0f}, {  66.7f,  116.7f}, {-266.7f, -16.7f }, {-600.0f, -150.0f} } },
+                { { {-600.0f,-150.0f}, {-266.7f, -150.0f}, {  66.7f, -150.0f}, { 400.0f, -150.0f} } },
+                { { { 400.0f, -150.0f}, {  66.7f, -150.0f}, {-266.7f, -150.0f},{-600.0f,-150.0f}  } },
+                { { {-600.0f, -150.0f}, {-266.7f, -16.7f }, {  66.7f,  116.7f},{ 400.0f, 250.0f}  } },
+                { { { 400.0f,  250.0f}, {   0.0f,  250.0f}, {-400.0f,  250.0f},{-800.0f, 250.0f}  } },
+
             };
-            glm::vec2 fPos={800.0f,-150.0f};
+            glm::vec2 fPos = {-800.0f, 250.0f};
+
             m_DragonflyList[m_CurrentWave].push_back(
-                std::make_shared<Dragonfly>(glm::vec2{-800.0f, 250.0f}, fPos, path)
+                std::make_shared<Dragonfly>(glm::vec2{-650.0f, 250.0f}, fPos, path)
+            );
+        }
+    }
+
+    void Wave4() {
+        m_ZakoList.push_back({});
+        m_ButterflyList.push_back({});
+        m_GalagaList.push_back({});
+        m_DragonflyList.push_back({});
+
+        for (int i = 0; i < 10; i++) {
+            std::vector<Enemy::BezierPath> path = {
+                { { {-650.0f,  400.0f}, {-575.0f,  200.0f}, {-500.0f,    0.0f}, {-425.0f, -200.0f}}},
+                { { {-425.0f, -200.0f}, {-333.3f,  -50.0f}, {-241.7f,  100.0f}, {-150.0f,  250.0f}}},
+                { { {-150.0f,  250.0f}, { -41.7f,  100.0f}, {  66.7f,  -50.0f}, { 175.0f, -200.0f}}},
+                { { { 175.0f, -200.0f}, { 353.3f,  103.3f}, { 531.7f,  406.7f}, { 710.0f,  710.0f}}},
+
+            };
+            glm::vec2 fPos = {710.0f, 710.0f};
+
+            m_ZakoList[m_CurrentWave].push_back(
+                std::make_shared<Zako>(glm::vec2{-650.0f, 400.0f}, fPos, path)
             );
         }
     }
@@ -153,13 +178,14 @@ public:
                 m_DragonflyIndex++;
             }
             m_Timer = 300.0f;
+            CheckWaveFinished();
         }
         //跑出螢幕外的敵人
         for (auto& enemy : enemies) {
+            if (stageclear) break;
             if (enemy->IsOutOfScreen() && enemy->IsAlive()) {
                 enemy->Kill();
                 m_MissEnemies++;
-                CheckWaveFinished();
             }
         }
     }
