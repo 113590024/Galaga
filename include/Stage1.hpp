@@ -26,6 +26,8 @@ public:
                     Wave2();
                     nowWaveEnemies=42;
                     break;
+                default:
+                    stageclear = true;
             }
         }
     }
