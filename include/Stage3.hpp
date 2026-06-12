@@ -210,49 +210,76 @@ public:
         // ZAKO
         for (int i = 0; i < 20; i++) {
             glm::vec2 fPos = formationPositions[i];
-            std::vector<Enemy::BezierPath> path = {
-                { { {-100.0f, 500.0f}, {-100.0f, 350.0f}, {-100.0f, 350.0f}, {-400.0f, 180.0f} } },
-                { { {-400.0f, 180.0f}, {-600.0f, 120.0f}, {-400.0f, -250.0f}, fPos } }
-            };
-            m_ZakoList[m_CurrentWave].push_back(
-                std::make_shared<Zako>(glm::vec2{-100.0f, 500.0f}, fPos, path)
-            );
+            if (i%2==0) {
+                std::vector<Enemy::BezierPath> path = {
+                    { { {-300.0f, 500.0f}, {-400.0f, 120.0f}, {-500.0f, -250.0f}, fPos} }};
+                m_ZakoList[m_CurrentWave].push_back(
+                    std::make_shared<Zako>(glm::vec2{-300.0f, 500.0f}, fPos, path));
+            }
+            else {
+                std::vector<Enemy::BezierPath> path = {
+                    { { {0.0f, 500.0f}, {100.0f, 120.0f}, {200.0f, -250.0f}, fPos} } };
+                m_ZakoList[m_CurrentWave].push_back(
+                    std::make_shared<Zako>(glm::vec2{0.0f, 500.0f}, fPos, path)
+                );
+            }
         }
-        // Butterfly
+        /*// ZAKO右
+        for (int i = 10; i < 20; i++) {
+            glm::vec2 fPos = formationPositions[i];
+            std::vector<Enemy::BezierPath> path = {
+                { { {0.0f, 500.0f}, {100.0f, 120.0f}, {200.0f, -250.0f}, fPos} } };
+            m_ZakoList[m_CurrentWave].push_back(
+                std::make_shared<Zako>(glm::vec2{0.0f, 500.0f}, fPos, path)
+            );
+        }*/
+        // Butterfly左
         for (int i = 20; i < 36; i++) {
             glm::vec2 fPos = formationPositions[i];
-            std::vector<Enemy::BezierPath> path = {
-                { { {-200.0f, 500.0f}, {-200.0f, 350.0f},
-                    {-200.0f, 350.0f}, {100.0f, 180.0f} } },
-                { { {100.0f, 180.0f}, {300.0f, 120.0f},
-                    {100.0f, -250.0f}, fPos } }
-            };
-            m_ButterflyList[m_CurrentWave].push_back(
-                std::make_shared<Butterfly>(glm::vec2{100.0f, 500.0f}, fPos, path)
-            );
+            if (i%2==0) {
+                std::vector<Enemy::BezierPath> path = {
+                    { { {-400.0f, 500.0f}, {-500.0f, 120.0f},{-600.0f, -250.0f}, fPos } } };
+                m_ButterflyList[m_CurrentWave].push_back(
+                    std::make_shared<Butterfly>(glm::vec2{-400.0f, 500.0f}, fPos, path));
+            }
+            else {
+                std::vector<Enemy::BezierPath> path = {
+                    { { {-200.0f, 500.0f}, {-200.0f, 350.0f},{-200.0f, 350.0f}, {100.0f, 180.0f} } },
+                    { { {100.0f, 180.0f}, {300.0f, 120.0f},{100.0f, -250.0f}, fPos } }
+                };
+                m_ButterflyList[m_CurrentWave].push_back(
+                    std::make_shared<Butterfly>(glm::vec2{-200.0f, 500.0f}, fPos, path) );
+            }
         }
-        // Galaga右
-        for (int i = 36; i < 39; i++) {
+        /*// Butterfly右
+        for (int i = 28; i < 36; i++) {
             glm::vec2 fPos = formationPositions[i];
-            std::vector<Enemy::BezierPath> path = {
-                { { {400.0f, -150.0f}, {100.0f, -100.0f},
-                    {100.0f, -100.0f}, fPos } }
-            };
-            m_GalagaList[m_CurrentWave].push_back(
-                std::make_shared<Boss_Galaga>(glm::vec2{400.0f, -150.0f}, fPos, path)
-            );
+
+        }*/
+        // Galaga右
+        for (int i = 36; i < 42; i++) {
+            glm::vec2 fPos = formationPositions[i];
+            if (i%2==0) {
+                std::vector<Enemy::BezierPath> path = {
+                    { { {-650.0f, 100.0f}, {-300.0f, 100.0f},{-150.0f, 50.0f}, fPos } }
+                };
+                m_GalagaList[m_CurrentWave].push_back(
+                    std::make_shared<Boss_Galaga>(glm::vec2{400.0f, -150.0f}, fPos, path));
+            }
+            else {
+                std::vector<Enemy::BezierPath> path = {
+                    { { {350.0f, 100.0f}, {0.0f, 100.0f},{-150.0f, 50.0f}, fPos } }
+                };
+                m_GalagaList[m_CurrentWave].push_back(
+                    std::make_shared<Boss_Galaga>(glm::vec2{-700.0f, -150.0f}, fPos, path)
+                );
+            }
         }
-        // Galaga左
+        /*// Galaga左
         for (int i = 39; i < 42; i++) {
             glm::vec2 fPos = formationPositions[i];
-            std::vector<Enemy::BezierPath> path = {
-                { { {-700.0f, -150.0f}, {-450.0f, -100.0f},
-                    {-450.0f, -100.0f}, fPos } }
-            };
-            m_GalagaList[m_CurrentWave].push_back(
-                std::make_shared<Boss_Galaga>(glm::vec2{-700.0f, -150.0f}, fPos, path)
-            );
-        }
+
+        }*/
     }
 
     void Update(std::vector<std::shared_ptr<Enemy>>& enemies, Util::Renderer& root) override {

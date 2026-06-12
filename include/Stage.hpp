@@ -33,7 +33,6 @@ public:
     int nowWaveEnemies=100;
     int m_CurrentWave = 0;
     int m_WaveEnemiesKilled=0;
-private:
 };
 
 #endif //GALAGA_STAGE_HPP
