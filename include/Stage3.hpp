@@ -28,7 +28,7 @@ public:
                     break;
                 case 3:
                     Wave3();
-                    nowWaveEnemies = 10;
+                    nowWaveEnemies =42;
                     break;
                 default:
                     stageclear = true;

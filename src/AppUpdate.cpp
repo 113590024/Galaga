@@ -219,8 +219,8 @@ void App::Update() {
         }
 
 
-        if (Util::Input::IsKeyPressed(Util::Keycode::LEFT))  m_Player->Move(-1, 0);
-        if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) m_Player->Move(1, 0);
+        if (Util::Input::IsKeyPressed(Util::Keycode::LEFT) || Util::Input::IsKeyPressed(Util::Keycode::A))  m_Player->Move(-1, 0);
+        if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT) || Util::Input::IsKeyPressed(Util::Keycode::D)) m_Player->Move(1, 0);
 
         UpdateCommon(); // 更新爆炸、子彈、敵人
 
@@ -236,7 +236,8 @@ void App::Update() {
         // 按Z或X發射子彈
         m_ShootCooldown -= Util::Time::GetDeltaTimeMs();
         if ((Util::Input::IsKeyDown(Util::Keycode::Z) && m_ShootCooldown <= 0.0f)
-            || (Util::Input::IsKeyDown(Util::Keycode::X) && m_ShootCooldown <= 0.0f)){
+            || (Util::Input::IsKeyDown(Util::Keycode::X) && m_ShootCooldown <= 0.0f)
+            || (Util::Input::IsKeyDown(Util::Keycode::W) && m_ShootCooldown <= 0.0f)){
             // 最多兩顆子彈
             if (Player_bullet::getBulletcount()<2){
                 Player_bullet::setBulletcount(1);
