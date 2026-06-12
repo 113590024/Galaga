@@ -19,7 +19,7 @@ public:
         setAnimation(m_IdleFrames);
 
         m_Transform.translation = startPos;
-        m_Transform.scale = {0.9f, 0.9f};
+        m_Transform.scale = {1.2f, 1.2f};
         m_health = 1;
         m_Score = 150;
         m_FormationPos = formationPos;
