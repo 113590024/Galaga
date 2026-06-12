@@ -97,6 +97,7 @@ void App::Update() {
             if (m_StartTimer >= 7000.0f) {
                 m_StageSound->Play();
                 m_StartText->SetVisible(false);
+                m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
                 m_Stage1Text->SetVisible(true);
                 m_ShowingStage = true;
             }
@@ -106,7 +107,6 @@ void App::Update() {
         if (m_ShowingStage && !m_ShowingReady){
             m_StageTimer += Util::Time::GetDeltaTimeMs();
             if (m_StageTimer >= 2000.0f) {
-                m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
                 m_Stage1Text->SetVisible(false);
                 m_ReadyText->SetVisible(true);
                 m_ShowingReady = true;
@@ -673,6 +673,7 @@ void App::Update() {
             m_ScoreLabel->SetVisible(false);
             m_Player->ResetHP();
             m_Lives = m_Player->GetHP();
+            UpdateLifeIcons();
             // 隱藏玩家生命值圖片
             for (auto& icon : m_LifeIcons) {
                 icon->SetVisible(false);

@@ -77,7 +77,7 @@ public:
                         {100.0f, -250.0f}, fPos } }
                 };
                 m_ButterflyList[m_CurrentWave].push_back(
-                    std::make_shared<Butterfly>(glm::vec2{100.0f, 500.0f}, fPos, path)
+                    std::make_shared<Butterfly>(glm::vec2{-200.0f, 500.0f}, fPos, path)
                 );
             }
             // Galaga右
@@ -151,7 +151,7 @@ public:
                     {100.0f, -250.0f}, fPos } }
             };
             m_ButterflyList[m_CurrentWave].push_back(
-                std::make_shared<Butterfly>(glm::vec2{100.0f, 500.0f}, fPos, path)
+                std::make_shared<Butterfly>(glm::vec2{-200.0f, 500.0f}, fPos, path)
             );
         }
         // Galaga右
