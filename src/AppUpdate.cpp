@@ -18,10 +18,16 @@ void App::UpdateCommon() {
         exp->Update();
     }
     m_Explosions.erase(
-        std::remove_if(m_Explosions.begin(), m_Explosions.end(),
-            [](const auto& e) { return e->IsFinished(); }),
-        m_Explosions.end()
-    );
+    std::remove_if(m_Explosions.begin(), m_Explosions.end(),
+        [&](const auto& e) {
+            if (e->IsFinished()) {
+                m_Root.RemoveChild(e);  // 移除
+                return true;
+            }
+            return false;
+        }),
+    m_Explosions.end()
+);
     // 玩家子彈繼續飛
     for (auto& bullet : m_Bullets) {
         bullet->flyUp();
@@ -99,6 +105,7 @@ void App::Update() {
                 m_StartText->SetVisible(false);
                 m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
                 m_Stage1Text->SetVisible(true);
+                m_ChallengingStageText->SetVisible(m_Stages[m_Stagenumber]->getStageLevel() == 2);
                 m_ShowingStage = true;
             }
         }
@@ -108,6 +115,7 @@ void App::Update() {
             m_StageTimer += Util::Time::GetDeltaTimeMs();
             if (m_StageTimer >= 2000.0f) {
                 m_Stage1Text->SetVisible(false);
+                m_ChallengingStageText->SetVisible(false);
                 m_ReadyText->SetVisible(true);
                 m_ShowingReady = true;
             }
@@ -297,6 +305,14 @@ void App::Update() {
             };
         }
 
+        // 敵方子彈飛出畫面
+        Enemy_bullet::Remove(m_EnemyBullets, [&](const std::shared_ptr<Enemy_bullet>& b) {
+            if (b->IsOutOfScreen()) {
+                m_Root.RemoveChild(b);
+                return true;
+            }
+            return false;
+        });
 
         // 子彈打到玩家
         Enemy_bullet::Remove(m_EnemyBullets, [&](const std::shared_ptr<Enemy_bullet>& b) {
@@ -330,20 +346,15 @@ void App::Update() {
 
         // 移除被嘎嘎敵人和嘎嘎子彈
         m_Enemies.erase(
-            std::remove_if(m_Enemies.begin(), m_Enemies.end(),
-                [](const auto& e) { return !e->IsAlive(); }),
-            m_Enemies.end()
-        );
-        m_Bullets.erase(
-            std::remove_if(m_Bullets.begin(), m_Bullets.end(),
-                [](const auto& b) {
-                    if (!b->GetVisibility() || b->IsOutOfScreen()) {
-                        Player_bullet::setBulletcount(-1);
-                        return true;
-                    }
-                    return false;
-                }),
-            m_Bullets.end()
+        std::remove_if(m_Enemies.begin(), m_Enemies.end(),
+            [&](const auto& e) {
+                if (!e->IsAlive()) {
+                    m_Root.RemoveChild(e);  // 移除
+                    return true;
+                }
+                return false;
+            }),
+        m_Enemies.end()
         );
 
         // 敵人碰到玩家
@@ -397,13 +408,13 @@ void App::Update() {
             m_GameState != GameState::PLAYER_DEAD) {
             totalEnemies = 0;
             m_Stagenumber++;
-            UpdateStageFlagIcons();
 
             if (m_Stagenumber < static_cast<int>(m_Stages.size())) {
                 m_GameState = GameState::CLEAR;
-
+                UpdateStageFlagIcons();
                 m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
                 m_Stage1Text->SetVisible(true);
+                m_ChallengingStageText->SetVisible(m_Stages[m_Stagenumber]->getStageLevel() == 2);
 
                 // 生命值+1
                 m_Player->AddHP();
@@ -434,13 +445,13 @@ void App::Update() {
             // m_EnermyKill->SetVisible(false);
             totalEnemies = 0;
             m_Stagenumber++;
-            UpdateStageFlagIcons();
 
             if (m_Stagenumber < static_cast<int>(m_Stages.size())) {
                 m_GameState = GameState::CLEAR;
-
+                UpdateStageFlagIcons();
                 m_Stage1Text->SetText("Stage    " + std::to_string(m_Stages[m_Stagenumber]->getStageLevel()));
                 m_Stage1Text->SetVisible(true);
+                m_ChallengingStageText->SetVisible(m_Stages[m_Stagenumber]->getStageLevel() == 2);
 
                 // 生命值+1
                 m_Player->AddHP();
@@ -606,10 +617,20 @@ void App::Update() {
             m_GameOverText->SetVisible(false);
             m_Player->SetVisible(false);
             m_RedPlayer->SetVisible(false);
-            // 清除所有敵人
-            for (auto& enemy : m_Enemies) {
-                m_Root.RemoveChild(enemy);
-            }
+            // 清除所有Objects
+            for (auto& enemy : m_Enemies) m_Root.RemoveChild(enemy);
+            for (auto& b : m_Bullets) m_Root.RemoveChild(b);
+            m_Bullets.clear();
+            Player_bullet::setBulletcount(-Player_bullet::getBulletcount());
+
+            for (auto& b : m_EnemyBullets) m_Root.RemoveChild(b);
+            m_EnemyBullets.clear();
+
+            for (auto& e : m_Explosions) m_Root.RemoveChild(e);
+            m_Explosions.clear();
+
+            for (auto& enemy : m_Enemies) m_Root.RemoveChild(enemy);
+            m_Enemies.clear();
             m_Enemies.clear();
 
             m_ResultTimer = 5000.0f; // 給玩家 5 秒看分數
@@ -624,6 +645,7 @@ void App::Update() {
 
         if (m_ClearTimer <= 0.0f) {
             m_Stage1Text->SetVisible(false);
+            m_ChallengingStageText->SetVisible(false);
             m_GameState = GameState::PLAYING;
         }
     }
@@ -681,6 +703,7 @@ void App::Update() {
             for (auto& flag : m_StageFlagIcons) {
                 flag->SetVisible(false);
             }
+            m_ChallengingStageText->SetVisible(false);
 
             // 重置開場動畫狀態
             m_ShowingStart = false;
@@ -691,6 +714,9 @@ void App::Update() {
             m_ReadyTimer = 0.0f;
             m_IntroPlaying = true;
             m_IntroY = -500.0f;
+            m_Cursor->SetVisible(false);
+            m_Logo->SetPosition({0.0f, m_IntroY + 80.0f});
+            m_Text1P->SetPosition({0.0f, m_IntroY - 50.0f});
 
             // 顯示選單
             m_Logo->SetVisible(true);

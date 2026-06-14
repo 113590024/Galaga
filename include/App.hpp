@@ -139,8 +139,9 @@ private:
 
     // 關卡 (第幾關)
     std::vector<std::unique_ptr<Stage>> m_Stages;
-    int m_Stagenumber = 2;      //Stage1 = 0 ，Stage2 = 1
+    int m_Stagenumber = 0;      //Stage1 = 0 ，Stage2 = 1，Stage3 = 2
     std::shared_ptr<Label> m_Stage1Text;
+    std::shared_ptr<Label> m_ChallengingStageText;
     bool m_ShowingStage = false;
     float m_StageTimer = 0.0f;
 

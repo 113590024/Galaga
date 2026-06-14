@@ -85,7 +85,7 @@ public:
                 );
             }
             // Galaga
-            for (int i = 36; i < 39; i++) {
+            for (int i = 36; i < 42; i++) {
                 glm::vec2 fPos = formationPositions[i];
                 if (i%2==0) {
                     std::vector<Enemy::BezierPath> path = {
@@ -159,7 +159,7 @@ public:
             );
         }
         // Galaga右
-        for (int i = 36; i < 39; i++) {
+        for (int i = 36; i < 42; i++) {
             glm::vec2 fPos = formationPositions[i];
             if (i%2==0) {
                 std::vector<Enemy::BezierPath> path = {

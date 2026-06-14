@@ -80,6 +80,14 @@ void App::Start() {
     m_Stage1Text->SetVisible(false);
     m_Root.AddChild(m_Stage1Text);
 
+    m_ChallengingStageText = std::make_shared<Label>(
+    RESOURCE_DIR"/Font/Emulogic-zrEw.ttf", 35, "CHALLENGING STAGE",
+    Util::Color::FromRGB(255, 255, 0), 20
+    );
+    m_ChallengingStageText->SetPosition({-150.0f, 60.0f});
+    m_ChallengingStageText->SetVisible(false);
+    m_Root.AddChild(m_ChallengingStageText);
+
 
     // READY
     m_ReadyText = std::make_shared<Label>(
