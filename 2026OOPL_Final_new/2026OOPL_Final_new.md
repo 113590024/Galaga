@@ -62,6 +62,7 @@
 說明專案的類別繼承結構與狀態轉換邏輯：
 
 1. **展示所有類別**：
+```
 App.hpp (遊戲主流程)
 Enemy.hpp (敵人父類別)
  ├──Boss_Galaga.hpp (BOSS Galaga)
@@ -84,6 +85,7 @@ AppStart.cpp (創建遊戲環境)
 AppUpdate.cpp (遊戲進行)
 main.cpp (遊戲流程)
 PLAYER.cpp (玩家圖片、移動設置)
+```
 
 2. **遊戲狀態機轉換圖 (State Transition Diagram)**：
 ```mermaid
